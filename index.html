@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Wade 的日程表</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#2350c9">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+:root{
+  --bg:#f3f5f8; --surface:#ffffff; --line:#dde2ea; --fg:#18202c; --muted:#5d6878;
+  --accent:#2350c9; --on-accent:#ffffff; --danger:#c2362b; --danger-soft:#fbe7e5;
+  --c-class:#2350c9; --c-team:#18864b; --c-hw:#c2362b; --c-run:#d4671a; --c-tree:#8a7a12; --c-code:#7a3fc4; --c-eng:#0f7f8c; --c-read:#b03a7a; --c-misc:#5d6878; --sun:#c2362b; --sat:#2350c9;
+  --mono:ui-monospace,"Roboto Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root{
+  --bg:#10141b; --surface:#181e28; --line:#2a3240; --fg:#e7ebf2; --muted:#98a3b4;
+  --accent:#7d9cff; --on-accent:#0d1220; --danger:#ff7a6e; --danger-soft:#3a1e1c;
+  --c-class:#7d9cff; --c-team:#4fc683; --c-hw:#ff7a6e; --c-run:#ff9f57; --c-tree:#d3c24a; --c-code:#b892ff; --c-eng:#4cc9d6; --c-read:#f07ab8; --c-misc:#98a3b4; --sun:#ff7a6e; --sat:#7d9cff;
+  color-scheme:dark}}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);font-family:"Noto Sans TC","Noto Sans CJK TC",system-ui,sans-serif;font-size:15px;line-height:1.55;-webkit-tap-highlight-color:transparent}
+.top{position:sticky;top:0;z-index:5;background:var(--bg);padding:calc(env(safe-area-inset-top,0px) + 12px) 16px 8px;border-bottom:1px solid var(--line)}
+.top h1{margin:0;font-size:1.35rem;font-weight:900}
+.countdowns{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.cd{font-size:.8rem;padding:2px 9px;border:1px solid var(--line);border-radius:999px;background:var(--surface)}
+.cd b{font-family:var(--mono);color:var(--c-run);margin-left:4px}
+main{max-width:720px;margin:0 auto;padding:14px 16px calc(env(safe-area-inset-bottom,0px) + 84px)}
+.view[hidden]{display:none}
+h2{font-size:.78rem;letter-spacing:.1em;color:var(--muted);margin:18px 0 8px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.daynav{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;border-bottom:1px solid var(--line)}
+.daynav .d{font-weight:700}
+.daynav .d small{font-family:var(--mono);color:var(--muted);font-weight:500;margin-left:6px;font-size:.78rem}
+.btn{font:inherit;border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:8px;padding:6px 12px;cursor:pointer}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent);font-weight:700}
+.btn.danger{color:var(--danger)}
+.rows{list-style:none;margin:0;padding:0}
+.row{display:grid;grid-template-columns:52px 1fr auto;gap:10px;align-items:start;padding:10px 12px;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:0}
+.t{font-family:var(--mono);font-size:.8rem;color:var(--muted);padding-top:2px}
+.main{min-width:0}
+.title{font-weight:500;overflow-wrap:anywhere}
+.note{color:var(--muted);font-size:.82rem;overflow-wrap:anywhere}
+.tag{display:inline-block;font-size:.68rem;font-weight:700;padding:1px 7px;border-radius:999px;margin-right:6px;vertical-align:1px;color:var(--surface);background:var(--tc)}
+.row.done .title{text-decoration:line-through;color:var(--muted)}
+.row.overdue{background:var(--danger-soft)}
+.acts{display:flex;gap:4px;align-items:center}
+.chk{width:24px;height:24px;accent-color:var(--accent)}
+.del{border:0;background:none;color:var(--muted);font-size:1rem;padding:4px 6px}
+.empty{padding:16px 12px;color:var(--muted)}
+.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:8px}
+.chip{flex:none;font:inherit;font-size:.8rem;border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:999px;padding:4px 12px}
+.chip[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.day{margin-bottom:10px}
+.dayhead{padding:7px 12px;font-weight:700;font-size:.86rem;border-bottom:1px solid var(--line);display:flex;justify-content:space-between}
+.dayhead span{font-family:var(--mono);color:var(--muted);font-weight:500}
+.wd{padding:10px 12px;margin-bottom:10px}
+.wd h3{margin:0 0 6px;font-size:.92rem}
+.cls{display:flex;gap:8px;font-size:.83rem;border-left:3px solid var(--tc);padding:2px 0 2px 8px;margin-bottom:4px}
+.cls .t{padding:0;min-width:84px}
+form{padding:14px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+label{display:flex;flex-direction:column;gap:3px;font-size:.78rem;color:var(--muted);min-width:0}
+input,select{font:inherit;font-size:1rem;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 9px;width:100%}
+.full{grid-column:1/-1}
+.status{font-size:.82rem;color:var(--muted)}
+.setting{padding:12px;border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
+.setting:last-child{border-bottom:0}
+.setting p{margin:0;font-size:.82rem;color:var(--muted);flex-basis:100%}
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:5;display:grid;grid-template-columns:repeat(4,1fr);background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+nav.tabs button{font:inherit;font-size:.78rem;border:0;background:none;color:var(--muted);padding:10px 0 12px;display:flex;flex-direction:column;align-items:center;gap:2px}
+nav.tabs button[aria-current="page"]{color:var(--accent);font-weight:700}
+nav.tabs svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8}
+.mhead{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-bottom:1px solid var(--line)}
+.mhead strong{font-size:1.1rem}
+.mgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}
+.mwd{font-size:.7rem;text-align:center;color:var(--muted);padding:4px 0;border-bottom:1px solid var(--line)}
+.mwd:first-child,.mcell.sun .mnum{color:var(--sun)}
+.mwd:last-child,.mcell.sat .mnum{color:var(--sat)}
+.mcell{min-height:68px;min-width:0;overflow:hidden;border:0;border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:none;color:inherit;font:inherit;padding:3px 2px;text-align:left;display:flex;flex-direction:column;gap:2px;cursor:pointer}
+.mcell:nth-child(7n){border-right:0}
+.mcell.other{opacity:.38}
+.mnum{font-size:.74rem;font-weight:700;font-family:var(--mono);padding-left:2px;line-height:1.5}
+.mcell.today .mnum{display:inline-block;width:1.6em;text-align:center;border-radius:999px;background:var(--accent);color:var(--on-accent)!important;padding:0}
+.mcell.sel{background:var(--bg);box-shadow:inset 0 0 0 2px var(--accent)}
+.ev{display:block;font-size:.6rem;line-height:1.45;white-space:nowrap;overflow:hidden;border-radius:3px;padding:0 3px;color:var(--surface);background:var(--tc)}
+.ev.done{opacity:.4;text-decoration:line-through}
+.ev.ms{font-weight:700}
+.more{font-size:.6rem;color:var(--muted);padding-left:3px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+</head>
+<body>
+<header class="top">
+  <h1>Wade 的日程表</h1>
+  <div class="countdowns" id="countdowns"></div>
+</header>
+
+<main>
+  <section class="view" id="v-today">
+    <div class="card" style="margin-top:12px">
+      <div class="mhead">
+        <button class="btn" id="mPrev" aria-label="上個月">‹</button>
+        <strong id="mLabel"></strong>
+        <div style="display:flex;gap:6px"><button class="btn" id="goToday">今天</button><button class="btn" id="mNext" aria-label="下個月">›</button></div>
+      </div>
+      <div class="mgrid" id="mgrid"></div>
+    </div>
+    <div class="card" style="margin-top:12px">
+      <div class="daynav">
+        <button class="btn" id="prev" aria-label="前一天">‹</button>
+        <div class="d" id="dayLabel"></div>
+        <button class="btn" id="next" aria-label="後一天">›</button>
+      </div>
+      <ul class="rows" id="todayList"></ul>
+    </div>
+  </section>
+
+  <section class="view" id="v-up" hidden>
+    <h2>接下來 14 天</h2>
+    <div class="chips" id="filters"></div>
+    <div id="upcoming"></div>
+  </section>
+
+  <section class="view" id="v-add" hidden>
+    <h2>新增事項</h2>
+    <div class="card">
+      <form id="addForm">
+        <label class="full">要做什麼<input id="fTitle" required placeholder="例如：微積分作業 3.2"></label>
+        <label>日期<input id="fDate" type="date" required></label>
+        <label>時間（可空白）<input id="fTime" type="time"></label>
+        <label>分類<select id="fCat"></select></label>
+        <label>重複<select id="fRepeat"><option value="">不重複</option><option value="daily">每天</option><option value="weekly">每週同一天</option></select></label>
+        <label class="full">備註<input id="fNote" placeholder="選填"></label>
+        <div class="full" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <button class="btn primary" type="submit">加入</button><span class="status" id="status"></span>
+        </div>
+      </form>
+    </div>
+    <h2>每週課表</h2>
+    <div id="week"></div>
+  </section>
+
+  <section class="view" id="v-set" hidden>
+    <h2>設定</h2>
+    <div class="card">
+      <div class="setting"><strong>每日提醒通知</strong><button class="btn primary" id="notifyBtn">開啟通知</button>
+        <p id="notifyInfo">把 App 加到主畫面後開啟，Chrome 會在每天第一次背景同步時通知你今天要做的事。實際時間由 Chrome 決定，不一定是固定的早上。</p></div>
+      <div class="setting"><strong>測試通知</strong><button class="btn" id="testBtn">送一則今天的摘要</button></div>
+      <div class="setting"><strong>備份</strong><span style="display:flex;gap:6px"><button class="btn" id="exportBtn">匯出</button><label class="btn" style="font-size:inherit;color:inherit;flex-direction:row">匯入<input id="importFile" type="file" accept="application/json" hidden></label></span>
+        <p>資料只存在這支手機上。清除瀏覽器資料前先匯出備份。</p></div>
+      <div class="setting"><strong>還原成初始日程</strong><button class="btn danger" id="resetBtn">還原</button>
+        <p>會清掉你新增的事項和打勾紀錄。</p></div>
+    </div>
+    <p class="status" id="setStatus" style="margin-top:10px"></p>
+  </section>
+</main>
+
+<nav class="tabs" aria-label="主選單">
+  <button data-view="v-today" aria-current="page"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg>月曆</button>
+  <button data-view="v-up"><svg viewBox="0 0 24 24"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>接下來</button>
+  <button data-view="v-add"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v8M8 12h8"/></svg>新增/課表</button>
+  <button data-view="v-set"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/></svg>設定</button>
+</nav>
+
+<script src="summary.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
