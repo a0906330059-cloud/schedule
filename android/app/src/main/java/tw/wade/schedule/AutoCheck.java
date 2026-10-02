@@ -81,9 +81,9 @@ final class AutoCheck {
         return r.getString("access_token");
     }
 
-    /** Kilometres run today according to Strava, or -1 if unknown. */
+    /** Kilometres run today: Strava API if connected, otherwise Health Connect; -1 if unknown. */
     static double runKmToday(Context c) {
-        if (!stravaConnected(c)) return -1;
+        if (!stravaConnected(c)) return HealthRun.runKmToday(c);
         try {
             long after = startOfDay().getTimeInMillis() / 1000;
             HttpURLConnection con = (HttpURLConnection) new URL("https://www.strava.com/api/v3/athlete/activities?per_page=50&after=" + after).openConnection();

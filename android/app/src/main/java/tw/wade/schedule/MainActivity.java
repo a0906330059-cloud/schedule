@@ -28,6 +28,7 @@ public class MainActivity extends Activity {
     static final String EXTRA_VIEW = "view";
     private static final int REQ_FILE = 1;
     private static final int REQ_EXPORT = 2;
+    private static final int REQ_HEALTH = 3;
     private static final String START_URL = "https://appassets.androidplatform.net/assets/www/index.html";
 
     private WebView web;
@@ -158,6 +159,15 @@ public class MainActivity extends Activity {
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] results) {
+        super.onRequestPermissionsResult(requestCode, permissions, results);
+        if (requestCode != REQ_HEALTH) return;
+        boolean ok = HealthRun.granted(this);
+        notifyPage(ok ? "已連結 Health Connect，跑步會自動打勾。" : "沒有拿到 Health Connect 權限。可以到 Health Connect →「App 權限」→ 日程表，把運動和距離打開。");
+        if (ok) runAutoCheck();
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQ_FILE) {
@@ -211,6 +221,8 @@ public class MainActivity extends Activity {
         public String autoStatus() {
             return "{\"strava\":" + AutoCheck.stravaConnected(MainActivity.this)
                     + ",\"usage\":" + AutoCheck.usageGranted(MainActivity.this)
+                    + ",\"health\":" + HealthRun.granted(MainActivity.this)
+                    + ",\"healthAvail\":" + HealthRun.available(MainActivity.this)
                     + ",\"clientId\":" + org.json.JSONObject.quote(AutoCheck.prefs(MainActivity.this).getString("client_id", "")) + "}";
         }
 
@@ -220,6 +232,15 @@ public class MainActivity extends Activity {
             runOnUiThread(() -> {
                 try { startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(AutoCheck.authorizeUrl(MainActivity.this)))); }
                 catch (Exception e) { notifyPage("打不開 Strava 授權頁。"); }
+            });
+        }
+
+        /** Asks for permission to read runs (exercise + distance) from Health Connect. */
+        @JavascriptInterface
+        public void healthConnect() {
+            runOnUiThread(() -> {
+                if (!HealthRun.available(MainActivity.this)) { notifyPage("這支手機沒有內建 Health Connect（需要 Android 14 以上）。"); return; }
+                requestPermissions(HealthRun.PERMS, REQ_HEALTH);
             });
         }
 
