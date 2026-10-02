@@ -845,6 +845,7 @@
   function renderAuto() {
     $("sEpop").value = settings().epopMin || 10;
     $("sExtraRun").value = settings().extraRunMin == null ? 1 : settings().extraRunMin;
+    $("sStravaOnly").checked = settings().runStravaOnly !== false;
     if (!NATIVE) { $("autoCard").hidden = true; $("autoWebNote").hidden = false; return; }
     var st = {}; try { st = JSON.parse(window.Android.autoStatus()); } catch (e) {}
     $("stravaState").textContent = st.strava ? "已連結" : "未連結";
@@ -871,6 +872,7 @@
     window.Android.stravaDisconnect(); offArmed = false; $("stravaOff").textContent = "取消連結"; renderAuto();
   };
   $("sExtraRun").addEventListener("change", function () { var n = parseFloat($("sExtraRun").value); if (n >= 0) { settings().extraRunMin = n; persist(); } });
+  $("sStravaOnly").addEventListener("change", function () { settings().runStravaOnly = $("sStravaOnly").checked; persist(); if (NATIVE) { autoMsg("檢查中…"); window.Android.checkNow(); } });
   $("healthBtn").onclick = function () { if (window.Android.healthConnect) window.Android.healthConnect(); };
   $("usageBtn").onclick = function () { window.Android.openUsageSettings(); };
   $("checkNow").onclick = function () { autoMsg("檢查中…"); window.Android.checkNow(); };
