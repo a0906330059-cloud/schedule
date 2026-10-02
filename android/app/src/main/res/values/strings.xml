@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">日程表</string>
+    <string name="widget_desc">今天的課、事件和任務，點 + 隨手記一筆</string>
+    <string name="widget_empty">今天沒有安排，點 + 記一筆</string>
+    <string name="quick_add">新增</string>
+    <string name="toggle_done">完成</string>
+</resources>
