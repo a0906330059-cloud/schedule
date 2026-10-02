@@ -55,9 +55,10 @@
 
     <ImageView
         android:id="@+id/i_check"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="6dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:padding="5dp"
+        android:layout_marginStart="2dp"
         android:src="@drawable/box_off"
         android:contentDescription="@string/toggle_done" />
 </LinearLayout>
