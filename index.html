@@ -175,6 +175,21 @@ textarea{font:inherit;font-size:.92rem;color:var(--fg);background:var(--surface)
 .vocab b{font-family:var(--mono);color:var(--fg)}
 .vocab span{color:var(--muted)}
 .rp-link{display:block;margin-top:20px;text-align:center;padding:10px;border-radius:10px;border:1px solid var(--line);color:var(--accent);text-decoration:none;font-weight:700}
+.quiz{margin:26px 0 8px;padding:14px;border-radius:14px;border:1px solid color-mix(in srgb,var(--accent) 45%,var(--line));background:linear-gradient(160deg,var(--accent-soft),var(--bg) 70%)}
+.quiz.review{border-color:color-mix(in srgb,#fbbf24 45%,var(--line));background:linear-gradient(160deg,color-mix(in srgb,#fbbf24 14%,var(--bg)),var(--bg) 70%)}
+.quiz-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.quiz-head h3{margin:0!important}
+.quiz-head span{font-family:var(--mono);font-size:.82rem;color:var(--muted)}
+.qz{margin-top:16px}
+.qz-q{font-weight:800;margin:0 0 8px;font-size:1rem}
+.qz-opts{display:flex;flex-direction:column;gap:6px}
+.qz-opt{display:flex;gap:10px;align-items:flex-start;text-align:left;font:inherit;font-size:.93rem;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer}
+.qz-opt:disabled{cursor:default;opacity:.55}
+.qz-opt.right{opacity:1;border-color:#34d399;background:color-mix(in srgb,#34d399 18%,var(--surface))}
+.qz-opt.wrong{opacity:1;border-color:#ff6b6f;background:color-mix(in srgb,#ff6b6f 18%,var(--surface))}
+.qz-l{flex:none;width:22px;height:22px;border-radius:6px;background:var(--bg);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-weight:800;font-size:.8rem;color:var(--muted)}
+.qz-exp{margin-top:8px;font-size:.88rem;line-height:1.55;padding:10px 12px;border-radius:10px;background:var(--surface);border-left:4px solid #34d399}
+.qz-exp.no{border-left-color:#ff6b6f}
 .rp-hist{display:flex;flex-direction:column;gap:6px}
 .rp-hist button{text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:8px 10px;cursor:pointer;font-size:.86rem}
 .rp-hist button small{display:block;color:var(--muted);font-family:var(--mono);font-size:.72rem}

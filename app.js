@@ -710,6 +710,9 @@
       r.vocab.forEach(function (v) { g.append(el("b", {}, v.en), el("span", {}, v.zh)); });
       b.append(el("h3", {}, "英文小單字"), g);
     }
+    if (r.quiz && r.quiz.length) b.append(renderQuiz(r));
+    var review = reviewQs(r.date);
+    if (review.length) b.append(renderReview(review));
     if (r.link) b.append(el("a", { class: "rp-link", href: r.link, target: "_blank", rel: "noopener" }, "看英文原文 ›"));
     var hist = el("div", { class: "rp-hist" });
     b.append(el("h3", {}, "以前的報告"), hist);
@@ -724,6 +727,65 @@
       if (!hist.children.length) hist.append(el("p", { class: "status" }, "還沒有以前的報告。"));
     }).catch(function () { hist.append(el("p", { class: "status" }, "目前連不到網路。")); });
     if (!quiet) { window.scrollTo(0, 0); }
+  }
+  // ---------- report quiz: answer to remember, wrong ones come back later ----------
+  function quizStore() { var st = settings(); st.quiz = st.quiz || {}; st.quizWrong = st.quizWrong || []; return st; }
+  function qBlock(item, picked, onPick) {
+    var box = el("div", { class: "qz" + (picked != null ? " answered" : "") });
+    box.append(el("p", { class: "qz-q" }, item.q));
+    var opts = el("div", { class: "qz-opts" });
+    item.options.forEach(function (o, i) {
+      var cls = "qz-opt";
+      if (picked != null) { if (i === item.answer) cls += " right"; else if (i === picked) cls += " wrong"; }
+      var btn = el("button", { type: "button", class: cls }, el("span", { class: "qz-l" }, "ABCD"[i]), o);
+      if (picked != null) btn.disabled = true;
+      btn.addEventListener("click", function () { onPick(i); });
+      opts.append(btn);
+    });
+    box.append(opts);
+    if (picked != null) box.append(el("div", { class: "qz-exp " + (picked === item.answer ? "ok" : "no") }, el("b", {}, picked === item.answer ? "答對了！" : "正確答案是 " + "ABCD"[item.answer] + "。"), " " + (item.explain || "")));
+    return box;
+  }
+  function renderQuiz(r) {
+    var st = quizStore(), ans = st.quiz[r.date] || [];
+    var wrap = el("section", { class: "quiz" });
+    var done = r.quiz.filter(function (_, i) { return ans[i] != null; }).length;
+    var right = r.quiz.filter(function (q, i) { return ans[i] === q.answer; }).length;
+    wrap.append(el("div", { class: "quiz-head" }, el("h3", {}, "小測驗"), el("span", {}, done < r.quiz.length ? "答完才算讀完：" + done + "/" + r.quiz.length : "答對 " + right + "/" + r.quiz.length)));
+    if (!done) wrap.append(el("p", { class: "status" }, "先別往上偷看，憑記憶選。選錯也沒關係，錯的題目過幾天會再出現一次。"));
+    r.quiz.forEach(function (q, i) {
+      wrap.append(qBlock(q, ans[i], function (pick) {
+        var a = st.quiz[r.date] = st.quiz[r.date] || [];
+        if (a[i] != null) return;
+        a[i] = pick;
+        if (pick !== q.answer) st.quizWrong.push({ date: r.date, q: q.q, options: q.options, answer: q.answer, explain: q.explain || "" });
+        st.quizWrong = st.quizWrong.slice(-20);
+        persist();
+        wrap.replaceWith(renderQuiz(r));
+      }));
+    });
+    if (done === r.quiz.length) wrap.append(el("div", { class: "wk-msg", style: "--tone:" + (right === r.quiz.length ? "#34d399" : right * 2 >= r.quiz.length ? "#fbbf24" : "#ff6b6f") }, right === r.quiz.length ? "全對！今天這篇你真的讀懂了。" : "答錯的題目我記下來了，過兩天會在報告下面再考你一次。"));
+    return wrap;
+  }
+  // wrong answers from at least 2 days ago come back (max 2 at a time); answer right → gone
+  function reviewQs(today) { var st = quizStore(), lim = addDays(todayStr(), -2); return st.quizWrong.filter(function (w) { return w.date <= lim && w.date !== today; }).slice(0, 2); }
+  function renderReview(list) {
+    var wrap = el("section", { class: "quiz review" });
+    wrap.append(el("div", { class: "quiz-head" }, el("h3", {}, "複習：之前答錯的題目"), el("span", {}, list.length + " 題")));
+    list.forEach(function (w) {
+      var slot = el("div");
+      var draw = function (picked) {
+        slot.replaceChildren(qBlock(w, picked, function (pick) {
+          var st = quizStore();
+          if (pick === w.answer) st.quizWrong = st.quizWrong.filter(function (x) { return x !== w; });
+          else { st.quizWrong = st.quizWrong.filter(function (x) { return x !== w; }); w.date = todayStr(); st.quizWrong.push(w); }
+          persist(); draw(pick);
+        }));
+      };
+      draw(null);
+      wrap.append(slot);
+    });
+    return wrap;
   }
   function loadReport() {
     var cached = null; try { cached = JSON.parse(localStorage.getItem("daily-report") || "null"); } catch (e) {}
