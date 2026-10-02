@@ -133,6 +133,7 @@ final class AutoCheck {
             auto.put("date", today);
             if (km >= 0) auto.put("runKm", Math.round(km * 10) / 10.0);
             if (epop >= 0) auto.put("epopMin", epop);
+            if (!stravaConnected(c)) auto.put("hcInfo", HealthRun.lastInfo);
             data.put("auto", auto);
 
             if (km >= 0) {

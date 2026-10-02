@@ -42,9 +42,13 @@ final class HealthRun {
         return true;
     }
 
+    /** What Health Connect showed on the last check — shown in Settings to make problems easy to spot. */
+    static String lastInfo = "";
+
     /** Kilometres run today, or -1 if unknown (no permission, too old Android, app in background…). */
     static double runKmToday(Context c) {
-        if (!granted(c)) return -1;
+        if (!available(c)) { lastInfo = "這支手機沒有內建 Health Connect"; return -1; }
+        if (!granted(c)) { lastInfo = "還沒給日程表讀取 Health Connect 的權限"; return -1; }
         try {
             HealthConnectManager hc = c.getSystemService(HealthConnectManager.class);
             Calendar day = Calendar.getInstance();
@@ -52,12 +56,19 @@ final class HealthRun {
             Instant from = Instant.ofEpochMilli(day.getTimeInMillis()), to = Instant.now();
 
             List<ExerciseSessionRecord> runs = new ArrayList<>();
-            for (ExerciseSessionRecord s : read(hc, ExerciseSessionRecord.class, from, to)) {
-                int t = s.getExerciseType();
-                if (t == ExerciseSessionType.EXERCISE_SESSION_TYPE_RUNNING || t == ExerciseSessionType.EXERCISE_SESSION_TYPE_RUNNING_TREADMILL) runs.add(s);
-            }
-            if (runs.isEmpty()) return 0;
+            List<ExerciseSessionRecord> sessions = read(hc, ExerciseSessionRecord.class, from, to);
             List<DistanceRecord> dist = read(hc, DistanceRecord.class, from, to);
+            StringBuilder info = new StringBuilder("Health Connect 今天：運動 " + sessions.size() + " 筆、距離紀錄 " + dist.size() + " 筆");
+            for (ExerciseSessionRecord s : sessions) {
+                int t = s.getExerciseType();
+                boolean run = t == ExerciseSessionType.EXERCISE_SESSION_TYPE_RUNNING || t == ExerciseSessionType.EXERCISE_SESSION_TYPE_RUNNING_TREADMILL;
+                if (run) runs.add(s);
+                info.append("\n・").append(run ? "跑步" : "運動類型 " + t).append("，來自 ")
+                    .append(s.getMetadata().getDataOrigin().getPackageName())
+                    .append("，").append(String.format(java.util.Locale.US, "%.2f", metres(s, dist) / 1000)).append(" 公里");
+            }
+            lastInfo = info.toString();
+            if (runs.isEmpty()) return 0;
 
             // the same run can be saved by two apps (e.g. Strava and Samsung Health):
             // overlapping sessions count once, using the longest distance among them
@@ -77,6 +88,7 @@ final class HealthRun {
             if (groupMax > 0) total += groupMax;
             return total / 1000.0;
         } catch (Exception e) {
+            lastInfo = "讀 Health Connect 失敗：" + e.getClass().getSimpleName() + " " + e.getMessage();
             return -1;
         }
     }
