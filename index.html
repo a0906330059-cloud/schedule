@@ -288,10 +288,12 @@ textarea{font:inherit;font-size:.92rem;color:var(--fg);background:var(--surface)
     </div>
     <h2>自動打勾</h2>
     <div class="card" id="autoCard">
-      <div class="setting"><strong>Strava（跑步）</strong><span class="status" id="stravaState">未連結</span>
-        <p>當天在 Strava 跑到課表上的完整距離，跑步任務就會自動打勾。</p>
+      <div class="setting"><strong>跑步（Health Connect）</strong><span class="status" id="healthState">未連結</span>
+        <p>照常用 Strava 跑步就好。Strava 會把跑步記進手機的 Health Connect，App 從那裡讀；當天跑到課表上的完整距離，跑步任務就會自動打勾。免費，不用 Strava 訂閱。</p>
+        <button class="btn primary" id="healthBtn">連結 Health Connect</button></div>
+      <details class="setting" id="stravaBox"><summary><strong>改用 Strava API（需要 Strava 付費訂閱）</strong><span class="status" id="stravaState">未連結</span></summary>
         <div class="rename" id="stravaForm"><span>Client ID</span><input id="sCid" inputmode="numeric" autocomplete="off"><span>Client Secret</span><input id="sCsec" autocomplete="off"></div>
-        <span style="display:flex;gap:6px"><button class="btn primary" id="stravaBtn">連結 Strava</button><button class="btn" id="stravaOff" hidden>取消連結</button></span></div>
+        <span style="display:flex;gap:6px"><button class="btn" id="stravaBtn">連結 Strava</button><button class="btn" id="stravaOff" hidden>取消連結</button></span></details>
       <div class="setting"><strong>EPOP（英文）</strong><span class="status" id="usageState">未開啟</span>
         <p>一天三次：EPOP 今天累計用滿 1 倍、2 倍、3 倍分鐘數時，早、午、晚三格會依序自動打勾。只看有沒有開著，不知道你練了什麼。</p>
         <div class="rename"><span>每次幾分鐘</span><input id="sEpop" type="number" min="1" max="120"></div>

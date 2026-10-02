@@ -829,12 +829,15 @@
     if (!NATIVE) { $("autoCard").hidden = true; $("autoWebNote").hidden = false; return; }
     var st = {}; try { st = JSON.parse(window.Android.autoStatus()); } catch (e) {}
     $("stravaState").textContent = st.strava ? "已連結" : "未連結";
+    if (st.strava) $("stravaBox").open = true;
+    $("healthState").textContent = st.health ? "已連結" : st.healthAvail === false ? "這支手機不支援" : "未連結";
+    $("healthBtn").textContent = st.health ? "重新檢查權限" : "連結 Health Connect";
     $("stravaForm").hidden = !!st.strava; $("stravaBtn").hidden = !!st.strava; $("stravaOff").hidden = !st.strava;
     if (st.clientId && !$("sCid").value) $("sCid").value = st.clientId;
     $("usageState").textContent = st.usage ? "已開啟" : "未開啟";
     $("usageBtn").textContent = st.usage ? "到系統設定查看" : "開啟「使用情形存取權」";
     var a = data.auto;
-    if (a && a.date === todayStr()) autoMsg("今天：" + (a.runKm != null ? "跑了 " + a.runKm + " 公里" : "Strava 未連結") + "，" + (a.epopMin != null ? "EPOP 共用了 " + a.epopMin + " 分" : "EPOP 未開啟權限"));
+    if (a && a.date === todayStr()) autoMsg("今天：" + (a.runKm != null ? "跑了 " + a.runKm + " 公里" : "跑步還沒連結") + "，" + (a.epopMin != null ? "EPOP 共用了 " + a.epopMin + " 分" : "EPOP 未開啟權限"));
   }
   $("sEpop").addEventListener("change", function () { var n = parseInt($("sEpop").value, 10); if (n > 0) { settings().epopMin = n; persist(); } });
   $("stravaBtn").onclick = function () {
@@ -847,6 +850,7 @@
     if (!offArmed) { offArmed = true; $("stravaOff").textContent = "再按一次確認"; return; }
     window.Android.stravaDisconnect(); offArmed = false; $("stravaOff").textContent = "取消連結"; renderAuto();
   };
+  $("healthBtn").onclick = function () { if (window.Android.healthConnect) window.Android.healthConnect(); };
   $("usageBtn").onclick = function () { window.Android.openUsageSettings(); };
   $("checkNow").onclick = function () { autoMsg("檢查中…"); window.Android.checkNow(); };
   window.onAutoChecked = function (message) {
