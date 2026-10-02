@@ -46,7 +46,10 @@ final class HealthRun {
     static String lastInfo = "";
 
     /** Kilometres run today, or -1 if unknown (no permission, too old Android, app in background…). */
-    static double runKmToday(Context c) {
+    static final String STRAVA = "com.strava";
+
+    /** stravaOnly: ignore runs other apps guessed (Samsung Health's auto-detected runs can be far off). */
+    static double runKmToday(Context c, boolean stravaOnly) {
         if (!available(c)) { lastInfo = "這支手機沒有內建 Health Connect"; return -1; }
         if (!granted(c)) { lastInfo = "還沒給日程表讀取 Health Connect 的權限"; return -1; }
         try {
@@ -62,30 +65,35 @@ final class HealthRun {
             for (ExerciseSessionRecord s : sessions) {
                 int t = s.getExerciseType();
                 boolean run = t == ExerciseSessionType.EXERCISE_SESSION_TYPE_RUNNING || t == ExerciseSessionType.EXERCISE_SESSION_TYPE_RUNNING_TREADMILL;
-                if (run) runs.add(s);
+                boolean fromStrava = STRAVA.equals(s.getMetadata().getDataOrigin().getPackageName());
+                if (run && (fromStrava || !stravaOnly)) runs.add(s);
                 info.append("\n・").append(run ? "跑步" : "運動類型 " + t).append("，來自 ")
                     .append(s.getMetadata().getDataOrigin().getPackageName())
                     .append("，").append(String.format(java.util.Locale.US, "%.2f", metres(s, dist) / 1000)).append(" 公里");
             }
+            if (stravaOnly) info.append("\n（目前只算 Strava 的跑步）");
             lastInfo = info.toString();
             if (runs.isEmpty()) return 0;
 
             // the same run can be saved by two apps (e.g. Strava and Samsung Health):
-            // overlapping sessions count once, using the longest distance among them
+            // overlapping sessions count once: Strava's GPS distance wins, otherwise the longest
             runs.sort((a, b) -> a.getStartTime().compareTo(b.getStartTime()));
-            double total = 0, groupMax = -1;
+            double total = 0, groupBest = -1;
+            boolean groupStrava = false;
             Instant groupEnd = null;
             for (ExerciseSessionRecord s : runs) {
                 double m = metres(s, dist);
+                boolean fromStrava = STRAVA.equals(s.getMetadata().getDataOrigin().getPackageName());
                 if (groupEnd != null && s.getStartTime().isBefore(groupEnd)) {
-                    groupMax = Math.max(groupMax, m);
+                    if (fromStrava && !groupStrava) { groupBest = m; groupStrava = true; }
+                    else if (fromStrava == groupStrava) groupBest = Math.max(groupBest, m);
                     if (s.getEndTime().isAfter(groupEnd)) groupEnd = s.getEndTime();
                 } else {
-                    if (groupMax > 0) total += groupMax;
-                    groupMax = m; groupEnd = s.getEndTime();
+                    if (groupBest > 0) total += groupBest;
+                    groupBest = m; groupStrava = fromStrava; groupEnd = s.getEndTime();
                 }
             }
-            if (groupMax > 0) total += groupMax;
+            if (groupBest > 0) total += groupBest;
             return total / 1000.0;
         } catch (Exception e) {
             lastInfo = "讀 Health Connect 失敗：" + e.getClass().getSimpleName() + " " + e.getMessage();

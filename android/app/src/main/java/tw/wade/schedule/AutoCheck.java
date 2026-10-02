@@ -82,8 +82,8 @@ final class AutoCheck {
     }
 
     /** Kilometres run today: Strava API if connected, otherwise Health Connect; -1 if unknown. */
-    static double runKmToday(Context c) {
-        if (!stravaConnected(c)) return HealthRun.runKmToday(c);
+    static double runKmToday(Context c, boolean stravaOnly) {
+        if (!stravaConnected(c)) return HealthRun.runKmToday(c, stravaOnly);
         try {
             long after = startOfDay().getTimeInMillis() / 1000;
             HttpURLConnection con = (HttpURLConnection) new URL("https://www.strava.com/api/v3/athlete/activities?per_page=50&after=" + after).openConnection();
@@ -124,7 +124,9 @@ final class AutoCheck {
     static synchronized void run(Context c) {
         String json = Store.load(c);
         if (json == null) return;
-        double km = runKmToday(c);
+        boolean stravaOnly = true;
+        try { JSONObject st0 = new JSONObject(json).optJSONObject("settings"); if (st0 != null) stravaOnly = st0.optBoolean("runStravaOnly", true); } catch (Exception ignored) { }
+        double km = runKmToday(c, stravaOnly);
         int epop = epopMinutesToday(c);
         try {
             JSONObject data = new JSONObject(json);
@@ -150,6 +152,7 @@ final class AutoCheck {
                     if (goal <= 0) continue;
                     planned = true;
                     if (km >= goal) { t.put("done", true); t.put("doneKm", kmR); }
+                    else t.remove("doneKm");   // ticked by hand: count the planned distance
                 }
                 // a run that wasn't on the schedule: log it once it's past the minimum distance
                 JSONObject settings0 = data.optJSONObject("settings");
