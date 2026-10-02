@@ -68,7 +68,7 @@
   }
   function autoInfo(obj, date) {
     var a = data.auto; if (!a || a.date !== date) return "";
-    if (obj.goalKm && a.runKm != null) return "Strava " + a.runKm + "/" + obj.goalKm + "K";
+    if (obj.goalKm && a.runKm != null && !/^auto-run-/.test(obj.id || "")) return "已跑 " + a.runKm + "/" + obj.goalKm + "K";
     if (obj.link === "epop" && a.epopMin != null) return "今天已用 " + a.epopMin + "/" + (settings().epopMin || 10) * (obj.epopSlot || 1) + " 分";
     return "";
   }
@@ -407,7 +407,7 @@
       habitsOn(d).forEach(function (h) { var ok = !!(h.doneDates && h.doneDates[d]); habitTotal++; if (ok) habitDone++; add(h.cat, ok); });
     });
     var runDone = 0, runPlan = 0;
-    tasks.forEach(function (t) { if (t.goalKm) { runPlan += t.goalKm; if (t.done) runDone += t.goalKm; } });
+    tasks.forEach(function (t) { if (t.goalKm) { if (!/^auto-run-/.test(t.id)) runPlan += t.goalKm; if (t.done) runDone += (t.doneKm || t.goalKm); } });
     var done = due.filter(function (t) { return t.done; }).length + habitDone, total = due.length + habitTotal;
     return { mon: mon, last: last, done: done, total: total, byCat: byCat, runDone: runDone, runPlan: runPlan, future: today < mon };
   }
@@ -844,6 +844,7 @@
   function autoMsg(m) { $("autoMsg").textContent = m || ""; }
   function renderAuto() {
     $("sEpop").value = settings().epopMin || 10;
+    $("sExtraRun").value = settings().extraRunMin == null ? 1 : settings().extraRunMin;
     if (!NATIVE) { $("autoCard").hidden = true; $("autoWebNote").hidden = false; return; }
     var st = {}; try { st = JSON.parse(window.Android.autoStatus()); } catch (e) {}
     $("stravaState").textContent = st.strava ? "已連結" : "未連結";
@@ -868,6 +869,7 @@
     if (!offArmed) { offArmed = true; $("stravaOff").textContent = "再按一次確認"; return; }
     window.Android.stravaDisconnect(); offArmed = false; $("stravaOff").textContent = "取消連結"; renderAuto();
   };
+  $("sExtraRun").addEventListener("change", function () { var n = parseFloat($("sExtraRun").value); if (n >= 0) { settings().extraRunMin = n; persist(); } });
   $("healthBtn").onclick = function () { if (window.Android.healthConnect) window.Android.healthConnect(); };
   $("usageBtn").onclick = function () { window.Android.openUsageSettings(); };
   $("checkNow").onclick = function () { autoMsg("檢查中…"); window.Android.checkNow(); };
