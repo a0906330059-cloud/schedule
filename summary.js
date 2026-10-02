@@ -8,7 +8,9 @@
     now = now || new Date();
     var today = fmt(now), dow = now.getDay();
     var lines = [];
-    var cls = (data.classes || []).filter(function (c) { return c.day === dow; })
+    var terms = data.terms && data.terms.length ? data.terms : [{ id: "", start: "", end: "" }];
+    function termOf(c) { for (var i = 0; i < terms.length; i++) if (terms[i].id === c.termId) return terms[i]; return terms[0]; }
+    var cls = (data.classes || []).filter(function (c) { var t = termOf(c); return c.day === dow && (!t.start || today >= t.start) && (!t.end || today <= t.end); })
       .sort(function (a, b) { return a.start.localeCompare(b.start); });
     cls.forEach(function (c) { lines.push(c.start + " " + c.name + (c.room ? "（" + c.room + "）" : "")); });
     var todo = (data.tasks || []).filter(function (t) { return t.date === today && !t.done; })

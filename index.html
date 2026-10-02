@@ -5,164 +5,319 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Wade 的日程表</title>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#2350c9">
+<meta name="theme-color" content="#07090d">
 <link rel="icon" href="icon-192.png">
-<link rel="apple-touch-icon" href="icon-192.png">
 <style>
+/* Blue / black / white. Events = solid bars, tasks = dots. */
 :root{
-  --bg:#f3f5f8; --surface:#ffffff; --line:#dde2ea; --fg:#18202c; --muted:#5d6878;
-  --accent:#2350c9; --on-accent:#ffffff; --danger:#c2362b; --danger-soft:#fbe7e5;
-  --c-class:#2350c9; --c-team:#18864b; --c-hw:#c2362b; --c-run:#d4671a; --c-tree:#8a7a12; --c-code:#7a3fc4; --c-eng:#0f7f8c; --c-read:#b03a7a; --c-misc:#5d6878; --sun:#c2362b; --sat:#2350c9;
+  --bg:#07090d; --surface:#11151c; --line:#222a36; --fg:#f3f6fb; --muted:#8d97a8;
+  --accent:#4d82ff; --on-accent:#ffffff; --accent-soft:#14203a; --danger:#ff6b6f; --danger-soft:#3a1517;
+  --c-class:#4d82ff; --c-team:#e8edf5; --c-hw:#ff6b6f; --c-run:#5bb8ff; --c-eng:#8b96ff; --c-code:#93b4ff; --c-tree:#94a3b8; --c-read:#38c6ff; --c-study:#c7d2fe; --c-club:#c084fc; --c-gym:#22d3ee; --c-misc:#64748b;
   --mono:ui-monospace,"Roboto Mono",Menlo,monospace;
+  color-scheme:dark;
 }
-@media (prefers-color-scheme: dark){:root{
-  --bg:#10141b; --surface:#181e28; --line:#2a3240; --fg:#e7ebf2; --muted:#98a3b4;
-  --accent:#7d9cff; --on-accent:#0d1220; --danger:#ff7a6e; --danger-soft:#3a1e1c;
-  --c-class:#7d9cff; --c-team:#4fc683; --c-hw:#ff7a6e; --c-run:#ff9f57; --c-tree:#d3c24a; --c-code:#b892ff; --c-eng:#4cc9d6; --c-read:#f07ab8; --c-misc:#98a3b4; --sun:#ff7a6e; --sat:#7d9cff;
-  color-scheme:dark}}
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 html,body{margin:0}
-body{background:var(--bg);color:var(--fg);font-family:"Noto Sans TC","Noto Sans CJK TC",system-ui,sans-serif;font-size:15px;line-height:1.55;-webkit-tap-highlight-color:transparent}
-.top{position:sticky;top:0;z-index:5;background:var(--bg);padding:calc(env(safe-area-inset-top,0px) + 12px) 16px 8px;border-bottom:1px solid var(--line)}
-.top h1{margin:0;font-size:1.35rem;font-weight:900}
-.countdowns{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
-.cd{font-size:.8rem;padding:2px 9px;border:1px solid var(--line);border-radius:999px;background:var(--surface)}
-.cd b{font-family:var(--mono);color:var(--c-run);margin-left:4px}
-main{max-width:720px;margin:0 auto;padding:14px 16px calc(env(safe-area-inset-bottom,0px) + 84px)}
+body{background:var(--bg);color:var(--fg);font-family:"Noto Sans TC","Noto Sans CJK TC",system-ui,sans-serif;font-size:15px;line-height:1.5;-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit}
+.top{position:sticky;top:0;z-index:5;background:var(--bg);padding:calc(env(safe-area-inset-top,0px) + 10px) 14px 8px;border-bottom:1px solid var(--line)}
+.toprow{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.top h1{margin:0;font-size:1.15rem;font-weight:900;letter-spacing:.02em}
+.countdowns{display:flex;gap:6px;flex-wrap:wrap}
+.cd{font-size:.75rem;padding:2px 8px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-weight:700}
+.cd b{font-family:var(--mono);margin-left:3px}
+.shortcuts{display:flex;gap:8px;margin-top:8px;overflow-x:auto}
+.sc{flex:none;display:flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:4px 12px 4px 4px;font-size:.82rem;font-weight:700;cursor:pointer;text-decoration:none;color:var(--fg)}
+.sc i{display:grid;place-items:center;width:24px;height:24px;border-radius:999px;font-style:normal;font-size:.72rem;color:#fff;background:var(--fg)}
+.sc.strava i{background:#1f5eff}.sc.epop i{background:#e8edf5;color:#07090d}.sc.claude i{background:#5b6cf0}
+main{max-width:720px;margin:0 auto;padding:10px 12px calc(env(safe-area-inset-bottom,0px) + 90px)}
 .view[hidden]{display:none}
-h2{font-size:.78rem;letter-spacing:.1em;color:var(--muted);margin:18px 0 8px}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
-.daynav{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;border-bottom:1px solid var(--line)}
-.daynav .d{font-weight:700}
-.daynav .d small{font-family:var(--mono);color:var(--muted);font-weight:500;margin-left:6px;font-size:.78rem}
-.btn{font:inherit;border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:8px;padding:6px 12px;cursor:pointer}
-.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent);font-weight:700}
-.btn.danger{color:var(--danger)}
+h2{font-size:.74rem;letter-spacing:.12em;color:var(--muted);margin:16px 2px 6px}
+.card{background:var(--bg);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.mhead{display:flex;align-items:center;justify-content:space-between;padding:8px 10px}
+.mhead strong{font-size:1.05rem}
+.ib{border:1px solid var(--line);background:var(--surface);border-radius:10px;min-width:36px;height:34px;padding:0 10px;cursor:pointer}
+.mgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));border-top:1px solid var(--line)}
+.mwd{font-size:.68rem;text-align:center;color:var(--muted);padding:4px 0;border-bottom:1px solid var(--line)}
+.mcell{min-height:74px;min-width:0;overflow:hidden;border:0;border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:none;padding:3px 2px;text-align:left;display:flex;flex-direction:column;gap:2px;cursor:pointer}
+.mcell:nth-child(7n){border-right:0}
+.mcell.other{opacity:.35}
+.mnum{font-size:.74rem;font-weight:700;font-family:var(--mono);padding-left:2px;line-height:1.55;align-self:flex-start;border-radius:999px;min-width:1.65em;text-align:center}
+.mcell.sun .mnum,.mcell.sat .mnum{color:var(--accent)}
+.mcell.today .mnum{background:var(--fg);color:var(--bg)!important}
+.mcell.sel{background:var(--accent-soft)}
+.bar{display:block;font-size:.6rem;line-height:1.5;white-space:nowrap;overflow:hidden;border-radius:4px;padding:0 3px;color:#fff;background:var(--tc);font-weight:700}
+.dots{display:flex;flex-wrap:wrap;gap:3px;padding:1px 3px}
+.dot{width:6px;height:6px;border-radius:999px;background:var(--tc)}
+.dot.done{opacity:.3}
+.more{font-size:.58rem;color:var(--muted);padding-left:3px}
+.daycard{margin-top:12px}
+.dayhead{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-bottom:1px solid var(--line)}
+.dayhead .d{font-weight:900;font-size:1.05rem}
+.dayhead .d small{font-family:var(--mono);color:var(--muted);font-weight:500;margin-left:6px;font-size:.75rem}
+.sec{font-size:.7rem;letter-spacing:.12em;color:var(--muted);padding:8px 12px 2px;font-weight:700}
 .rows{list-style:none;margin:0;padding:0}
-.row{display:grid;grid-template-columns:52px 1fr auto;gap:10px;align-items:start;padding:10px 12px;border-bottom:1px solid var(--line)}
-.row:last-child{border-bottom:0}
-.t{font-family:var(--mono);font-size:.8rem;color:var(--muted);padding-top:2px}
-.main{min-width:0}
-.title{font-weight:500;overflow-wrap:anywhere}
-.note{color:var(--muted);font-size:.82rem;overflow-wrap:anywhere}
-.tag{display:inline-block;font-size:.68rem;font-weight:700;padding:1px 7px;border-radius:999px;margin-right:6px;vertical-align:1px;color:var(--surface);background:var(--tc)}
-.row.done .title{text-decoration:line-through;color:var(--muted)}
+.row{display:grid;grid-template-columns:46px 1fr auto;gap:10px;align-items:start;padding:9px 12px;border-top:1px solid var(--line)}
+.t{font-family:var(--mono);font-size:.78rem;color:var(--muted);padding-top:2px}
+.main{min-width:0;cursor:pointer}
+.rename{display:grid;grid-template-columns:auto 1fr;gap:8px 10px;align-items:center;padding:4px 12px 12px;width:100%}
+.rename span{font-size:.82rem;display:flex;align-items:center;gap:6px}
+.rename span i{width:10px;height:10px;border-radius:999px;background:var(--tc)}
+.rename input{padding:6px 8px;font-size:.92rem}
+.title{font-weight:500;overflow-wrap:anywhere;display:flex;align-items:center;gap:6px}
+.title .mk{flex:none;width:4px;align-self:stretch;border-radius:2px;background:var(--tc)}
+.title .mkdot{flex:none;width:8px;height:8px;border-radius:999px;background:var(--tc)}
+.note{color:var(--muted);font-size:.8rem;overflow-wrap:anywhere}
+.row.done .title span.tx{text-decoration:line-through;color:var(--muted)}
 .row.overdue{background:var(--danger-soft)}
-.acts{display:flex;gap:4px;align-items:center}
-.chk{width:24px;height:24px;accent-color:var(--accent)}
-.del{border:0;background:none;color:var(--muted);font-size:1rem;padding:4px 6px}
-.empty{padding:16px 12px;color:var(--muted)}
-.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:8px}
-.chip{flex:none;font:inherit;font-size:.8rem;border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:999px;padding:4px 12px}
+.acts{display:flex;gap:2px;align-items:center}
+.chk{width:22px;height:22px;accent-color:var(--accent)}
+.del{border:0;background:none;color:var(--muted);font-size:.95rem;padding:4px 6px;cursor:pointer}
+.empty{padding:14px 12px;color:var(--muted);font-size:.9rem}
+.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:6px}
+.chip{flex:none;font-size:.8rem;border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:4px 12px;cursor:pointer}
 .chip[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
-.day{margin-bottom:10px}
-.dayhead{padding:7px 12px;font-weight:700;font-size:.86rem;border-bottom:1px solid var(--line);display:flex;justify-content:space-between}
-.dayhead span{font-family:var(--mono);color:var(--muted);font-weight:500}
+.up{margin-bottom:10px}
+.uphead{padding:7px 12px;font-weight:700;font-size:.85rem;display:flex;justify-content:space-between;background:var(--surface)}
+.uphead span{font-family:var(--mono);color:var(--muted);font-weight:500}
 .wd{padding:10px 12px;margin-bottom:10px}
-.wd h3{margin:0 0 6px;font-size:.92rem}
+.wd h3{margin:0 0 6px;font-size:.9rem}
 .cls{display:flex;gap:8px;font-size:.83rem;border-left:3px solid var(--tc);padding:2px 0 2px 8px;margin-bottom:4px}
 .cls .t{padding:0;min-width:84px}
-form{padding:14px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
-label{display:flex;flex-direction:column;gap:3px;font-size:.78rem;color:var(--muted);min-width:0}
-input,select{font:inherit;font-size:1rem;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 9px;width:100%}
-.full{grid-column:1/-1}
+.setting{padding:12px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
+.setting:first-child{border-top:0}
+.setting p{margin:0;font-size:.8rem;color:var(--muted);flex-basis:100%}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:7px 14px;cursor:pointer}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent);font-weight:700}
+.btn.danger{color:var(--danger)}
 .status{font-size:.82rem;color:var(--muted)}
-.setting{padding:12px;border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
-.setting:last-child{border-bottom:0}
-.setting p{margin:0;font-size:.82rem;color:var(--muted);flex-basis:100%}
-nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:5;display:grid;grid-template-columns:repeat(4,1fr);background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
-nav.tabs button{font:inherit;font-size:.78rem;border:0;background:none;color:var(--muted);padding:10px 0 12px;display:flex;flex-direction:column;align-items:center;gap:2px}
+.fab{position:fixed;right:18px;bottom:calc(env(safe-area-inset-bottom,0px) + 76px);z-index:6;width:56px;height:56px;border-radius:18px;border:0;background:var(--accent);color:#fff;font-size:1.8rem;line-height:1;box-shadow:0 6px 18px rgba(77,130,255,.35);cursor:pointer}
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:5;display:grid;grid-template-columns:repeat(5,1fr);background:var(--bg);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+nav.tabs button{font-size:.74rem;border:0;background:none;color:var(--muted);padding:9px 0 11px;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer}
 nav.tabs button[aria-current="page"]{color:var(--accent);font-weight:700}
+nav.tabs button{position:relative}
+.rdot{position:absolute;top:7px;left:calc(50% + 8px);width:8px;height:8px;border-radius:999px;background:var(--danger)}
 nav.tabs svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8}
-.mhead{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-bottom:1px solid var(--line)}
-.mhead strong{font-size:1.1rem}
-.mgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}
-.mwd{font-size:.7rem;text-align:center;color:var(--muted);padding:4px 0;border-bottom:1px solid var(--line)}
-.mwd:first-child,.mcell.sun .mnum{color:var(--sun)}
-.mwd:last-child,.mcell.sat .mnum{color:var(--sat)}
-.mcell{min-height:68px;min-width:0;overflow:hidden;border:0;border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:none;color:inherit;font:inherit;padding:3px 2px;text-align:left;display:flex;flex-direction:column;gap:2px;cursor:pointer}
-.mcell:nth-child(7n){border-right:0}
-.mcell.other{opacity:.38}
-.mnum{font-size:.74rem;font-weight:700;font-family:var(--mono);padding-left:2px;line-height:1.5}
-.mcell.today .mnum{display:inline-block;width:1.6em;text-align:center;border-radius:999px;background:var(--accent);color:var(--on-accent)!important;padding:0}
-.mcell.sel{background:var(--bg);box-shadow:inset 0 0 0 2px var(--accent)}
-.ev{display:block;font-size:.6rem;line-height:1.45;white-space:nowrap;overflow:hidden;border-radius:3px;padding:0 3px;color:var(--surface);background:var(--tc)}
-.ev.done{opacity:.4;text-decoration:line-through}
-.ev.ms{font-weight:700}
-.more{font-size:.6rem;color:var(--muted);padding-left:3px}
+dialog{border:0;padding:0;width:min(560px,100%);max-width:100%;margin:auto auto 0;border-radius:18px 18px 0 0;background:var(--bg);color:var(--fg)}
+dialog::backdrop{background:rgba(5,8,14,.55)}
+.sheet{padding:16px 16px calc(env(safe-area-inset-bottom,0px) + 16px);display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sheet h3{margin:0;grid-column:1/-1;font-size:1rem}
+.seg{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.seg button{border:0;background:var(--bg);padding:8px;cursor:pointer;font-weight:700;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+label{display:flex;flex-direction:column;gap:3px;font-size:.76rem;color:var(--muted);min-width:0}
+input,select{font:inherit;font-size:1rem;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:9px 10px;width:100%}
+.full{grid-column:1/-1}
+.hint{grid-column:1/-1;font-size:.76rem;color:var(--muted);margin:-4px 0 0}
+ /* timeline */
+.allday{padding:6px 12px 2px;display:flex;flex-direction:column;gap:4px}
+.adi{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;background:var(--surface);border-left:4px solid var(--tc);font-size:.88rem}
+.adi.adot{border-left:0}.adi.adot::before{content:"";width:8px;height:8px;border-radius:999px;background:var(--tc);flex:none}
+.adi.overdue{background:var(--danger-soft)}
+.adi .tx{flex:1;min-width:0;overflow-wrap:anywhere;cursor:pointer}
+.adi.done .tx{text-decoration:line-through;color:var(--muted)}
+.adi small{color:var(--muted);font-family:var(--mono);font-size:.72rem}
+.tlwrap{height:62vh;min-height:360px;overflow-y:auto;border-top:1px solid var(--line);position:relative}
+.tl{position:relative;margin-left:44px;margin-right:8px}
+.hr{position:absolute;left:-44px;right:0;border-top:1px solid var(--line);height:0}
+.hr span{position:absolute;left:4px;top:-8px;font-family:var(--mono);font-size:.68rem;color:var(--muted);background:var(--bg);padding-right:4px}
+.sleep{position:absolute;left:0;right:0;background:repeating-linear-gradient(135deg,transparent 0 6px,rgba(141,151,168,.07) 6px 12px)}
+.sleep span{position:absolute;right:4px;top:4px;font-size:.66rem;color:var(--muted)}
+.gap{position:absolute;left:2px;right:2px;border:1.5px dashed var(--accent);border-radius:8px;color:var(--accent);font-size:.74rem;font-weight:700;display:flex;align-items:center;justify-content:center;gap:4px;background:transparent;cursor:pointer;opacity:.75}
+.blk{position:absolute;border-radius:8px;padding:3px 26px 3px 7px;overflow:hidden;font-size:.78rem;line-height:1.3;cursor:pointer;background:var(--surface);border-left:4px solid var(--tc);box-sizing:border-box}
+.blk.task{border-left:0;background:color-mix(in srgb,var(--tc) 14%,var(--bg));border:1px solid color-mix(in srgb,var(--tc) 45%,transparent)}
+.blk b{display:block;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.blk small{color:var(--muted);font-family:var(--mono);font-size:.66rem}
+.blk.fixed{padding-right:7px}
+.blk.done b{text-decoration:line-through;color:var(--muted)}.blk.done{opacity:.6}
+.blk .bchk{position:absolute;right:4px;top:4px;width:18px;height:18px;margin:0;accent-color:var(--accent)}
+.now{position:absolute;left:-6px;right:0;border-top:2px solid var(--danger);z-index:3}
+.now::before{content:"";position:absolute;left:-4px;top:-5px;width:8px;height:8px;border-radius:999px;background:var(--danger)}
+.daysel{grid-column:1/-1;display:flex;gap:6px;flex-wrap:wrap}
+.daysel button{width:38px;height:34px;border:1px solid var(--line);background:var(--surface);border-radius:8px;cursor:pointer}
+.daysel button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:700}
+.addfix{margin:4px 0 12px;width:100%}
+ /* today card */
+.todaycard{margin-bottom:12px;padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+.quote{font-size:1rem;font-weight:700;line-height:1.5;text-wrap:balance}
+.quote::before{content:"今日一句";display:block;font-size:.68rem;letter-spacing:.14em;color:var(--accent);font-weight:700;margin-bottom:2px}
+.arts{display:flex;flex-direction:column;gap:6px;border-top:1px solid var(--line);padding-top:10px}
+.arts .lbl{font-size:.68rem;letter-spacing:.14em;color:var(--accent);font-weight:700;display:flex;justify-content:space-between;align-items:center}
+.art{display:block;text-decoration:none;color:var(--fg);padding:6px 8px;border-radius:8px;background:var(--surface)}
+.art b{display:block;font-size:.88rem;line-height:1.35}
+.art small{color:var(--muted);font-size:.72rem}
+.linkbtn{border:0;background:none;color:var(--accent);font-size:.74rem;font-weight:700;cursor:pointer;padding:0}
+textarea{font:inherit;font-size:.92rem;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:9px 10px;width:100%;min-height:96px;resize:vertical}
+ /* report */
+.rep-cta{display:flex;flex-direction:column;gap:4px;text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:10px 12px;cursor:pointer;color:var(--fg)}
+.rep-cta b{font-size:.95rem;line-height:1.4}
+.rep-cta small{color:var(--muted);font-size:.78rem;line-height:1.45}
+.rep-cta span{color:var(--accent);font-size:.78rem;font-weight:700}
+#v-report article{max-width:62ch;margin:0 auto;padding:4px 2px 24px}
+.rp-top{display:flex;align-items:center;justify-content:space-between;margin:6px 0 10px}
+.rp-tag{display:inline-block;font-size:.72rem;font-weight:700;color:var(--accent);background:var(--accent-soft);border-radius:999px;padding:2px 10px}
+#v-report h1{font-size:1.35rem;line-height:1.4;margin:10px 0 6px;text-wrap:balance}
+.rp-meta{color:var(--muted);font-size:.78rem;font-family:var(--mono)}
+.rp-lead{font-size:1rem;font-weight:700;border-left:3px solid var(--accent);padding:4px 0 4px 12px;margin:16px 0}
+#v-report h3{font-size:.74rem;letter-spacing:.14em;color:var(--accent);margin:22px 0 8px}
+#v-report p{line-height:1.8;margin:0 0 12px;font-size:.96rem}
+#v-report ul{margin:0;padding-left:1.2em;line-height:1.75}
+.vocab{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:.92rem}
+.vocab b{font-family:var(--mono);color:var(--fg)}
+.vocab span{color:var(--muted)}
+.rp-link{display:block;margin-top:20px;text-align:center;padding:10px;border-radius:10px;border:1px solid var(--line);color:var(--accent);text-decoration:none;font-weight:700}
+.rp-hist{display:flex;flex-direction:column;gap:6px}
+.rp-hist button{text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:8px 10px;cursor:pointer;font-size:.86rem}
+.rp-hist button small{display:block;color:var(--muted);font-family:var(--mono);font-size:.72rem}
+ /* weekly review */
+.wk{padding:12px 14px;margin-bottom:12px}
+.wk-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+.wk-head b{font-size:1rem}
+.wk-big{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.wk-big div{background:var(--surface);border-radius:10px;padding:8px 10px}
+.wk-big b{display:block;font-size:1.3rem;font-family:var(--mono);font-variant-numeric:tabular-nums}
+.wk-big small{color:var(--muted);font-size:.72rem}
+.wk-row{display:grid;grid-template-columns:5.5em 1fr 4.2em;gap:8px;align-items:center;font-size:.84rem;margin:6px 0}
+.wk-bar{height:8px;border-radius:999px;background:var(--surface);overflow:hidden}
+.wk-bar i{display:block;height:100%;border-radius:999px;background:var(--tc)}
+.wk-row span:last-child{text-align:right;font-family:var(--mono);color:var(--muted);font-size:.78rem}
+.wk-msg{margin-top:10px;font-size:.88rem;color:var(--fg);border-left:3px solid var(--accent);padding-left:10px}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 </style>
 </head>
 <body>
 <header class="top">
-  <h1>Wade 的日程表</h1>
-  <div class="countdowns" id="countdowns"></div>
+  <div class="toprow"><h1 id="appTitle">Wade 的日程表</h1><div class="countdowns" id="countdowns"></div></div>
+  <div class="shortcuts" id="shortcuts"></div>
 </header>
 
 <main>
-  <section class="view" id="v-today">
-    <div class="card" style="margin-top:12px">
+  <section class="view" id="v-cal">
+    <div class="card todaycard" id="todayCard">
+      <div class="quote" id="quote"></div>
+    </div>
+    <div class="card">
       <div class="mhead">
-        <button class="btn" id="mPrev" aria-label="上個月">‹</button>
+        <button class="ib" id="mPrev" aria-label="上個月">‹</button>
         <strong id="mLabel"></strong>
-        <div style="display:flex;gap:6px"><button class="btn" id="goToday">今天</button><button class="btn" id="mNext" aria-label="下個月">›</button></div>
+        <div style="display:flex;gap:6px"><button class="ib" id="goToday">今天</button><button class="ib" id="mNext" aria-label="下個月">›</button></div>
       </div>
       <div class="mgrid" id="mgrid"></div>
     </div>
-    <div class="card" style="margin-top:12px">
-      <div class="daynav">
-        <button class="btn" id="prev" aria-label="前一天">‹</button>
+    <div class="card daycard">
+      <div class="dayhead">
+        <button class="ib" id="prev" aria-label="前一天">‹</button>
         <div class="d" id="dayLabel"></div>
-        <button class="btn" id="next" aria-label="後一天">›</button>
+        <button class="ib" id="next" aria-label="後一天">›</button>
       </div>
-      <ul class="rows" id="todayList"></ul>
+      <div id="dayBody"></div>
     </div>
   </section>
 
+  <section class="view" id="v-report" hidden>
+    <article id="reportBody"></article>
+  </section>
+
   <section class="view" id="v-up" hidden>
+    <h2>每週回顧</h2>
+    <div class="card wk" id="weekly"></div>
     <h2>接下來 14 天</h2>
     <div class="chips" id="filters"></div>
     <div id="upcoming"></div>
   </section>
 
-  <section class="view" id="v-add" hidden>
-    <h2>新增事項</h2>
-    <div class="card">
-      <form id="addForm">
-        <label class="full">要做什麼<input id="fTitle" required placeholder="例如：微積分作業 3.2"></label>
-        <label>日期<input id="fDate" type="date" required></label>
-        <label>時間（可空白）<input id="fTime" type="time"></label>
-        <label>分類<select id="fCat"></select></label>
-        <label>重複<select id="fRepeat"><option value="">不重複</option><option value="daily">每天</option><option value="weekly">每週同一天</option></select></label>
-        <label class="full">備註<input id="fNote" placeholder="選填"></label>
-        <div class="full" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-          <button class="btn primary" type="submit">加入</button><span class="status" id="status"></span>
-        </div>
-      </form>
-    </div>
-    <h2>每週課表</h2>
+  <section class="view" id="v-week" hidden>
+    <h2>每週固定行程</h2>
+    <button class="btn primary addfix" id="addFixed">＋ 新增固定行程（課、社團、打工…）</button>
     <div id="week"></div>
   </section>
 
   <section class="view" id="v-set" hidden>
     <h2>設定</h2>
     <div class="card">
-      <div class="setting"><strong>每日提醒通知</strong><button class="btn primary" id="notifyBtn">開啟通知</button>
-        <p id="notifyInfo">把 App 加到主畫面後開啟，Chrome 會在每天第一次背景同步時通知你今天要做的事。實際時間由 Chrome 決定，不一定是固定的早上。</p></div>
-      <div class="setting"><strong>測試通知</strong><button class="btn" id="testBtn">送一則今天的摘要</button></div>
-      <div class="setting"><strong>備份</strong><span style="display:flex;gap:6px"><button class="btn" id="exportBtn">匯出</button><label class="btn" style="font-size:inherit;color:inherit;flex-direction:row">匯入<input id="importFile" type="file" accept="application/json" hidden></label></span>
-        <p>資料只存在這支手機上。清除瀏覽器資料前先匯出備份。</p></div>
+      <div class="setting"><strong>App 名稱</strong>
+        <input id="sTitle" maxlength="20" style="flex-basis:100%"></div>
+      <div class="setting"><strong>分類名稱</strong><p>改了之後，所有事項上的分類名稱都會跟著變。</p>
+        <div class="rename" id="catRename"></div></div>
+      <div class="setting"><strong>上方捷徑名稱</strong>
+        <div class="rename" id="appRename"></div></div>
+      <div class="setting"><strong>作息時間</strong><p>時間軸上，睡覺時間會變淡，空檔只算醒著的時間。</p>
+        <div class="rename"><span>起床</span><input id="sWake" type="time"><span>睡覺</span><input id="sSleep" type="time"></div></div>
+      <div class="setting"><span class="status" id="renameStatus">修改會自動儲存。</span></div>
+    </div>
+    <h2>自動打勾</h2>
+    <div class="card" id="autoCard">
+      <div class="setting"><strong>Strava（跑步）</strong><span class="status" id="stravaState">未連結</span>
+        <p>當天在 Strava 跑到課表上的完整距離，跑步任務就會自動打勾。</p>
+        <div class="rename" id="stravaForm"><span>Client ID</span><input id="sCid" inputmode="numeric" autocomplete="off"><span>Client Secret</span><input id="sCsec" autocomplete="off"></div>
+        <span style="display:flex;gap:6px"><button class="btn primary" id="stravaBtn">連結 Strava</button><button class="btn" id="stravaOff" hidden>取消連結</button></span></div>
+      <div class="setting"><strong>EPOP（英文）</strong><span class="status" id="usageState">未開啟</span>
+        <p>一天三次：EPOP 今天累計用滿 1 倍、2 倍、3 倍分鐘數時，早、午、晚三格會依序自動打勾。只看有沒有開著，不知道你練了什麼。</p>
+        <div class="rename"><span>每次幾分鐘</span><input id="sEpop" type="number" min="1" max="120"></div>
+        <button class="btn" id="usageBtn">開啟「使用情形存取權」</button></div>
+      <div class="setting"><button class="btn" id="checkNow">立刻檢查一次</button><span class="status" id="autoMsg"></span></div>
+    </div>
+    <p class="status" id="autoWebNote" hidden style="margin:6px 2px">自動打勾只有 Android App 版能用。</p>
+
+    <h2>每日推播與勵志句</h2>
+    <div class="card">
+      <div class="setting" id="pushRow"><strong>每天早上提醒</strong><input id="sPush" type="time" style="width:auto">
+        <p>到了這個時間，手機會跳出通知：今天的行程、今日一句。設成空白就關掉。</p>
+        <button class="btn" id="pushBtn">允許通知</button></div>
+      <div class="setting"><strong>事前提醒</strong>
+        <p>每件事開始前跳通知（只有 Android App 版）。每件事也可以在編輯時單獨改。</p>
+        <div class="rename"><span>上課、固定行程</span><select id="sRemClass"></select><span>其他事情</span><select id="sRemOther"></select></div></div>
+      <div class="setting"><strong>自己的勵志句</strong>
+        <p>一行一句。有填的話，「今日一句」會從你寫的句子裡輪流出現；空白就用內建的 40 句。</p>
+        <textarea id="sQuotes" placeholder="例如：我要在田中馬笑著跑完！"></textarea></div>
+    </div>
+
+    <h2>其他</h2>
+    <div class="card">
+      <div class="setting" id="notifyRow"><strong>每日提醒通知</strong><button class="btn primary" id="notifyBtn">開啟通知</button>
+        <p>Chrome 會在每天第一次背景同步時通知你，時間不一定固定。</p></div>
+      <div class="setting"><strong>備份</strong><span style="display:flex;gap:6px"><button class="btn" id="exportBtn">匯出</button><label class="btn" style="font-size:inherit;color:inherit;flex-direction:row">匯入<input id="importFile" type="file" accept="application/json,.json" hidden></label></span>
+        <p>資料只存在這支手機上。換手機或清除資料前先匯出。</p></div>
       <div class="setting"><strong>還原成初始日程</strong><button class="btn danger" id="resetBtn">還原</button>
         <p>會清掉你新增的事項和打勾紀錄。</p></div>
     </div>
-    <p class="status" id="setStatus" style="margin-top:10px"></p>
+    <p class="status" id="setStatus" style="margin:10px 2px"></p>
   </section>
 </main>
 
+<button class="fab" id="fab" aria-label="新增">+</button>
+
+<dialog id="sheet">
+  <form class="sheet" id="addForm" method="dialog">
+    <h3 id="sheetTitle">新增</h3>
+    <div class="seg" role="group" aria-label="類型" id="kindSeg">
+      <button type="button" id="kEvent" aria-pressed="true">事件</button>
+      <button type="button" id="kTask" aria-pressed="false">任務</button>
+    </div>
+    <p class="hint" id="kindHint">事件：考試、聚會、比賽這類偶發的事，月曆上顯示成色條。</p>
+    <label class="full">內容<input id="fTitle" required placeholder="例如：微積分小考" autocomplete="off"></label>
+    <label id="dateWrap">日期<input id="fDate" type="date"></label>
+    <label><span id="timeLbl">時間</span><input id="fTime" type="time"></label>
+    <label id="endWrap">結束（可空白）<input id="fEnd" type="time"></label>
+    <div class="daysel" id="daySel" hidden></div>
+    <label id="roomWrap" class="full" hidden>教室<input id="fRoom" autocomplete="off"></label>
+    <label id="catWrap"><span id="catLbl">分類</span><select id="fCat"></select></label>
+    <label id="repeatWrap">重複<select id="fRepeat"><option value="">不重複</option><option value="daily">每天</option><option value="weekly">每週同一天</option></select></label>
+    <label id="remindWrap">提醒<select id="fRemind"></select></label>
+    <label id="goalWrap" hidden>目標距離（公里）<input id="fGoal" type="number" step="0.1" min="0"></label>
+    <label class="full">備註<input id="fNote" placeholder="選填" autocomplete="off"></label>
+    <button class="btn" type="button" id="cancelBtn">取消</button>
+    <button class="btn primary" type="submit" id="submitBtn">加入</button>
+    <button class="btn danger full" type="button" id="deleteBtn" hidden>刪除這一項</button>
+  </form>
+</dialog>
+
 <nav class="tabs" aria-label="主選單">
-  <button data-view="v-today" aria-current="page"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg>月曆</button>
+  <button data-view="v-cal" aria-current="page"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg>月曆</button>
   <button data-view="v-up"><svg viewBox="0 0 24 24"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>接下來</button>
-  <button data-view="v-add"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v8M8 12h8"/></svg>新增/課表</button>
+  <button data-view="v-report"><svg viewBox="0 0 24 24"><path d="M6 3.5h9l3.5 3.5v13.5H6z"/><path d="M14.5 3.5V7.5h4M9 11h6M9 14.5h6M9 18h4"/></svg>報告<span class="rdot" id="rdot" hidden></span></button>
+  <button data-view="v-week"><svg viewBox="0 0 24 24"><rect x="3.5" y="4" width="17" height="16" rx="2"/><path d="M3.5 9h17M9 9v11"/></svg>固定行程</button>
   <button data-view="v-set"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/></svg>設定</button>
 </nav>
 

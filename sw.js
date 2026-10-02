@@ -1,7 +1,7 @@
 importScripts("summary.js");
 
-var CACHE = "sched-app-v1";
-var ASSETS = ["./", "index.html", "app.js", "summary.js", "seed.json", "manifest.json", "icon-192.png", "icon-512.png"];
+var CACHE = "sched-app-v12";
+var ASSETS = ["./", "index.html", "app.js", "summary.js", "seed.json", "quotes.json", "manifest.json", "icon-192.png", "icon-512.png"];
 
 self.addEventListener("install", function (e) {
   e.waitUntil(caches.open(CACHE).then(function (c) { return c.addAll(ASSETS); }));
