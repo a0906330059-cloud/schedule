@@ -34,7 +34,20 @@
                 <data android:scheme="wadeschedule" android:host="localhost" />
             </intent-filter>
         </activity>
-        <receiver android:name=".ScheduleWidget" android:exported="false">
+        <activity
+            android:name=".WidgetActionActivity"
+            android:exported="false"
+            android:theme="@android:style/Theme.NoDisplay"
+            android:taskAffinity=""
+            android:excludeFromRecents="true"
+            android:noHistory="true" />
+        <receiver android:name=".ReportWidget" android:exported="false" android:label="每日報告">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_report_info" />
+        </receiver>
+        <receiver android:name=".ScheduleWidget" android:exported="false" android:label="今天的行程">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
