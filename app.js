@@ -857,6 +857,7 @@
     $("usageBtn").textContent = st.usage ? "到系統設定查看" : "開啟「使用情形存取權」";
     var a = data.auto;
     if (a && a.date === todayStr()) autoMsg("今天：" + (a.runKm != null ? "跑了 " + a.runKm + " 公里" : "跑步還沒連結") + "，" + (a.epopMin != null ? "EPOP 共用了 " + a.epopMin + " 分" : "EPOP 未開啟權限"));
+    $("hcInfo").textContent = a && a.date === todayStr() && a.hcInfo ? a.hcInfo : "";
   }
   $("sEpop").addEventListener("change", function () { var n = parseInt($("sEpop").value, 10); if (n > 0) { settings().epopMin = n; persist(); } });
   $("stravaBtn").onclick = function () {

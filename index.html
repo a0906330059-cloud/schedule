@@ -292,7 +292,8 @@ textarea{font:inherit;font-size:.92rem;color:var(--fg);background:var(--surface)
         <p>照常用 Strava 跑步就好。Strava 會把跑步記進手機的 Health Connect，App 從那裡讀；當天跑到課表上的完整距離，跑步任務就會自動打勾。免費，不用 Strava 訂閱。</p>
         <p>沒排在日程上的跑步也會自動記一筆「額外跑步」，算進每週回顧的總跑量。</p>
         <div class="rename"><span>超過幾公里才記</span><input id="sExtraRun" type="number" min="0" max="50" step="0.5"></div>
-        <button class="btn primary" id="healthBtn">連結 Health Connect</button></div>
+        <button class="btn primary" id="healthBtn">連結 Health Connect</button>
+        <pre class="status" id="hcInfo" style="white-space:pre-wrap;font-family:var(--mono);font-size:.74rem;margin:8px 0 0"></pre></div>
       <details class="setting" id="stravaBox"><summary><strong>改用 Strava API（需要 Strava 付費訂閱）</strong><span class="status" id="stravaState">未連結</span></summary>
         <div class="rename" id="stravaForm"><span>Client ID</span><input id="sCid" inputmode="numeric" autocomplete="off"><span>Client Secret</span><input id="sCsec" autocomplete="off"></div>
         <span style="display:flex;gap:6px"><button class="btn" id="stravaBtn">連結 Strava</button><button class="btn" id="stravaOff" hidden>取消連結</button></span></details>
