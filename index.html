@@ -53,6 +53,14 @@ h2{font-size:.74rem;letter-spacing:.12em;color:var(--muted);margin:16px 2px 6px}
 .dot.done{opacity:.3}
 .more{font-size:.58rem;color:var(--muted);padding-left:3px}
 .daycard{margin-top:12px}
+.calseg{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;margin-bottom:12px;background:var(--surface);border:1px solid var(--line);border-radius:12px}
+.calseg button{border:0;border-radius:9px;padding:9px;font:inherit;font-weight:800;font-size:.92rem;background:transparent;color:var(--muted);cursor:pointer}
+.calseg button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent)}
+#v-cal[data-mode="month"] .daycard{display:none}
+#v-cal[data-mode="day"] .monthcard,#v-cal[data-mode="day"] .todaycard{display:none}
+#v-cal[data-mode="day"] .daycard{margin-top:0;overflow:visible}
+#v-cal[data-mode="day"] .dayhead{position:sticky;top:var(--toph,0px);z-index:4;background:var(--bg);border-radius:14px 14px 0 0}
+#v-cal[data-mode="day"] .tlwrap{height:auto;min-height:0;overflow:visible}
 .dayhead{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-bottom:1px solid var(--line)}
 .dayhead .d{font-weight:900;font-size:1.05rem}
 .dayhead .d small{font-family:var(--mono);color:var(--muted);font-weight:500;margin-left:6px;font-size:.75rem}
@@ -171,18 +179,31 @@ textarea{font:inherit;font-size:.92rem;color:var(--fg);background:var(--surface)
 .rp-hist button{text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:8px 10px;cursor:pointer;font-size:.86rem}
 .rp-hist button small{display:block;color:var(--muted);font-family:var(--mono);font-size:.72rem}
  /* weekly review */
-.wk{padding:12px 14px;margin-bottom:12px}
-.wk-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
-.wk-head b{font-size:1rem}
-.wk-big{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
-.wk-big div{background:var(--surface);border-radius:10px;padding:8px 10px}
-.wk-big b{display:block;font-size:1.3rem;font-family:var(--mono);font-variant-numeric:tabular-nums}
-.wk-big small{color:var(--muted);font-size:.72rem}
-.wk-row{display:grid;grid-template-columns:5.5em 1fr 4.2em;gap:8px;align-items:center;font-size:.84rem;margin:6px 0}
-.wk-bar{height:8px;border-radius:999px;background:var(--surface);overflow:hidden}
-.wk-bar i{display:block;height:100%;border-radius:999px;background:var(--tc)}
-.wk-row span:last-child{text-align:right;font-family:var(--mono);color:var(--muted);font-size:.78rem}
-.wk-msg{margin-top:10px;font-size:.88rem;color:var(--fg);border-left:3px solid var(--accent);padding-left:10px}
+.wk{padding:16px;margin-bottom:14px;--tone:var(--accent);background:linear-gradient(160deg,color-mix(in srgb,var(--tone) 22%,var(--bg)) 0%,var(--bg) 60%);border-color:color-mix(in srgb,var(--tone) 40%,var(--line))}
+.wk[data-tone="good"]{--tone:#34d399}.wk[data-tone="mid"]{--tone:#fbbf24}.wk[data-tone="low"]{--tone:#ff6b6f}
+.wk-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:14px}
+.wk-head b{font-size:1.15rem;font-weight:900}
+.wk-hero{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;margin-bottom:16px}
+.wk-ring{--p:0;width:118px;height:118px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(closest-side,var(--bg) 78%,transparent 79%),conic-gradient(var(--tone) calc(var(--p)*1%),color-mix(in srgb,var(--tone) 16%,var(--surface)) 0)}
+.wk-ring b{font-size:2rem;font-weight:900;font-family:var(--mono);font-variant-numeric:tabular-nums;line-height:1;color:var(--tone)}
+.wk-ring small{color:var(--muted);font-size:.74rem;margin-top:4px}
+.wk-tiles{display:grid;gap:8px}
+.wk-tile{border-radius:12px;padding:10px 12px;background:color-mix(in srgb,var(--tc,var(--accent)) 16%,var(--surface));border:1px solid color-mix(in srgb,var(--tc,var(--accent)) 35%,transparent)}
+.wk-tile.t-done{--tc:var(--accent)}.wk-tile.t-run{--tc:var(--c-run)}
+.wk-tile small{display:block;color:var(--muted);font-size:.74rem}
+.wk-tile b{font-size:1.45rem;font-weight:900;font-family:var(--mono);font-variant-numeric:tabular-nums}
+.wk-tile b span{font-size:.85rem;color:var(--muted);font-weight:600}
+.wk-mini{height:6px;border-radius:999px;background:var(--bg);margin-top:6px;overflow:hidden}
+.wk-mini i{display:block;height:100%;background:var(--tc);border-radius:999px}
+.wk-sub{font-size:.8rem;color:var(--muted);font-weight:700;margin:0 0 6px}
+.wk-row{margin:10px 0}
+.wk-rowtop{display:flex;justify-content:space-between;align-items:center;font-size:.95rem;margin-bottom:5px}
+.wk-cat{display:flex;align-items:center;gap:8px;font-weight:800}
+.wk-cat i{width:10px;height:10px;border-radius:3px;background:var(--tc)}
+.wk-num{font-family:var(--mono);color:var(--muted);font-size:.82rem}
+.wk-bar{height:14px;border-radius:999px;background:color-mix(in srgb,var(--tc) 14%,var(--surface));overflow:hidden}
+.wk-bar i{display:block;height:100%;border-radius:999px;background:var(--tc);box-shadow:0 0 12px color-mix(in srgb,var(--tc) 55%,transparent)}
+.wk-msg{margin-top:14px;font-size:.95rem;font-weight:700;color:var(--fg);background:color-mix(in srgb,var(--tone) 16%,var(--surface));border-left:4px solid var(--tone);border-radius:10px;padding:10px 12px}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 </style>
 </head>
@@ -193,11 +214,15 @@ textarea{font:inherit;font-size:.92rem;color:var(--fg);background:var(--surface)
 </header>
 
 <main>
-  <section class="view" id="v-cal">
+  <section class="view" id="v-cal" data-mode="month">
+    <div class="calseg" role="group" aria-label="月曆或當天日程">
+      <button type="button" id="cmMonth" aria-pressed="true">月曆</button>
+      <button type="button" id="cmDay" aria-pressed="false">當天日程</button>
+    </div>
     <div class="card todaycard" id="todayCard">
       <div class="quote" id="quote"></div>
     </div>
-    <div class="card">
+    <div class="card monthcard">
       <div class="mhead">
         <button class="ib" id="mPrev" aria-label="上個月">‹</button>
         <strong id="mLabel"></strong>
@@ -209,7 +234,7 @@ textarea{font:inherit;font-size:.92rem;color:var(--fg);background:var(--surface)
       <div class="dayhead">
         <button class="ib" id="prev" aria-label="前一天">‹</button>
         <div class="d" id="dayLabel"></div>
-        <button class="ib" id="next" aria-label="後一天">›</button>
+        <div style="display:flex;gap:6px"><button class="ib" id="dayToday">今天</button><button class="ib" id="next" aria-label="後一天">›</button></div>
       </div>
       <div id="dayBody"></div>
     </div>
@@ -266,8 +291,8 @@ textarea{font:inherit;font-size:.92rem;color:var(--fg);background:var(--surface)
         <p>到了這個時間，手機會跳出通知：今天的行程、今日一句。設成空白就關掉。</p>
         <button class="btn" id="pushBtn">允許通知</button></div>
       <div class="setting"><strong>事前提醒</strong>
-        <p>每件事開始前跳通知（只有 Android App 版）。每件事也可以在編輯時單獨改。</p>
-        <div class="rename"><span>上課、固定行程</span><select id="sRemClass"></select><span>其他事情</span><select id="sRemOther"></select></div></div>
+        <p>上課和習慣是開始前幾分鐘提醒；事件和任務預設在前 3 天和前 1 天的晚上 8 點提醒（只有 Android App 版）。每件事也可以在編輯時單獨改。</p>
+        <div class="rename"><span>上課、固定行程</span><select id="sRemClass"></select><span>每天重複的習慣</span><select id="sRemOther"></select><span>事件和任務</span><select id="sRemTask"></select></div></div>
       <div class="setting"><strong>自己的勵志句</strong>
         <p>一行一句。有填的話，「今日一句」會從你寫的句子裡輪流出現；空白就用內建的 40 句。</p>
         <textarea id="sQuotes" placeholder="例如：我要在田中馬笑著跑完！"></textarea></div>

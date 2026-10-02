@@ -79,7 +79,9 @@
   }
 
   // ---------- storage ----------
+  var loaded = false;   // never save before the real data has been read (would wipe it)
   function persist() {
+    if (!loaded) return;
     var json = JSON.stringify(data);
     try { localStorage.setItem(KEY, json); } catch (e) {}
     if (NATIVE) { try { window.Android.save(json); } catch (e) {} }
@@ -98,11 +100,11 @@
   }
   function load() {
     var s = readStored();
-    if (s) { try { data = normalize(JSON.parse(s)); return Promise.resolve(); } catch (e) {} }
+    if (s) { try { data = normalize(JSON.parse(s)); loaded = true; return Promise.resolve(); } catch (e) {} }
     return seed();
   }
   function seed() {
-    return fetch("seed.json").then(function (r) { return r.json(); }).then(function (s) { data = normalize(s); persist(); });
+    return fetch("seed.json").then(function (r) { return r.json(); }).then(function (s) { data = normalize(s); loaded = true; persist(); });
   }
 
   // ---------- shortcuts ----------
@@ -163,9 +165,8 @@
       }
       (function (ds) {
         cell.addEventListener("click", function () {
-          if (viewDate === ds) { openSheet(ds); return; }
           viewDate = ds; if (ds.slice(0, 7) !== month) month = ds.slice(0, 7);
-          renderMonth(); renderDay(true);
+          renderMonth(); setCalMode("day");
         });
       })(ds);
       grid.append(cell);
@@ -234,6 +235,11 @@
     if (scroll || keepScroll == null) {
       var focus = isToday ? new Date().getHours() * 60 + new Date().getMinutes() - 60 : (timed.length ? timed[0].start - 30 : wk);
       wrap.scrollTop = Math.max(0, focus / 60 * HOUR);
+      // on the day page the whole page scrolls (one smooth scroll, no box-inside-a-box)
+      if (scroll && calMode === "day" && !$("v-cal").hidden) {
+        var y = wrap.getBoundingClientRect().top + window.scrollY + Math.max(0, focus) / 60 * HOUR - 110;
+        window.scrollTo(0, Math.max(0, y));
+      }
     } else wrap.scrollTop = keepScroll;
   }
   function topItem(e, tag, overdue) {
@@ -351,12 +357,20 @@
   function renderAll() { renderCountdowns(); renderMonth(); renderDay(); renderUpcoming(); renderWeek(); renderWeekly(); }
 
   // ---------- reminders ----------
+  // minutes before; for events & tasks also "days before" (rings at 20:00 that evening). -31 = 3 days AND 1 day before
   var REMIND = [["-1", "不提醒"], ["0", "準時"], ["5", "5 分鐘前"], ["10", "10 分鐘前"], ["15", "15 分鐘前"], ["30", "30 分鐘前"], ["60", "1 小時前"]];
-  function remindDefault(isClass) { var v = isClass ? settings().remindClass : settings().remindOther; return v == null ? 10 : v; }
-  function fillRemind(selEl, withDefault, isClass) {
-    selEl.replaceChildren();
-    if (withDefault) { var d = remindDefault(isClass), lab = (REMIND.filter(function (r) { return +r[0] === d; })[0] || ["", d + " 分鐘前"])[1]; selEl.append(el("option", { value: "" }, "預設（" + lab + "）")); }
-    REMIND.forEach(function (r) { selEl.append(el("option", { value: r[0] }, r[1])); });
+  var REMIND_TASK = [["-31", "前 3 天和前 1 天（晚上 8 點）"], ["1440", "前 1 天（晚上 8 點）"], ["4320", "前 3 天（晚上 8 點）"]].concat(REMIND);
+  function remindKind(isClass) { return isClass === true ? "class" : isClass === false ? "habit" : isClass; }
+  function remindDefault(k) {
+    k = remindKind(k); var s = settings();
+    var v = k === "class" ? s.remindClass : k === "habit" ? s.remindOther : s.remindTask;
+    return v == null ? (k === "task" ? -31 : 10) : v;
+  }
+  function fillRemind(selEl, withDefault, k) {
+    k = remindKind(k); selEl.replaceChildren();
+    var list = k === "task" ? REMIND_TASK : REMIND;
+    if (withDefault) { var d = remindDefault(k), lab = (list.filter(function (r) { return +r[0] === d; })[0] || ["", d + " 分鐘前"])[1]; selEl.append(el("option", { value: "" }, "預設（" + lab + "）")); }
+    list.forEach(function (r) { selEl.append(el("option", { value: r[0] }, r[1])); });
   }
 
   // ---------- weekly review ----------
@@ -389,13 +403,22 @@
     var title = weekOffset === 0 ? "這週" : weekOffset === -1 ? "上週" : (-weekOffset) + " 週前";
     box.append(el("div", { class: "wk-head" }, prev, el("b", {}, title + "（" + label(w.mon).replace(/（.）/, "") + "–" + label(w.last).replace(/（.）/, "") + "）"), next));
     var pct = w.total ? Math.round(w.done / w.total * 100) : 0;
-    box.append(el("div", { class: "wk-big" },
-      el("div", {}, el("b", {}, pct + "%"), el("small", {}, "完成率")),
-      el("div", {}, el("b", {}, w.done + "/" + w.total), el("small", {}, "做完的事")),
-      el("div", {}, el("b", {}, (Math.round(w.runDone * 10) / 10) + "K"), el("small", {}, "跑步（計畫 " + w.runPlan + "K）"))));
-    Object.keys(w.byCat).sort(function (a, b) { return w.byCat[b].total - w.byCat[a].total; }).forEach(function (c) {
-      var x = w.byCat[c], p = x.total ? x.done / x.total * 100 : 0;
-      box.append(el("div", { class: "wk-row", style: tc(c) }, el("span", {}, catName(c)), el("div", { class: "wk-bar" }, el("i", { style: "width:" + p + "%" })), el("span", {}, x.done + "/" + x.total)));
+    var tone = !w.total ? "none" : pct >= 70 ? "good" : pct >= 40 ? "mid" : "low";
+    var runPct = w.runPlan ? Math.min(100, Math.round(w.runDone / w.runPlan * 100)) : 0;
+    box.dataset.tone = tone;
+    box.append(el("div", { class: "wk-hero" },
+      el("div", { class: "wk-ring", style: "--p:" + pct }, el("b", {}, pct + "%"), el("small", {}, "完成率")),
+      el("div", { class: "wk-tiles" },
+        el("div", { class: "wk-tile t-done" }, el("small", {}, "做完的事"), el("b", {}, w.done, el("span", {}, " / " + w.total))),
+        el("div", { class: "wk-tile t-run" }, el("small", {}, "跑步"), el("b", {}, (Math.round(w.runDone * 10) / 10), el("span", {}, " / " + w.runPlan + " K")),
+          el("div", { class: "wk-mini" }, el("i", { style: "width:" + runPct + "%" }))))));
+    var cats = Object.keys(w.byCat).sort(function (a, b) { return w.byCat[b].total - w.byCat[a].total; });
+    if (cats.length) box.append(el("div", { class: "wk-sub" }, "各分類完成度"));
+    cats.forEach(function (c) {
+      var x = w.byCat[c], p = x.total ? Math.round(x.done / x.total * 100) : 0;
+      box.append(el("div", { class: "wk-row", style: tc(c) },
+        el("div", { class: "wk-rowtop" }, el("span", { class: "wk-cat" }, el("i"), catName(c)), el("span", { class: "wk-num" }, x.done + "/" + x.total + "・" + p + "%")),
+        el("div", { class: "wk-bar" }, el("i", { style: "width:" + p + "%" }))));
     });
     if (!w.total) { box.append(el("p", { class: "status" }, weekOffset === 0 ? "這週還沒有到期的事，加油！" : "這週沒有紀錄。")); return; }
     var msg = pct >= 90 ? "太強了，這週幾乎全部完成！" : pct >= 70 ? "做得很好，保持這個節奏。" : pct >= 40 ? "完成一半以上了，下週挑一兩件最重要的先做。" : "這週比較忙沒關係，下週從一件小事開始就好。";
@@ -437,7 +460,7 @@
     $("catLbl").textContent = fixed ? "類型" : "分類";
     fillCats(fixed ? FIXED_CATS : ITEM_CATS);
     $("deleteBtn").hidden = m === "new" || m === "fixed";
-    fillRemind($("fRemind"), true, fixed); $("fRemind").value = "";
+    fillRemind($("fRemind"), true, fixed ? "class" : m === "habit" ? "habit" : "task"); $("fRemind").value = "";
     toggleGoal();
     $("submitBtn").textContent = (m === "new" || m === "fixed") ? "加入" : "儲存";
   }
@@ -485,6 +508,20 @@
     showDialog();
   }
   window.openQuickAdd = function (date) { openSheet(date || todayStr()); };
+  function currentView() { var v = document.querySelector(".view:not([hidden])"); return v ? v.id : "v-cal"; }
+  // Android back button: close the form → leave the day page → back to the calendar tab → (only then) leave the app
+  window.handleBack = function () {
+    var dlg = $("sheet");
+    if (dlg.open) { dlg.close(); return true; }
+    if (currentView() !== "v-cal") { showView("v-cal"); return true; }
+    if (calMode === "day") { setCalMode("month"); return true; }
+    return false;
+  };
+  window.goView = function (v) {
+    var dlg = $("sheet"); if (dlg.open) dlg.close();
+    if (v === "report") showView("v-report");
+    else { showView("v-cal"); if (v === "day") { viewDate = todayStr(); month = viewDate.slice(0, 7); setCalMode("day"); } else setCalMode("month"); }
+  };
   $("fDate").addEventListener("change", function () { if ($("fDate").value && mode === "new") $("sheetTitle").textContent = "新增到 " + label($("fDate").value); });
   $("cancelBtn").onclick = function () { $("sheet").close(); };
   $("fab").onclick = function () { if (!$("v-week").hidden) openFixed(); else openSheet(viewDate); };
@@ -512,13 +549,28 @@
       var gk = parseFloat($("fGoal").value); if (t.cat === "跑步" && gk > 0) t.goalKm = gk;
       var rp = kind === "task" ? $("fRepeat").value : "";
       applyRemind(t);
-      if (rp) { var hb = { id: t.id, title: title, cat: t.cat, time: start, endTime: end || undefined, note: note, start: t.date, end: "", days: rp === "daily" ? [0, 1, 2, 3, 4, 5, 6] : [parse(t.date).getDay()], doneDates: {} }; if (t.remind != null) hb.remind = t.remind; data.habits.push(hb); }
+      if (rp) { var hb = { id: t.id, title: title, cat: t.cat, time: start, endTime: end || undefined, note: note, start: t.date, end: "", days: rp === "daily" ? [0, 1, 2, 3, 4, 5, 6] : [parse(t.date).getDay()], doneDates: {} }; if (t.remind != null && t.remind >= -1 && t.remind < 1440) hb.remind = t.remind; data.habits.push(hb); }
       else data.tasks.push(t);
       viewDate = t.date; month = t.date.slice(0, 7);
     }
     persist(); renderAll(); $("sheet").close(); editing = null;
   });
   function applyRemind(o) { var v = $("fRemind").value; if (v === "") delete o.remind; else o.remind = parseInt(v, 10); }
+
+  // ---------- calendar: month grid and day schedule are two separate pages ----------
+  var calMode = "month";
+  function measureTop() { var h = document.querySelector("header.top"); if (h) document.documentElement.style.setProperty("--toph", h.offsetHeight + "px"); }
+  window.addEventListener("resize", measureTop);
+  function setCalMode(m) {
+    calMode = m; measureTop();
+    $("v-cal").dataset.mode = m;
+    $("cmMonth").setAttribute("aria-pressed", String(m === "month"));
+    $("cmDay").setAttribute("aria-pressed", String(m === "day"));
+    window.scrollTo(0, 0);
+    if (m === "day") renderDay(true); else renderMonth();
+  }
+  $("cmMonth").onclick = function () { setCalMode("month"); };
+  $("cmDay").onclick = function () { setCalMode("day"); };
 
   // ---------- tabs & nav ----------
   function showView(id) {
@@ -535,6 +587,7 @@
   $("prev").onclick = function () { pick(addDays(viewDate, -1)); };
   $("next").onclick = function () { pick(addDays(viewDate, 1)); };
   $("goToday").onclick = function () { pick(todayStr()); };
+  $("dayToday").onclick = function () { pick(todayStr()); };
   $("mPrev").onclick = function () { var p = month.split("-").map(Number); month = fmt(new Date(p[0], p[1] - 2, 1)).slice(0, 7); renderMonth(); };
   $("mNext").onclick = function () { var p = month.split("-").map(Number); month = fmt(new Date(p[0], p[1], 1)).slice(0, 7); renderMonth(); };
 
@@ -575,7 +628,7 @@
     f.text().then(function (txt) {
       var d = JSON.parse(txt);
       if (!d || !Array.isArray(d.tasks) || !Array.isArray(d.classes)) throw new Error("bad");
-      data = normalize(d); persist(); refreshEverything(); setStatus("已匯入。");
+      data = normalize(d); loaded = true; persist(); refreshEverything(); setStatus("已匯入。");
     }).catch(function () { setStatus("這不是這個 App 的備份檔。"); });
     e.target.value = "";
   };
@@ -632,6 +685,9 @@
   var BASE = "https://a0906330059-cloud.github.io/schedule/";
   var report = null;
   function renderReportCard() {
+    if (NATIVE && report && window.Android.setReport) { try { window.Android.setReport(report.date || "", report.title || ""); } catch (e) {} }
+    // already looking at the Report tab when today's report arrives → it counts as read
+    if (report && !$("v-report").hidden && settings().readReport !== report.date) { settings().readReport = report.date; persist(); openReport(report, true); }
     var unread = report && report.date === todayStr() && settings().readReport !== report.date;
     $("rdot").hidden = !unread;
     if ($("v-report").hidden) openReport(report, true);
@@ -686,9 +742,10 @@
   }
   $("sQuotes").addEventListener("input", function () { settings().quotes = $("sQuotes").value; renderQuote(); savedSoon(); });
   function renderRemindSettings() {
-    fillRemind($("sRemClass"), false); fillRemind($("sRemOther"), false);
-    $("sRemClass").value = String(remindDefault(true)); $("sRemOther").value = String(remindDefault(false));
+    fillRemind($("sRemClass"), false, "class"); fillRemind($("sRemOther"), false, "habit"); fillRemind($("sRemTask"), false, "task");
+    $("sRemClass").value = String(remindDefault("class")); $("sRemOther").value = String(remindDefault("habit")); $("sRemTask").value = String(remindDefault("task"));
   }
+  $("sRemTask").addEventListener("change", function () { settings().remindTask = parseInt($("sRemTask").value, 10); persist(); });
   $("sRemClass").addEventListener("change", function () { settings().remindClass = parseInt($("sRemClass").value, 10); persist(); });
   $("sRemOther").addEventListener("change", function () { settings().remindOther = parseInt($("sRemOther").value, 10); persist(); });
   function renderPush() {
