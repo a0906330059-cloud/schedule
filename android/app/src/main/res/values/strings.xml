@@ -5,4 +5,5 @@
     <string name="widget_empty">今天沒有安排，點 + 記一筆</string>
     <string name="quick_add">新增</string>
     <string name="toggle_done">完成</string>
+    <string name="report_widget_desc">Claude 的每日報告，有新的會出現紅點</string>
 </resources>
