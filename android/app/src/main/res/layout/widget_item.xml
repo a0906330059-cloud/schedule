@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/i_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp">
+
+    <TextView
+        android:id="@+id/i_time"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="monospace"
+        android:textColor="#8D97A8"
+        android:textSize="11sp" />
+
+    <ImageView
+        android:id="@+id/i_bar"
+        android:layout_width="4dp"
+        android:layout_height="16dp"
+        android:layout_marginEnd="8dp"
+        android:src="@drawable/bar"
+        android:contentDescription="@null" />
+
+    <ImageView
+        android:id="@+id/i_dot"
+        android:layout_width="8dp"
+        android:layout_height="8dp"
+        android:layout_marginStart="-2dp"
+        android:layout_marginEnd="6dp"
+        android:src="@drawable/dot"
+        android:contentDescription="@null" />
+
+    <TextView
+        android:id="@+id/i_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textColor="#FFFFFF"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/i_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:textColor="#4D82FF"
+        android:textSize="9sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/i_check"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="6dp"
+        android:src="@drawable/box_off"
+        android:contentDescription="@string/toggle_done" />
+</LinearLayout>

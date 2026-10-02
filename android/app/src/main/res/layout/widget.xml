@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/w_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/widget_bg"
+    android:padding="12dp">
+
+    <LinearLayout
+        android:id="@+id/w_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/w_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-condensed"
+            android:text="10/2" />
+
+        <TextView
+            android:id="@+id/w_dow"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="6dp"
+            android:textColor="#8D97A8"
+            android:textSize="13sp"
+            android:text="週五" />
+
+        <TextView
+            android:id="@+id/w_add"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:background="@drawable/add_bg"
+            android:gravity="center"
+            android:text="+"
+            android:textColor="#FFFFFF"
+            android:textSize="22sp"
+            android:contentDescription="@string/quick_add" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="6dp">
+
+        <ListView
+            android:id="@+id/w_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@null"
+            android:dividerHeight="0dp" />
+
+        <TextView
+            android:id="@+id/w_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/widget_empty"
+            android:textColor="#8D97A8"
+            android:textSize="13sp" />
+    </FrameLayout>
+</LinearLayout>
