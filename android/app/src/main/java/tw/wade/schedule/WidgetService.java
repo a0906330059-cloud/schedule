@@ -110,7 +110,7 @@ public class WidgetService extends RemoteViewsService {
                     Item ti = new Item(t.optString("time"), t.optString("title"), colorFor(t.optString("cat")), event,
                             "task", t.optString("id"), t.optBoolean("done"));
                     if (auto != null && t.optDouble("goalKm", 0) > 0 && auto.has("runKm"))
-                        ti.info = "Strava " + auto.optDouble("runKm") + "/" + fmtKm(t.optDouble("goalKm")) + "K";
+                        ti.info = "已跑 " + auto.optDouble("runKm") + "/" + fmtKm(t.optDouble("goalKm")) + "K";
                     items.add(ti);
                 }
                 JSONArray habits = data.optJSONArray("habits");

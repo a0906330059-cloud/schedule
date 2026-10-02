@@ -137,10 +137,31 @@ final class AutoCheck {
 
             if (km >= 0) {
                 JSONArray tasks = data.optJSONArray("tasks");
-                for (int i = 0; tasks != null && i < tasks.length(); i++) {
+                if (tasks == null) { tasks = new JSONArray(); data.put("tasks", tasks); }
+                double kmR = Math.round(km * 10) / 10.0;
+                boolean planned = false;
+                JSONObject extra = null;
+                for (int i = 0; i < tasks.length(); i++) {
                     JSONObject t = tasks.getJSONObject(i);
+                    if (!today.equals(t.optString("date"))) continue;
+                    if (("auto-run-" + today).equals(t.optString("id"))) { extra = t; continue; }
                     double goal = t.optDouble("goalKm", 0);
-                    if (today.equals(t.optString("date")) && goal > 0 && km >= goal) t.put("done", true);
+                    if (goal <= 0) continue;
+                    planned = true;
+                    if (km >= goal) { t.put("done", true); t.put("doneKm", kmR); }
+                }
+                // a run that wasn't on the schedule: log it once it's past the minimum distance
+                JSONObject settings0 = data.optJSONObject("settings");
+                double minKm = settings0 == null ? 1 : settings0.optDouble("extraRunMin", 1);
+                if (!planned && km >= minKm && km > 0) {
+                    if (extra == null) {
+                        extra = new JSONObject();
+                        extra.put("id", "auto-run-" + today); extra.put("kind", "task"); extra.put("date", today);
+                        extra.put("cat", "跑步"); extra.put("time", ""); extra.put("note", "沒排在日程上，App 從 Health Connect 自動記錄");
+                        tasks.put(extra);
+                    }
+                    extra.put("title", "額外跑步 " + WidgetService.fmtKm(kmR) + "K");
+                    extra.put("goalKm", kmR); extra.put("doneKm", kmR); extra.put("done", true);
                 }
             }
             if (epop >= 0) {

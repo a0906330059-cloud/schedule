@@ -190,7 +190,7 @@ public class ItemReminder extends BroadcastReceiver {
             boolean event = t.has("kind") ? "event".equals(t.optString("kind")) : t.optBoolean("milestone");
             if (event || d.compareTo(from) < 0 || d.compareTo(to) > 0) continue;
             total++;
-            if (t.optBoolean("done")) { done++; km += t.optDouble("goalKm", 0); }
+            if (t.optBoolean("done")) { done++; km += t.optDouble("doneKm", t.optDouble("goalKm", 0)); }
         }
         JSONArray habits = data.optJSONArray("habits");
         for (int i = 0; habits != null && i < habits.length(); i++) {
