@@ -10,17 +10,17 @@
 
     <TextView
         android:id="@+id/i_time"
-        android:layout_width="40dp"
+        android:layout_width="36dp"
         android:layout_height="wrap_content"
         android:fontFamily="monospace"
         android:textColor="#8D97A8"
-        android:textSize="11sp" />
+        android:textSize="10sp" />
 
     <ImageView
         android:id="@+id/i_bar"
         android:layout_width="4dp"
         android:layout_height="16dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="6dp"
         android:src="@drawable/bar"
         android:contentDescription="@null" />
 
@@ -39,7 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:ellipsize="end"
-        android:singleLine="true"
+        android:maxLines="2"
         android:textColor="#FFFFFF"
         android:textSize="13sp" />
 
