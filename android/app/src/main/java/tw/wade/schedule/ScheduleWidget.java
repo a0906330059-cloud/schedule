@@ -82,7 +82,11 @@ public class ScheduleWidget extends AppWidgetProvider {
         v.setEmptyView(R.id.w_list, R.id.w_empty);
 
         int flags = PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE;
-        PendingIntent open = PendingIntent.getActivity(c, 0, new Intent(c, MainActivity.class), flags);
+        // tapping anywhere (background, date, empty space) opens the calendar
+        Intent openCal = new Intent(c, MainActivity.class).setAction("tw.wade.schedule.OPEN_CAL")
+                .putExtra(MainActivity.EXTRA_VIEW, "cal");
+        PendingIntent open = PendingIntent.getActivity(c, 0, openCal, flags);
+        v.setOnClickPendingIntent(R.id.w_root, open);
         v.setOnClickPendingIntent(R.id.w_header, open);
         v.setOnClickPendingIntent(R.id.w_empty, open);
 
@@ -91,8 +95,9 @@ public class ScheduleWidget extends AppWidgetProvider {
                 .putExtra(MainActivity.EXTRA_QUICK_ADD, true);
         v.setOnClickPendingIntent(R.id.w_add, PendingIntent.getActivity(c, 1, add, flags));
 
-        Intent toggle = new Intent(c, ScheduleWidget.class).setAction(ACTION_TOGGLE);
-        PendingIntent template = PendingIntent.getBroadcast(c, 2, toggle,
+        // list rows: row → open the app, checkbox → tick (both via WidgetActionActivity)
+        Intent hop = new Intent(c, WidgetActionActivity.class);
+        PendingIntent template = PendingIntent.getActivity(c, 2, hop,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
         v.setPendingIntentTemplate(R.id.w_list, template);
 

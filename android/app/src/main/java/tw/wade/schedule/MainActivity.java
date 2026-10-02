@@ -25,6 +25,7 @@ import java.util.Locale;
 
 public class MainActivity extends Activity {
     static final String EXTRA_QUICK_ADD = "quickAdd";
+    static final String EXTRA_VIEW = "view";
     private static final int REQ_FILE = 1;
     private static final int REQ_EXPORT = 2;
     private static final String START_URL = "https://appassets.androidplatform.net/assets/www/index.html";
@@ -64,7 +65,7 @@ public class MainActivity extends Activity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 pageReady = true;
-                if (!handleStravaReturn(getIntent())) handleQuickAdd(getIntent());
+                if (!handleStravaReturn(getIntent())) { handleView(getIntent()); handleQuickAdd(getIntent()); }
                 runAutoCheck();
             }
         });
@@ -97,7 +98,7 @@ public class MainActivity extends Activity {
         super.onNewIntent(intent);
         setIntent(intent);
         if (handleStravaReturn(intent)) return;
-        if (pageReady) handleQuickAdd(intent);
+        if (pageReady) { handleView(intent); handleQuickAdd(intent); }
     }
 
     @Override
@@ -139,10 +140,21 @@ public class MainActivity extends Activity {
         }
     }
 
+    /** Opens a tab when launched from a widget: "cal" (calendar) or "report". */
+    private void handleView(Intent intent) {
+        String v = intent == null ? null : intent.getStringExtra(EXTRA_VIEW);
+        if (v == null) return;
+        intent.removeExtra(EXTRA_VIEW);
+        web.evaluateJavascript("window.goView && window.goView(" + org.json.JSONObject.quote(v) + ")", null);
+    }
+
+    /** Back closes the open form / goes back to the calendar first; only leaves the app at the very end. */
     @Override
     public void onBackPressed() {
-        if (web.canGoBack()) web.goBack();
-        else super.onBackPressed();
+        if (!pageReady) { moveTaskToBack(true); return; }
+        web.evaluateJavascript("window.handleBack ? window.handleBack() : false", value -> {
+            if (!"true".equals(value)) moveTaskToBack(true);
+        });
     }
 
     @Override
@@ -174,6 +186,7 @@ public class MainActivity extends Activity {
         public void save(String json) {
             Store.save(MainActivity.this, json);
             ScheduleWidget.refreshAll(MainActivity.this);
+            ReportWidget.refreshAll(MainActivity.this);
         }
 
         @JavascriptInterface
@@ -234,6 +247,13 @@ public class MainActivity extends Activity {
                     requestPermissions(new String[]{"android.permission.POST_NOTIFICATIONS"}, 5);
                 else Toast.makeText(MainActivity.this, "通知已經可以用了", Toast.LENGTH_SHORT).show();
             });
+        }
+
+        /** The page tells the report widget about today's report (title + date). */
+        @JavascriptInterface
+        public void setReport(String date, String title) {
+            ReportWidget.remember(MainActivity.this, date, title);
+            ReportWidget.refreshAll(MainActivity.this);
         }
 
         @JavascriptInterface

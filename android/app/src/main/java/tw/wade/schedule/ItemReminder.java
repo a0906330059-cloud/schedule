@@ -89,7 +89,8 @@ public class ItemReminder extends BroadcastReceiver {
             JSONObject data = new JSONObject(json);
             JSONObject s = data.optJSONObject("settings");
             int defClass = s == null ? 10 : s.optInt("remindClass", 10);
-            int defOther = s == null ? 10 : s.optInt("remindOther", 10);
+            int defOther = s == null ? 10 : s.optInt("remindOther", 10);   // daily habits
+            int defTask = s == null ? BOTH_DAYS : s.optInt("remindTask", BOTH_DAYS); // events & tasks
             JSONArray terms = data.optJSONArray("terms");
             for (int k = 0; k < 2; k++) {
                 Calendar day = Calendar.getInstance();
@@ -104,13 +105,6 @@ public class ItemReminder extends BroadcastReceiver {
                     add(out, date, o.optString("start"), o.has("remind") ? o.optInt("remind") : defClass,
                             o.optString("name"), o.optString("room"), o.optString("id") + date);
                 }
-                JSONArray tasks = data.optJSONArray("tasks");
-                for (int i = 0; tasks != null && i < tasks.length(); i++) {
-                    JSONObject o = tasks.getJSONObject(i);
-                    if (!date.equals(o.optString("date")) || o.optBoolean("done")) continue;
-                    add(out, date, o.optString("time"), o.has("remind") ? o.optInt("remind") : defOther,
-                            o.optString("title"), o.optString("note"), o.optString("id"));
-                }
                 JSONArray habits = data.optJSONArray("habits");
                 for (int i = 0; habits != null && i < habits.length(); i++) {
                     JSONObject h = habits.getJSONObject(i);
@@ -120,7 +114,9 @@ public class ItemReminder extends BroadcastReceiver {
                     String start = h.optString("start"), end = h.optString("end");
                     JSONObject dd = h.optJSONObject("doneDates");
                     if (!on || date.compareTo(start) < 0 || (!end.isEmpty() && date.compareTo(end) > 0) || (dd != null && dd.optBoolean(date))) continue;
-                    add(out, date, h.optString("time"), h.has("remind") ? h.optInt("remind") : defOther,
+                    int hr = h.has("remind") ? h.optInt("remind") : defOther;
+                    if (hr == BOTH_DAYS || hr >= DAY) hr = defOther;   // "days before" makes no sense for something daily
+                    add(out, date, h.optString("time"), hr,
                             h.optString("title"), h.optString("note"), h.optString("id") + date);
                 }
                 // weekly review: Sunday 21:00
@@ -130,8 +126,42 @@ public class ItemReminder extends BroadcastReceiver {
                     out.add(new Due(at.getTimeInMillis(), "本週回顧", weekly(data, day), 777));
                 }
             }
+            // events & tasks: up to 3 days ahead, reminded the evening before / 3 days before
+            String today = FMT.get().format(Calendar.getInstance().getTime());
+            Calendar lim = Calendar.getInstance();
+            lim.add(Calendar.DAY_OF_MONTH, 4);
+            String last = FMT.get().format(lim.getTime());
+            JSONArray tasks = data.optJSONArray("tasks");
+            for (int i = 0; tasks != null && i < tasks.length(); i++) {
+                JSONObject o = tasks.getJSONObject(i);
+                String date = o.optString("date");
+                if (o.optBoolean("done") || date.compareTo(today) < 0 || date.compareTo(last) > 0) continue;
+                int r = o.has("remind") ? o.optInt("remind") : defTask;
+                String title = o.optString("title"), time = o.optString("time"), key = o.optString("id");
+                if (r == BOTH_DAYS) { addDays(out, date, 3, time, title, key); addDays(out, date, 1, time, title, key); }
+                else if (r >= DAY && r % DAY == 0) addDays(out, date, r / DAY, time, title, key);
+                else add(out, date, time, r, title, o.optString("note"), key);
+            }
         } catch (Exception ignored) { }
         return out;
+    }
+
+    static final int DAY = 1440, BOTH_DAYS = -31;
+    private static final String WD = "日一二三四五六";
+
+    /** "n days before" reminders ring at 20:00 that evening. */
+    private static void addDays(List<Due> out, String date, int n, String time, String title, String key) {
+        try {
+            Calendar d = Calendar.getInstance();
+            d.setTime(FMT.get().parse(date));
+            String when = (d.get(Calendar.MONTH) + 1) + "/" + d.get(Calendar.DAY_OF_MONTH) + " 週" + WD.charAt(d.get(Calendar.DAY_OF_WEEK) - 1)
+                    + (time != null && time.matches("\\d\\d:\\d\\d") ? " " + time : "");
+            Calendar at = (Calendar) d.clone();
+            at.add(Calendar.DAY_OF_MONTH, -n);
+            at.set(Calendar.HOUR_OF_DAY, 20); at.set(Calendar.MINUTE, 0); at.set(Calendar.SECOND, 0); at.set(Calendar.MILLISECOND, 0);
+            String text = (n == 1 ? "明天" : n + " 天後") + "（" + when + "）";
+            out.add(new Due(at.getTimeInMillis(), title, text, 1000 + Math.abs((key + "d" + n).hashCode() % 100000)));
+        } catch (Exception ignored) { }
     }
 
     private static void add(List<Due> out, String date, String time, int before, String title, String sub, String key) {

@@ -148,10 +148,14 @@ public class WidgetService extends RemoteViewsService {
             v.setViewVisibility(R.id.i_check, fixed ? View.GONE : View.VISIBLE);
             v.setImageViewResource(R.id.i_check, it.done ? R.drawable.box_on : R.drawable.box_off);
             v.setTextColor(R.id.i_title, it.done ? Color.parseColor("#5B6474") : Color.WHITE);
-            Intent fill = new Intent();
-            fill.putExtra(ScheduleWidget.EXTRA_TYPE, it.type);
-            fill.putExtra(ScheduleWidget.EXTRA_ID, it.id);
-            v.setOnClickFillInIntent(R.id.i_root, fill);
+            v.setOnClickFillInIntent(R.id.i_root, new Intent().putExtra(WidgetActionActivity.EXTRA_ACT, "open"));
+            if (!fixed) {
+                Intent fill = new Intent();
+                fill.putExtra(WidgetActionActivity.EXTRA_ACT, "toggle");
+                fill.putExtra(ScheduleWidget.EXTRA_TYPE, it.type);
+                fill.putExtra(ScheduleWidget.EXTRA_ID, it.id);
+                v.setOnClickFillInIntent(R.id.i_check, fill);
+            }
             return v;
         }
     }
