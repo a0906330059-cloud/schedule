@@ -2,8 +2,8 @@
   var KEY = "sched-data-v1";
   var NATIVE = typeof window.Android !== "undefined";
   var CATS = { "課程": "--c-class", "校隊": "--c-team", "作業考試": "--c-hw", "跑步": "--c-run", "英文": "--c-eng", "程式": "--c-code", "柳丁樹": "--c-tree", "閱讀": "--c-read", "讀書": "--c-study", "社團": "--c-club", "健身": "--c-gym", "其他": "--c-misc" };
-  var ITEM_CATS = ["作業考試", "讀書", "跑步", "英文", "程式", "柳丁樹", "閱讀", "其他"];
-  var FIXED_CATS = ["課程", "校隊", "社團", "健身"].concat(ITEM_CATS);
+  var ITEM_CATS = ["作業考試", "讀書", "跑步", "健身", "英文", "程式", "柳丁樹", "閱讀", "其他"];
+  var FIXED_CATS = ["課程", "校隊", "社團"].concat(ITEM_CATS);
   var APPS = [
     { cls: "strava", name: "Strava", letter: "S", pkg: "com.strava", web: "https://www.strava.com/dashboard" },
     { cls: "epop", name: "EPOP", letter: "E", pkg: "kr.epopsoft.word", web: "https://play.google.com/store/apps/details?id=kr.epopsoft.word" },
@@ -102,6 +102,24 @@
     var s = readStored();
     if (s) { try { data = normalize(JSON.parse(s)); loaded = true; return Promise.resolve(); } catch (e) {} }
     return seed();
+  }
+  // one-time data fixes for people who already imported their data
+  function migrate() {
+    var st = settings(), t0 = todayStr();
+    if (st.mig2) return;
+    // gym becomes a weekly task with a checkbox (it used to be a fixed, un-tickable item)
+    var groups = {};
+    data.classes.filter(function (c) { return c.kind === "健身"; }).forEach(function (c) {
+      var k = c.name + "|" + c.start + "|" + c.end;
+      var g = groups[k] = groups[k] || { id: "h-gym-" + c.id, title: c.name, cat: "健身", time: c.start, endTime: c.end, note: c.note || "", days: [], start: t0, end: "", doneDates: {} };
+      if (c.remind != null) g.remind = c.remind;
+      if (g.days.indexOf(c.day) < 0) g.days.push(c.day);
+    });
+    Object.keys(groups).forEach(function (k) { data.habits.push(groups[k]); });
+    data.classes = data.classes.filter(function (c) { return c.kind !== "健身"; });
+    // EPOP and the morning article start today instead of tomorrow
+    data.habits.forEach(function (h) { if (/^h-(epop\d?|read)$/.test(h.id) && h.start > t0) h.start = t0; });
+    st.mig2 = 1;
   }
   function seed() {
     return fetch("seed.json").then(function (r) { return r.json(); }).then(function (s) { data = normalize(s); loaded = true; persist(); });
@@ -628,7 +646,7 @@
     f.text().then(function (txt) {
       var d = JSON.parse(txt);
       if (!d || !Array.isArray(d.tasks) || !Array.isArray(d.classes)) throw new Error("bad");
-      data = normalize(d); loaded = true; persist(); refreshEverything(); setStatus("已匯入。");
+      data = normalize(d); loaded = true; migrate(); persist(); refreshEverything(); setStatus("已匯入。");
     }).catch(function () { setStatus("這不是這個 App 的備份檔。"); });
     e.target.value = "";
   };
@@ -863,7 +881,7 @@
   notifyState();
   loadDaily();
   load().then(function () {
-    persist(); refreshEverything(); renderDay(true);
+    migrate(); persist(); refreshEverything(); renderDay(true);
     if (NATIVE) window.Android.setReminder(settings().pushTime == null ? "07:30" : settings().pushTime); if (window.__pendingQuickAdd) { openSheet(window.__pendingQuickAdd); window.__pendingQuickAdd = null; } })
     .catch(function () { $("dayBody").replaceChildren(el("p", { class: "empty" }, "讀不到資料，請連上網路後重新開啟。")); });
   if (!NATIVE && "serviceWorker" in navigator) {
