@@ -592,6 +592,7 @@
 
   // ---------- tabs & nav ----------
   function showView(id) {
+    if (id === "v-report") loadReport();   // always check for a newer report
     if (id === "v-report") { if (report) { settings().readReport = report.date; persist(); $("rdot").hidden = true; } openReport(report); }
     document.querySelectorAll("nav.tabs button").forEach(function (x) { if (x.dataset.view === id) x.setAttribute("aria-current", "page"); else x.removeAttribute("aria-current"); });
     document.querySelectorAll(".view").forEach(function (v) { v.hidden = v.id !== id; });
@@ -715,7 +716,7 @@
     var b = $("reportBody"); b.replaceChildren();
     if (!r) { b.append(el("p", { class: "empty" }, "今天的報告還沒準備好。Claude 每天早上大約 7:30 會寫好放上來。")); return; }
     var top = el("div", { class: "rp-top" }, el("span", { class: "rp-tag" }, r.topic + (r.date === todayStr() ? "・今天" : "・" + r.date.slice(5))));
-    if (report && r !== report) { var back = el("button", { class: "ib", type: "button" }, "回到今天的報告"); back.addEventListener("click", function () { openReport(report); }); top.append(back); }
+    if (report && r !== report) { var back = el("button", { class: "ib", type: "button" }, "回到最新的報告"); back.addEventListener("click", function () { openReport(report); }); top.append(back); }
     b.append(top);
     b.append(el("h1", {}, r.title));
     b.append(el("div", { class: "rp-meta" }, (r.source || "") + (r.sourceDate ? " ・ " + r.sourceDate : "") + " ・ Claude 整理於 " + r.date));
@@ -896,6 +897,7 @@
   }
   document.addEventListener("visibilitychange", function () {
     if (document.hidden) return;
+    loadReport();
     if (NATIVE) { var s = readStored(); if (s) { try { data = normalize(JSON.parse(s)); } catch (e) {} } }
     if (viewDate < todayStr()) { viewDate = todayStr(); month = viewDate.slice(0, 7); loadDaily(); }
     renderQuote(); renderAll();
