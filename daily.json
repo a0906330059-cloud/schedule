@@ -1,27 +1,27 @@
 {
- "date": "2026-10-04",
- "topic": "綜合",
+ "date": "2026-10-05",
+ "topic": "區塊鏈",
  "articles": [
   {
-   "title": "Payments firm OpenPayd targets year-end Nasdaq listing to fund U.S. expansion and acquisitions",
-   "link": "https://www.coindesk.com/business/2026/10/03/openpayd-targets-year-end-nasdaq-listing-to-fund-u-s-expansion-and-acquisitions",
-   "summary": "CEO Iana Dimitrova said OpenPayd aims to launch in the U.S. by April 2027 and is eyeing deals to add licenses and technology.",
+   "title": "There's an election next month: State of Crypto",
+   "link": "https://www.coindesk.com/policy/2026/10/04/there-s-an-election-next-month-state-of-crypto",
+   "summary": "Congress is gone from Washington for the final pre-election recess, and it's time to take stock of what's going on ahead of November.",
    "source": "CoinDesk",
    "topic": "區塊鏈"
   },
   {
-   "title": "Chainalysis Used AI to Trace the $387M Bitget Hack Back to North Korea",
-   "link": "https://decrypt.co/380005/chainalysis-ai-87m-bitget-hack-north-korea",
-   "summary": "The firm says the Sept. 24 breach pushed North Korea's 2026 crypto haul past $1 billion, and detailed how it used in-house AI to trace the stolen funds across four blockchains in a race against the attackers.",
-   "source": "Decrypt",
+   "title": "Crypto poured years into new products. The next challenge is keeping users",
+   "link": "https://www.coindesk.com/business/2026/10/04/crypto-poured-years-into-new-products-the-next-challenge-is-keeping-users",
+   "summary": "Crypto firms have spent years building financial products on blockchains. Getting people to use them — and keep using them — is becoming the next challenge.",
+   "source": "CoinDesk",
    "topic": "區塊鏈"
   },
   {
-   "title": "Milt Windler, NASA flight director who helped save Apollo 13, dies at 94",
-   "link": "https://arstechnica.com/space/2026/10/milt-windler-nasa-flight-director-who-helped-save-apollo-13-dies-at-94/",
-   "summary": "\"...we were making history.\"",
-   "source": "Ars Technica",
-   "topic": "科技"
+   "title": "The Clarity Act stalled. Bankers aren’t hitting the brakes yet on crypto dealmaking",
+   "link": "https://www.coindesk.com/business/2026/10/04/the-clarity-act-stalled-crypto-dealmakers-aren-t-hitting-the-brakes-yet",
+   "summary": "Crypto M&A has hit record levels, but the Clarity Act’s Senate setback leaves dealmakers weighing how much regulatory uncertainty still matters.",
+   "source": "CoinDesk",
+   "topic": "區塊鏈"
   }
  ]
 }
