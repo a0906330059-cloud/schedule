@@ -5,6 +5,8 @@ on:
     branches: [main]
     paths-ignore:
       - 'daily.json'
+      - 'report.json'
+      - 'reports/**'
   workflow_dispatch:
 
 permissions:
