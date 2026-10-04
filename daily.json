@@ -1,27 +1,27 @@
 {
- "date": "2026-10-03",
- "topic": "國際",
+ "date": "2026-10-04",
+ "topic": "綜合",
  "articles": [
   {
-   "title": "G7 to release 100 million barrels of oil and diesel after Trump export ban threat",
-   "link": "https://www.bbc.co.uk/news/articles/ck87zg8jnwngo?at_medium=RSS&at_campaign=rss",
-   "summary": "The coordinated release is aimed at heading off further price spikes and avoiding a ban on US diesel exports.",
-   "source": "BBC World",
-   "topic": "國際"
+   "title": "Payments firm OpenPayd targets year-end Nasdaq listing to fund U.S. expansion and acquisitions",
+   "link": "https://www.coindesk.com/business/2026/10/03/openpayd-targets-year-end-nasdaq-listing-to-fund-u-s-expansion-and-acquisitions",
+   "summary": "CEO Iana Dimitrova said OpenPayd aims to launch in the U.S. by April 2027 and is eyeing deals to add licenses and technology.",
+   "source": "CoinDesk",
+   "topic": "區塊鏈"
   },
   {
-   "title": "Riot police clash with students as education protests rage in France",
-   "link": "https://www.bbc.co.uk/news/articles/ck3r5dxxwqzpo?at_medium=RSS&at_campaign=rss",
-   "summary": "About 735 schools have faced disruption as violent protests over standards and lack of teachers continue.",
-   "source": "BBC World",
-   "topic": "國際"
+   "title": "Chainalysis Used AI to Trace the $387M Bitget Hack Back to North Korea",
+   "link": "https://decrypt.co/380005/chainalysis-ai-87m-bitget-hack-north-korea",
+   "summary": "The firm says the Sept. 24 breach pushed North Korea's 2026 crypto haul past $1 billion, and detailed how it used in-house AI to trace the stolen funds across four blockchains in a race against the attackers.",
+   "source": "Decrypt",
+   "topic": "區塊鏈"
   },
   {
-   "title": "US murderer Christa Pike unconscious and on ventilator after failed execution, lawyers say",
-   "link": "https://www.bbc.co.uk/news/articles/c3kgqw7zvz47o?at_medium=RSS&at_campaign=rss",
-   "summary": "As of Thursday night, Pike remained critically ill and is being treated at a hospital in Nashville, Tennessee.",
-   "source": "BBC World",
-   "topic": "國際"
+   "title": "Milt Windler, NASA flight director who helped save Apollo 13, dies at 94",
+   "link": "https://arstechnica.com/space/2026/10/milt-windler-nasa-flight-director-who-helped-save-apollo-13-dies-at-94/",
+   "summary": "\"...we were making history.\"",
+   "source": "Ars Technica",
+   "topic": "科技"
   }
  ]
 }
