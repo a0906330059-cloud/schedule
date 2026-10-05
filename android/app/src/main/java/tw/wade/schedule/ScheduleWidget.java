@@ -61,7 +61,7 @@ public class ScheduleWidget extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager manager, int[] ids) {
         for (int id : ids) update(context, manager, id);
-        // every ~30 min: look at Strava / EPOP in the background, then redraw
+        // every ~30 min: look at EPOP screen time in the background, then redraw
         final PendingResult pending = goAsync();
         final Context app = context.getApplicationContext();
         new Thread(() -> {

@@ -23,85 +23,13 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
- * Ticks today's runs from Strava (only when the full planned distance is reached)
+ * Ticks today's runs from Health Connect (only when the full planned distance is reached)
  * and the EPOP habit from Android's screen-time stats.
  */
 final class AutoCheck {
     static final String EPOP_PKG = "kr.epopsoft.word";
-    static final String REDIRECT = "wadeschedule://localhost/strava";
-    private static final String PREFS = "strava";
-
-    // ---------- Strava account ----------
-    static SharedPreferences prefs(Context c) { return c.getSharedPreferences(PREFS, Context.MODE_PRIVATE); }
-
-    static boolean stravaConnected(Context c) { return prefs(c).getString("refresh", null) != null; }
-
-    static void saveClient(Context c, String id, String secret) {
-        prefs(c).edit().putString("client_id", id.trim()).putString("client_secret", secret.trim()).apply();
-    }
-
-    static String authorizeUrl(Context c) {
-        return "https://www.strava.com/oauth/mobile/authorize?client_id=" + enc(prefs(c).getString("client_id", ""))
-                + "&redirect_uri=" + enc(REDIRECT) + "&response_type=code&approval_prompt=auto&scope=activity:read_all";
-    }
-
-    /** Swaps the one-time code from Strava's sign-in page for long-lived tokens. */
-    static boolean exchangeCode(Context c, String code) {
-        try {
-            SharedPreferences p = prefs(c);
-            JSONObject r = post("https://www.strava.com/oauth/token",
-                    "client_id=" + enc(p.getString("client_id", "")) + "&client_secret=" + enc(p.getString("client_secret", ""))
-                            + "&code=" + enc(code) + "&grant_type=authorization_code");
-            storeTokens(c, r);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    static void disconnect(Context c) {
-        prefs(c).edit().remove("access").remove("refresh").remove("expires").apply();
-    }
-
-    private static void storeTokens(Context c, JSONObject r) throws Exception {
-        prefs(c).edit()
-                .putString("access", r.getString("access_token"))
-                .putString("refresh", r.getString("refresh_token"))
-                .putLong("expires", r.getLong("expires_at"))
-                .apply();
-    }
-
-    private static String accessToken(Context c) throws Exception {
-        SharedPreferences p = prefs(c);
-        if (p.getLong("expires", 0) - 120 > System.currentTimeMillis() / 1000) return p.getString("access", null);
-        JSONObject r = post("https://www.strava.com/oauth/token",
-                "client_id=" + enc(p.getString("client_id", "")) + "&client_secret=" + enc(p.getString("client_secret", ""))
-                        + "&refresh_token=" + enc(p.getString("refresh", "")) + "&grant_type=refresh_token");
-        storeTokens(c, r);
-        return r.getString("access_token");
-    }
-
-    /** Kilometres run today: Strava API if connected, otherwise Health Connect; -1 if unknown. */
-    static double runKmToday(Context c, boolean stravaOnly) {
-        if (!stravaConnected(c)) return HealthRun.runKmToday(c, stravaOnly);
-        try {
-            long after = startOfDay().getTimeInMillis() / 1000;
-            HttpURLConnection con = (HttpURLConnection) new URL("https://www.strava.com/api/v3/athlete/activities?per_page=50&after=" + after).openConnection();
-            con.setRequestProperty("Authorization", "Bearer " + accessToken(c));
-            con.setConnectTimeout(10000); con.setReadTimeout(10000);
-            if (con.getResponseCode() != 200) return -1;
-            JSONArray acts = new JSONArray(read(con.getInputStream()));
-            double m = 0;
-            for (int i = 0; i < acts.length(); i++) {
-                JSONObject a = acts.getJSONObject(i);
-                String type = a.optString("sport_type", a.optString("type"));
-                if (type.contains("Run")) m += a.optDouble("distance", 0);
-            }
-            return m / 1000.0;
-        } catch (Exception e) {
-            return -1;
-        }
-    }
+    /** Kilometres run today from Health Connect (Samsung Health), or -1 if unknown. */
+    static double runKmToday(Context c) { return HealthRun.runKmToday(c); }
 
     // ---------- EPOP screen time ----------
     static boolean usageGranted(Context c) {
@@ -124,9 +52,7 @@ final class AutoCheck {
     static synchronized void run(Context c) {
         String json = Store.load(c);
         if (json == null) return;
-        boolean stravaOnly = true;
-        try { JSONObject st0 = new JSONObject(json).optJSONObject("settings"); if (st0 != null) stravaOnly = st0.optBoolean("runStravaOnly", true); } catch (Exception ignored) { }
-        double km = runKmToday(c, stravaOnly);
+        double km = runKmToday(c);
         int epop = epopMinutesToday(c);
         try {
             JSONObject data = new JSONObject(json);
@@ -135,7 +61,7 @@ final class AutoCheck {
             auto.put("date", today);
             if (km >= 0) auto.put("runKm", Math.round(km * 10) / 10.0);
             if (epop >= 0) auto.put("epopMin", epop);
-            if (!stravaConnected(c)) auto.put("hcInfo", HealthRun.lastInfo);
+            auto.put("hcInfo", HealthRun.lastInfo);
             data.put("auto", auto);
 
             if (km >= 0) {
@@ -190,30 +116,6 @@ final class AutoCheck {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, 0); cal.set(Calendar.MINUTE, 0); cal.set(Calendar.SECOND, 0); cal.set(Calendar.MILLISECOND, 0);
         return cal;
-    }
-
-    private static String enc(String s) {
-        try { return URLEncoder.encode(s == null ? "" : s, "UTF-8"); } catch (Exception e) { return ""; }
-    }
-
-    private static JSONObject post(String url, String body) throws Exception {
-        HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
-        con.setRequestMethod("POST");
-        con.setDoOutput(true);
-        con.setConnectTimeout(10000); con.setReadTimeout(10000);
-        con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-        try (OutputStream o = con.getOutputStream()) { o.write(body.getBytes(StandardCharsets.UTF_8)); }
-        if (con.getResponseCode() != 200) throw new Exception("HTTP " + con.getResponseCode());
-        return new JSONObject(read(con.getInputStream()));
-    }
-
-    private static String read(InputStream in) throws Exception {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        byte[] buf = new byte[8192];
-        int n;
-        while ((n = in.read(buf)) > 0) out.write(buf, 0, n);
-        in.close();
-        return out.toString("UTF-8");
     }
 
     private AutoCheck() {}

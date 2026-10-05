@@ -89,8 +89,9 @@ public class ItemReminder extends BroadcastReceiver {
             JSONObject data = new JSONObject(json);
             JSONObject s = data.optJSONObject("settings");
             int defClass = s == null ? 10 : s.optInt("remindClass", 10);
-            int defOther = s == null ? 10 : s.optInt("remindOther", 10);   // daily habits
-            int defTask = s == null ? BOTH_DAYS : s.optInt("remindTask", BOTH_DAYS); // events & tasks
+            int defOther = s == null ? -1 : s.optInt("remindHabit", -1);          // repeating habits: off by default
+            int defTask = s == null ? -1 : s.optInt("remindTask2", -1);           // to-dos: off by default
+            int defEvent = s == null ? BOTH_DAYS : s.optInt("remindEvent", BOTH_DAYS); // exams, races: 3 days + 1 day before
             JSONArray terms = data.optJSONArray("terms");
             for (int k = 0; k < 2; k++) {
                 Calendar day = Calendar.getInstance();
@@ -136,7 +137,8 @@ public class ItemReminder extends BroadcastReceiver {
                 JSONObject o = tasks.getJSONObject(i);
                 String date = o.optString("date");
                 if (o.optBoolean("done") || date.compareTo(today) < 0 || date.compareTo(last) > 0) continue;
-                int r = o.has("remind") ? o.optInt("remind") : defTask;
+                boolean isEvent = o.has("kind") ? "event".equals(o.optString("kind")) : o.optBoolean("milestone");
+                int r = o.has("remind") ? o.optInt("remind") : (isEvent ? defEvent : defTask);
                 String title = o.optString("title"), time = o.optString("time"), key = o.optString("id");
                 if (r == BOTH_DAYS) { addDays(out, date, 3, time, title, key); addDays(out, date, 1, time, title, key); }
                 else if (r >= DAY && r % DAY == 0) addDays(out, date, r / DAY, time, title, key);

@@ -23,8 +23,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
- * Today's running distance from Android's Health Connect (Strava, Samsung Health,
- * a watch… whatever writes runs there). Free — no Strava API needed.
+ * Today's running distance from Android's Health Connect (written there by Samsung Health,
+ * a watch… whatever records runs).
  * Uses the built-in Health Connect of Android 14+.
  */
 final class HealthRun {
@@ -48,8 +48,7 @@ final class HealthRun {
     /** Kilometres run today, or -1 if unknown (no permission, too old Android, app in background…). */
     static final String STRAVA = "com.strava";
 
-    /** stravaOnly: ignore runs other apps guessed (Samsung Health's auto-detected runs can be far off). */
-    static double runKmToday(Context c, boolean stravaOnly) {
+    static double runKmToday(Context c) {
         if (!available(c)) { lastInfo = "這支手機沒有內建 Health Connect"; return -1; }
         if (!granted(c)) { lastInfo = "還沒給日程表讀取 Health Connect 的權限"; return -1; }
         try {
@@ -65,25 +64,24 @@ final class HealthRun {
             for (ExerciseSessionRecord s : sessions) {
                 int t = s.getExerciseType();
                 boolean run = t == ExerciseSessionType.EXERCISE_SESSION_TYPE_RUNNING || t == ExerciseSessionType.EXERCISE_SESSION_TYPE_RUNNING_TREADMILL;
-                boolean fromStrava = STRAVA.equals(s.getMetadata().getDataOrigin().getPackageName());
-                if (run && (fromStrava || !stravaOnly)) runs.add(s);
-                info.append("\n・").append(run ? "跑步" : "運動類型 " + t).append("，來自 ")
+                if (run) runs.add(s);
+                info.append("\n・").append(run ? (s.hasRoute() ? "跑步（GPS）" : "跑步") : "運動類型 " + t).append("，來自 ")
                     .append(s.getMetadata().getDataOrigin().getPackageName())
                     .append("，").append(String.format(java.util.Locale.US, "%.2f", metres(s, dist) / 1000)).append(" 公里");
             }
-            if (stravaOnly) info.append("\n（目前只算 Strava 的跑步）");
             lastInfo = info.toString();
             if (runs.isEmpty()) return 0;
 
             // the same run can be saved by two apps (e.g. Strava and Samsung Health):
-            // overlapping sessions count once: Strava's GPS distance wins, otherwise the longest
+            // overlapping sessions count once: a GPS-recorded run wins, otherwise the longest
             runs.sort((a, b) -> a.getStartTime().compareTo(b.getStartTime()));
             double total = 0, groupBest = -1;
             boolean groupStrava = false;
             Instant groupEnd = null;
             for (ExerciseSessionRecord s : runs) {
                 double m = metres(s, dist);
-                boolean fromStrava = STRAVA.equals(s.getMetadata().getDataOrigin().getPackageName());
+                // a run recorded with GPS (has a route) beats one the phone guessed from steps
+                boolean fromStrava = STRAVA.equals(s.getMetadata().getDataOrigin().getPackageName()) || s.hasRoute();
                 if (groupEnd != null && s.getStartTime().isBefore(groupEnd)) {
                     if (fromStrava && !groupStrava) { groupBest = m; groupStrava = true; }
                     else if (fromStrava == groupStrava) groupBest = Math.max(groupBest, m);

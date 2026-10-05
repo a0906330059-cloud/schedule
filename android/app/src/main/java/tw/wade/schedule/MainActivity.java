@@ -29,6 +29,7 @@ public class MainActivity extends Activity {
     private static final int REQ_FILE = 1;
     private static final int REQ_EXPORT = 2;
     private static final int REQ_HEALTH = 3;
+    private static final int REQ_BACKUP = 4;
     private static final String START_URL = "https://appassets.androidplatform.net/assets/www/index.html";
 
     private WebView web;
@@ -66,7 +67,7 @@ public class MainActivity extends Activity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 pageReady = true;
-                if (!handleStravaReturn(getIntent())) { handleView(getIntent()); handleQuickAdd(getIntent()); }
+                handleView(getIntent()); handleQuickAdd(getIntent());
                 runAutoCheck();
             }
         });
@@ -98,28 +99,20 @@ public class MainActivity extends Activity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);
-        if (handleStravaReturn(intent)) return;
         if (pageReady) { handleView(intent); handleQuickAdd(intent); }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        String json = Store.load(this);
+        if (json != null) Backup.onSaved(this, json, true);   // leaving the app: push the latest copy to the cloud file
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         if (pageReady) runAutoCheck();
-    }
-
-    /** Strava's sign-in page sends the user back here with a one-time code. */
-    private boolean handleStravaReturn(Intent intent) {
-        Uri u = intent == null ? null : intent.getData();
-        if (u == null || !"wadeschedule".equals(u.getScheme())) return false;
-        final String code = u.getQueryParameter("code");
-        if (code == null) { notifyPage("Strava 沒有授權，請再試一次。"); return true; }
-        new Thread(() -> {
-            boolean ok = AutoCheck.exchangeCode(this, code);
-            if (ok) AutoCheck.run(this);
-            runOnUiThread(() -> { notifyPage(ok ? "已連結 Strava。" : "連結 Strava 失敗，請檢查 Client ID 和 Client Secret。"); ScheduleWidget.refreshAll(this); });
-        }).start();
-        return true;
     }
 
     private void runAutoCheck() {
@@ -175,6 +168,17 @@ public class MainActivity extends Activity {
                 fileCallback.onReceiveValue(WebChromeClient.FileChooserParams.parseResult(resultCode, data));
                 fileCallback = null;
             }
+        } else if (requestCode == REQ_BACKUP) {
+            if (resultCode == RESULT_OK && data != null && data.getData() != null) {
+                Uri u = data.getData();
+                try {
+                    getContentResolver().takePersistableUriPermission(u, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                } catch (Exception ignored) { /* some providers only allow access while the app runs; we still try */ }
+                Backup.setTarget(this, u, u.getLastPathSegment());
+                String json = Store.load(this);
+                if (json != null) Backup.onSaved(this, json, true);
+                notifyPage("已設定自動備份位置，之後會自動更新這個檔案。");
+            }
         } else if (requestCode == REQ_EXPORT && resultCode == RESULT_OK && data != null && pendingExport != null) {
             try (OutputStream out = getContentResolver().openOutputStream(data.getData())) {
                 out.write(pendingExport.getBytes(StandardCharsets.UTF_8));
@@ -195,6 +199,7 @@ public class MainActivity extends Activity {
         @JavascriptInterface
         public void save(String json) {
             Store.save(MainActivity.this, json);
+            Backup.onSaved(MainActivity.this, json, false);
             ScheduleWidget.refreshAll(MainActivity.this);
             ReportWidget.refreshAll(MainActivity.this);
         }
@@ -219,20 +224,10 @@ public class MainActivity extends Activity {
 
         @JavascriptInterface
         public String autoStatus() {
-            return "{\"strava\":" + AutoCheck.stravaConnected(MainActivity.this)
-                    + ",\"usage\":" + AutoCheck.usageGranted(MainActivity.this)
+            return "{\"usage\":" + AutoCheck.usageGranted(MainActivity.this)
                     + ",\"health\":" + HealthRun.granted(MainActivity.this)
                     + ",\"healthAvail\":" + HealthRun.available(MainActivity.this)
-                    + ",\"clientId\":" + org.json.JSONObject.quote(AutoCheck.prefs(MainActivity.this).getString("client_id", "")) + "}";
-        }
-
-        @JavascriptInterface
-        public void stravaConnect(String clientId, String clientSecret) {
-            AutoCheck.saveClient(MainActivity.this, clientId, clientSecret);
-            runOnUiThread(() -> {
-                try { startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(AutoCheck.authorizeUrl(MainActivity.this)))); }
-                catch (Exception e) { notifyPage("打不開 Strava 授權頁。"); }
-            });
+                    + "}";
         }
 
         /** Asks for permission to read runs (exercise + distance) from Health Connect. */
@@ -242,11 +237,6 @@ public class MainActivity extends Activity {
                 if (!HealthRun.available(MainActivity.this)) { notifyPage("這支手機沒有內建 Health Connect（需要 Android 14 以上）。"); return; }
                 requestPermissions(HealthRun.PERMS, REQ_HEALTH);
             });
-        }
-
-        @JavascriptInterface
-        public void stravaDisconnect() {
-            AutoCheck.disconnect(MainActivity.this);
         }
 
         @JavascriptInterface
@@ -275,6 +265,44 @@ public class MainActivity extends Activity {
         public void setReport(String date, String title) {
             ReportWidget.remember(MainActivity.this, date, title);
             ReportWidget.refreshAll(MainActivity.this);
+        }
+
+        // ---------- backup ----------
+        @JavascriptInterface
+        public void backupPick() {
+            runOnUiThread(() -> {
+                Intent i = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+                i.addCategory(Intent.CATEGORY_OPENABLE);
+                i.setType("application/json");
+                i.putExtra(Intent.EXTRA_TITLE, "日程表自動備份.json");
+                try { startActivityForResult(i, REQ_BACKUP); } catch (Exception e) { notifyPage("打不開選擇位置的畫面。"); }
+            });
+        }
+
+        @JavascriptInterface
+        public String backupStatus() { return Backup.status(MainActivity.this); }
+
+        @JavascriptInterface
+        public void backupNow() {
+            String json = Store.load(MainActivity.this);
+            if (json != null) Backup.onSaved(MainActivity.this, json, true);
+        }
+
+        @JavascriptInterface
+        public void backupOff() { Backup.clearTarget(MainActivity.this); }
+
+        @JavascriptInterface
+        public String backupLoad(String day) { return Backup.load(MainActivity.this, day); }
+
+        // ---------- updates ----------
+        @JavascriptInterface
+        public int appVersion() {
+            try { return (int) getPackageManager().getPackageInfo(getPackageName(), 0).getLongVersionCode(); } catch (Exception e) { return 0; }
+        }
+
+        @JavascriptInterface
+        public void openUrl(final String url) {
+            runOnUiThread(() -> { try { startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url))); } catch (Exception ignored) { } });
         }
 
         @JavascriptInterface
