@@ -59,6 +59,6 @@ jobs:
         with:
           tag_name: android-latest
           name: 日程表 Android 版
-          body: 用手機下載 schedule.apk 安裝。每次更新都會換成最新版。
+          body: 用手機下載 schedule.apk 安裝。每次更新都會換成最新版。（build ${{ github.run_number }}）
           files: schedule.apk
           make_latest: true
