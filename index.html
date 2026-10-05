@@ -30,7 +30,7 @@ button{font:inherit;color:inherit}
 .shortcuts{display:flex;gap:8px;margin-top:8px;overflow-x:auto}
 .sc{flex:none;display:flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:4px 12px 4px 4px;font-size:.82rem;font-weight:700;cursor:pointer;text-decoration:none;color:var(--fg)}
 .sc i{display:grid;place-items:center;width:24px;height:24px;border-radius:999px;font-style:normal;font-size:.72rem;color:#fff;background:var(--fg)}
-.sc.strava i{background:#1f5eff}.sc.epop i{background:#e8edf5;color:#07090d}.sc.claude i{background:#5b6cf0}
+.sc.shealth i{background:#1d9bf0}.sc.epop i{background:#e8edf5;color:#07090d}.sc.claude i{background:#5b6cf0}
 main{max-width:720px;margin:0 auto;padding:10px 12px calc(env(safe-area-inset-bottom,0px) + 90px)}
 .view[hidden]{display:none}
 h2{font-size:.74rem;letter-spacing:.12em;color:var(--muted);margin:16px 2px 6px}
@@ -212,6 +212,8 @@ textarea{font:inherit;font-size:.92rem;color:var(--fg);background:var(--surface)
 .wk-mini i{display:block;height:100%;background:var(--tc);border-radius:999px}
 .wk-sub{font-size:.8rem;color:var(--muted);font-weight:700;margin:0 0 6px}
 .wk-row{margin:10px 0}
+.wk-quiz{display:grid;gap:2px;margin:10px 0 4px;border-radius:12px;padding:10px 12px;background:color-mix(in srgb,#a78bfa 16%,var(--surface));border:1px solid color-mix(in srgb,#a78bfa 35%,transparent)}
+.wk-quiz span{font-size:.74rem;color:var(--muted)}.wk-quiz b{font-size:1.05rem}.wk-quiz small{font-size:.78rem;color:var(--muted)}
 .wk-rowtop{display:flex;justify-content:space-between;align-items:center;font-size:.95rem;margin-bottom:5px}
 .wk-cat{display:flex;align-items:center;gap:8px;font-weight:800}
 .wk-cat i{width:10px;height:10px;border-radius:3px;background:var(--tc)}
@@ -220,6 +222,14 @@ textarea{font:inherit;font-size:.92rem;color:var(--fg);background:var(--surface)
 .wk-bar i{display:block;height:100%;border-radius:999px;background:var(--tc);box-shadow:0 0 12px color-mix(in srgb,var(--tc) 55%,transparent)}
 .wk-msg{margin-top:14px;font-size:.95rem;font-weight:700;color:var(--fg);background:color-mix(in srgb,var(--tone) 16%,var(--surface));border-left:4px solid var(--tone);border-radius:10px;padding:10px 12px}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(76px + env(safe-area-inset-bottom));z-index:60;background:#e8edf5;color:#07090d;border-radius:999px;padding:10px 8px 10px 18px;display:flex;align-items:center;gap:10px;font-size:.9rem;box-shadow:0 6px 24px rgba(0,0,0,.45);max-width:calc(100vw - 32px)}
+#toast[hidden]{display:none}#toast span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#toast button{background:#07090d;color:#e8edf5;border:0;border-radius:999px;padding:6px 14px;font:inherit;font-weight:600;flex:none}
+#toast:not(:has(button)){padding-right:18px}
+#updBar{display:block;width:100%;text-align:left;background:var(--accent);color:#07090d;border:0;border-radius:12px;padding:10px 14px;margin:0 0 10px;font:inherit;font-weight:600}
+#updBar[hidden]{display:none}
+.nlHint{font-size:.8rem;color:var(--accent);margin:4px 2px 0;min-height:1em}
+.repNote{background:rgba(255,184,77,.12);border:1px solid rgba(255,184,77,.35);color:#ffcf85;border-radius:10px;padding:8px 12px;font-size:.85rem;line-height:1.6;margin:0 0 12px}
+.repNote[hidden]{display:none}
 </style>
 </head>
 <body>
@@ -229,6 +239,7 @@ textarea{font:inherit;font-size:.92rem;color:var(--fg);background:var(--surface)
 </header>
 
 <main>
+  <button type="button" id="updBar" hidden>有新版本，點這裡下載安裝</button>
   <section class="view" id="v-cal" data-mode="month">
     <div class="calseg" role="group" aria-label="月曆或當天日程">
       <button type="button" id="cmMonth" aria-pressed="true">月曆</button>
@@ -288,16 +299,12 @@ textarea{font:inherit;font-size:.92rem;color:var(--fg);background:var(--surface)
     </div>
     <h2>自動打勾</h2>
     <div class="card" id="autoCard">
-      <div class="setting"><strong>跑步（Health Connect）</strong><span class="status" id="healthState">未連結</span>
-        <p>照常用 Strava 跑步就好。Strava 會把跑步記進手機的 Health Connect，App 從那裡讀；當天跑到課表上的完整距離，跑步任務就會自動打勾。免費，不用 Strava 訂閱。</p>
-        <p>沒排在日程上的跑步也會自動記一筆「額外跑步」，算進每週回顧的總跑量。</p>
+      <div class="setting"><strong>跑步（Samsung Health）</strong><span class="status" id="healthState">未連結</span>
+        <p>用 Samsung Health 記跑步：打開 Samsung Health →「運動」→「跑步」→ 開始，跑完按結束。它會把跑步存進手機的 Health Connect，日程表打開時從那裡讀；當天跑到排定的完整距離，跑步任務就會自動打勾。</p>
+        <p>要讀到資料，日程表需要被打開一次（Android 不讓 App 在背景讀健康資料）。沒排在日程上的跑步會自動記一筆「額外跑步」，算進每週總跑量。</p>
         <div class="rename"><span>超過幾公里才記</span><input id="sExtraRun" type="number" min="0" max="50" step="0.5"></div>
-        <label style="flex-direction:row;align-items:center;gap:8px;font-size:.88rem;color:var(--fg);margin:8px 0"><input id="sStravaOnly" type="checkbox" style="width:auto;accent-color:var(--accent)">只算 Strava 記錄的跑步（Samsung Health 自動偵測的距離常常不準）</label>
         <button class="btn primary" id="healthBtn">連結 Health Connect</button>
         <pre class="status" id="hcInfo" style="white-space:pre-wrap;font-family:var(--mono);font-size:.74rem;margin:8px 0 0"></pre></div>
-      <details class="setting" id="stravaBox"><summary><strong>改用 Strava API（需要 Strava 付費訂閱）</strong><span class="status" id="stravaState">未連結</span></summary>
-        <div class="rename" id="stravaForm"><span>Client ID</span><input id="sCid" inputmode="numeric" autocomplete="off"><span>Client Secret</span><input id="sCsec" autocomplete="off"></div>
-        <span style="display:flex;gap:6px"><button class="btn" id="stravaBtn">連結 Strava</button><button class="btn" id="stravaOff" hidden>取消連結</button></span></details>
       <div class="setting"><strong>EPOP（英文）</strong><span class="status" id="usageState">未開啟</span>
         <p>一天三次：EPOP 今天累計用滿 1 倍、2 倍、3 倍分鐘數時，早、午、晚三格會依序自動打勾。只看有沒有開著，不知道你練了什麼。</p>
         <div class="rename"><span>每次幾分鐘</span><input id="sEpop" type="number" min="1" max="120"></div>
@@ -312,8 +319,8 @@ textarea{font:inherit;font-size:.92rem;color:var(--fg);background:var(--surface)
         <p>到了這個時間，手機會跳出通知：今天的行程、今日一句。設成空白就關掉。</p>
         <button class="btn" id="pushBtn">允許通知</button></div>
       <div class="setting"><strong>事前提醒</strong>
-        <p>上課和習慣是開始前幾分鐘提醒；事件和任務預設在前 3 天和前 1 天的晚上 8 點提醒（只有 Android App 版）。每件事也可以在編輯時單獨改。</p>
-        <div class="rename"><span>上課、固定行程</span><select id="sRemClass"></select><span>每天重複的習慣</span><select id="sRemOther"></select><span>事件和任務</span><select id="sRemTask"></select></div></div>
+        <p>預設：上課開始前 10 分鐘；考試、比賽這類事件在前 3 天和前 1 天晚上 8 點；任務和每天的習慣不提醒（看小工具就好）。每件事也可以在編輯時單獨改（只有 Android App 版）。</p>
+        <div class="rename"><span>上課、固定行程</span><select id="sRemClass"></select><span>考試、比賽等事件</span><select id="sRemEvent"></select><span>任務</span><select id="sRemTask"></select><span>每天重複的習慣</span><select id="sRemOther"></select></div></div>
       <div class="setting"><strong>自己的勵志句</strong>
         <p>一行一句。有填的話，「今日一句」會從你寫的句子裡輪流出現；空白就用內建的 40 句。</p>
         <textarea id="sQuotes" placeholder="例如：我要在田中馬笑著跑完！"></textarea></div>
@@ -323,8 +330,13 @@ textarea{font:inherit;font-size:.92rem;color:var(--fg);background:var(--surface)
     <div class="card">
       <div class="setting" id="notifyRow"><strong>每日提醒通知</strong><button class="btn primary" id="notifyBtn">開啟通知</button>
         <p>Chrome 會在每天第一次背景同步時通知你，時間不一定固定。</p></div>
+      <div class="setting" id="autoBackup" hidden><strong>自動備份</strong><span class="status" id="bkState">未設定</span>
+        <p>選一次位置就好：按下面的按鈕，在左上角選單選「雲端硬碟」，存成「日程表自動備份.json」。之後每次修改（最多 15 分鐘一次）和離開 App 時都會自動更新這個檔案。手機壞掉時，新手機用下面的「匯入」選這個檔案就能救回來。</p>
+        <span style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn primary" id="bkPick">設定備份位置（Google 雲端硬碟）</button><button class="btn" id="bkNow" hidden>立即備份</button><button class="btn" id="bkOff" hidden>停止自動備份</button></span>
+        <p style="margin-top:10px">另外，手機裡每天會留一份（保留 14 天）。不小心刪錯可以從這裡回到某一天：</p>
+        <div id="bkDays" style="display:flex;gap:6px;flex-wrap:wrap"></div></div>
       <div class="setting"><strong>備份</strong><span style="display:flex;gap:6px"><button class="btn" id="exportBtn">匯出</button><label class="btn" style="font-size:inherit;color:inherit;flex-direction:row">匯入<input id="importFile" type="file" accept="application/json,.json" hidden></label></span>
-        <p>資料只存在這支手機上。換手機或清除資料前先匯出。</p></div>
+        <p>手動匯出一份 JSON 檔，或從備份檔匯入。</p></div>
       <div class="setting"><strong>還原成初始日程</strong><button class="btn danger" id="resetBtn">還原</button>
         <p>會清掉你新增的事項和打勾紀錄。</p></div>
     </div>
@@ -342,7 +354,7 @@ textarea{font:inherit;font-size:.92rem;color:var(--fg);background:var(--surface)
       <button type="button" id="kTask" aria-pressed="false">任務</button>
     </div>
     <p class="hint" id="kindHint">事件：考試、聚會、比賽這類偶發的事，月曆上顯示成色條。</p>
-    <label class="full">內容<input id="fTitle" required placeholder="例如：微積分小考" autocomplete="off"></label>
+    <label class="full">內容<input id="fTitle" required placeholder="例如：明天 3 點 微積分小考" autocomplete="off"><span class="nlHint" id="nlHint"></span></label>
     <label id="dateWrap">日期<input id="fDate" type="date"></label>
     <label><span id="timeLbl">時間</span><input id="fTime" type="time"></label>
     <label id="endWrap">結束（可空白）<input id="fEnd" type="time"></label>
@@ -355,6 +367,7 @@ textarea{font:inherit;font-size:.92rem;color:var(--fg);background:var(--surface)
     <label class="full">備註<input id="fNote" placeholder="選填" autocomplete="off"></label>
     <button class="btn" type="button" id="cancelBtn">取消</button>
     <button class="btn primary" type="submit" id="submitBtn">加入</button>
+    <button class="btn full" type="button" id="prepBtn" hidden>📚 幫我排考前複習</button>
     <button class="btn danger full" type="button" id="deleteBtn" hidden>刪除這一項</button>
   </form>
 </dialog>
@@ -369,5 +382,6 @@ textarea{font:inherit;font-size:.92rem;color:var(--fg);background:var(--surface)
 
 <script src="summary.js"></script>
 <script src="app.js"></script>
+<div id="toast" hidden></div>
 </body>
 </html>

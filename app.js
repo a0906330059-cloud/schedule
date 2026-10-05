@@ -5,7 +5,7 @@
   var ITEM_CATS = ["作業考試", "讀書", "跑步", "健身", "英文", "程式", "柳丁樹", "閱讀", "其他"];
   var FIXED_CATS = ["課程", "校隊", "社團"].concat(ITEM_CATS);
   var APPS = [
-    { cls: "strava", name: "Strava", letter: "S", pkg: "com.strava", web: "https://www.strava.com/dashboard" },
+    { cls: "shealth", name: "Samsung Health", letter: "S", pkg: "com.sec.android.app.shealth", web: "https://play.google.com/store/apps/details?id=com.sec.android.app.shealth" },
     { cls: "epop", name: "EPOP", letter: "E", pkg: "kr.epopsoft.word", web: "https://play.google.com/store/apps/details?id=kr.epopsoft.word" },
     { cls: "claude", name: "Claude", letter: "C", pkg: "com.anthropic.claude", web: "https://claude.ai" }
   ];
@@ -72,10 +72,23 @@
     if (obj.link === "epop" && a.epopMin != null) return "今天已用 " + a.epopMin + "/" + (settings().epopMin || 10) * (obj.epopSlot || 1) + " 分";
     return "";
   }
+  // every change you might regret gets a few seconds of "復原"
+  var toastTimer = null;
+  function toast(msg, undoFn, btnLabel) {
+    var t = $("toast"); t.replaceChildren(el("span", {}, msg));
+    if (undoFn) { var b = el("button", { type: "button" }, btnLabel || "復原"); b.addEventListener("click", function () { t.hidden = true; undoFn(); }); t.append(b); }
+    t.hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(function () { t.hidden = true; }, undoFn ? 7000 : 3500);
+  }
+  function undoable(msg, change) {
+    var snap = JSON.stringify(data);
+    change(); persist(); renderAll();
+    toast(msg, function () { data = normalize(JSON.parse(snap)); persist(); renderAll(); toast("已復原"); });
+  }
   function setDone(en, date, val) {
-    if (en.type === "task") en.obj.done = val;
-    else { en.obj.doneDates = en.obj.doneDates || {}; if (val) en.obj.doneDates[date] = true; else delete en.obj.doneDates[date]; }
-    persist(); renderAll();
+    undoable((val ? "已完成：" : "取消完成：") + (en.title || en.obj.title || ""), function () {
+      if (en.type === "task") en.obj.done = val;
+      else { en.obj.doneDates = en.obj.doneDates || {}; if (val) en.obj.doneDates[date] = true; else delete en.obj.doneDates[date]; }
+    });
   }
 
   // ---------- storage ----------
@@ -106,6 +119,7 @@
   // one-time data fixes for people who already imported their data
   function migrate() {
     var st = settings(), t0 = todayStr();
+    if (!st.mig4) { if (st.apps) delete st.apps.strava; delete st.runStravaOnly; st.mig4 = 1; }
     if (st.mig2) return;
     // gym becomes a weekly task with a checkbox (it used to be a fixed, un-tickable item)
     var groups = {};
@@ -151,7 +165,7 @@
     var ev = isEvent(t);
     var chk = el("input", { type: "checkbox", class: "chk", "aria-label": "完成：" + t.title });
     chk.checked = !!t.done;
-    chk.addEventListener("change", function () { t.done = chk.checked; persist(); renderAll(); });
+    chk.addEventListener("change", function () { var v = chk.checked; undoable((v ? "已完成：" : "取消完成：") + t.title, function () { t.done = v; }); });
     return el("li", { class: "row" + (t.done ? " done" : ""), style: tc(t.cat) },
       el("div", { class: "t" }, t.time || (ev ? "整天" : "—")),
       editable(el("div", { class: "main" }, el("div", { class: "title" }, el("span", { class: ev ? "mk" : "mkdot" }), el("span", { class: "tx" }, t.title)), el("div", { class: "note" }, catName(t.cat) + (t.note ? " ・ " + t.note : ""))), "task", t),
@@ -378,15 +392,16 @@
   // minutes before; for events & tasks also "days before" (rings at 20:00 that evening). -31 = 3 days AND 1 day before
   var REMIND = [["-1", "不提醒"], ["0", "準時"], ["5", "5 分鐘前"], ["10", "10 分鐘前"], ["15", "15 分鐘前"], ["30", "30 分鐘前"], ["60", "1 小時前"]];
   var REMIND_TASK = [["-31", "前 3 天和前 1 天（晚上 8 點）"], ["1440", "前 1 天（晚上 8 點）"], ["4320", "前 3 天（晚上 8 點）"]].concat(REMIND);
+  // kinds: class (fixed schedule), habit (repeats daily/weekly), task (to-do), event (exam, race…)
   function remindKind(isClass) { return isClass === true ? "class" : isClass === false ? "habit" : isClass; }
   function remindDefault(k) {
     k = remindKind(k); var s = settings();
-    var v = k === "class" ? s.remindClass : k === "habit" ? s.remindOther : s.remindTask;
-    return v == null ? (k === "task" ? -31 : 10) : v;
+    var v = k === "class" ? s.remindClass : k === "habit" ? s.remindHabit : k === "event" ? s.remindEvent : s.remindTask2;
+    return v == null ? (k === "class" ? 10 : k === "event" ? -31 : -1) : v;
   }
   function fillRemind(selEl, withDefault, k) {
     k = remindKind(k); selEl.replaceChildren();
-    var list = k === "task" ? REMIND_TASK : REMIND;
+    var list = k === "task" || k === "event" ? REMIND_TASK : REMIND;
     if (withDefault) { var d = remindDefault(k), lab = (list.filter(function (r) { return +r[0] === d; })[0] || ["", d + " 分鐘前"])[1]; selEl.append(el("option", { value: "" }, "預設（" + lab + "）")); }
     list.forEach(function (r) { selEl.append(el("option", { value: r[0] }, r[1])); });
   }
@@ -430,6 +445,13 @@
         el("div", { class: "wk-tile t-done" }, el("small", {}, "做完的事"), el("b", {}, w.done, el("span", {}, " / " + w.total))),
         el("div", { class: "wk-tile t-run" }, el("small", {}, "跑步"), el("b", {}, (Math.round(w.runDone * 10) / 10), el("span", {}, " / " + w.runPlan + " K")),
           el("div", { class: "wk-mini" }, el("i", { style: "width:" + runPct + "%" }))))));
+    var qs = settings().quizScore || {}, qr = 0, qt = 0, qd = 0;
+    Object.keys(qs).forEach(function (d) { if (d >= w.mon && d <= w.last) { qr += qs[d].right; qt += qs[d].total; qd++; } });
+    var pending = (settings().quizWrong || []).length;
+    if (weekOffset === 0 || qt) box.append(el("div", { class: "wk-quiz" },
+      el("span", {}, "📖 每日報告測驗"),
+      el("b", {}, qt ? "答對 " + qr + "/" + qt + "（" + Math.round(qr / qt * 100) + "%）・讀了 " + qd + " 篇" : "這週還沒作答"),
+      el("small", {}, pending ? "還有 " + pending + " 題答錯的會再考你" : "沒有待複習的題目")));
     var cats = Object.keys(w.byCat).sort(function (a, b) { return w.byCat[b].total - w.byCat[a].total; });
     if (cats.length) box.append(el("div", { class: "wk-sub" }, "各分類完成度"));
     cats.forEach(function (c) {
@@ -457,6 +479,7 @@
   }
   function setKind(k) {
     kind = k;
+    if (mode === "new") { var keep = $("fRemind").value; fillRemind($("fRemind"), true, k); $("fRemind").value = keep; if ($("fRemind").value !== keep) $("fRemind").value = ""; }
     $("kEvent").setAttribute("aria-pressed", String(k === "event"));
     $("kTask").setAttribute("aria-pressed", String(k === "task"));
     $("repeatWrap").hidden = k === "event" || mode !== "new";
@@ -478,7 +501,8 @@
     $("catLbl").textContent = fixed ? "類型" : "分類";
     fillCats(fixed ? FIXED_CATS : ITEM_CATS);
     $("deleteBtn").hidden = m === "new" || m === "fixed";
-    fillRemind($("fRemind"), true, fixed ? "class" : m === "habit" ? "habit" : "task"); $("fRemind").value = "";
+    $("prepBtn").hidden = true; $("nlHint").textContent = "";
+    fillRemind($("fRemind"), true, fixed ? "class" : m === "habit" ? "habit" : (m === "new" ? kind : (editing && isEvent(editing.obj) ? "event" : "task"))); $("fRemind").value = "";
     toggleGoal();
     $("submitBtn").textContent = (m === "new" || m === "fixed") ? "加入" : "儲存";
   }
@@ -487,9 +511,9 @@
   function showDialog() { var dlg = $("sheet"); if (dlg.showModal) dlg.showModal(); else dlg.setAttribute("open", ""); }
   function clearFields() { ["fTitle", "fNote", "fTime", "fEnd", "fRoom", "fGoal"].forEach(function (id) { $(id).value = ""; }); $("fRepeat").value = ""; }
   function openSheet(date, start, end) {
-    editing = null; clearFields();
+    editing = null; clearFields(); touched = {};
     $("fDate").value = date || viewDate;
-    if (start) $("fTime").value = start; if (end) $("fEnd").value = end;
+    if (start) { $("fTime").value = start; touched.fTime = true; } if (end) { $("fEnd").value = end; touched.fEnd = true; }
     $("sheetTitle").textContent = "新增到 " + label($("fDate").value) + (start ? " " + start : "");
     showFields("new"); setKind(kind);
     showDialog();
@@ -515,15 +539,119 @@
       toggleGoal();
       $("sheetTitle").textContent = type === "habit" ? "編輯重複任務" : (isEvent(obj) ? "編輯事件" : "編輯任務");
     }
+    $("prepBtn").hidden = !(type === "task" && isEvent(obj) && obj.cat === "作業考試" && obj.date > todayStr());
+    $("prepBtn").onclick = function () { $("sheet").close(); planReview(obj); };
     var armed = false; $("deleteBtn").textContent = "刪除這一項";
     $("deleteBtn").onclick = function () {
-      if (!armed) { armed = true; $("deleteBtn").textContent = "再按一次確認刪除"; return; }
-      if (type === "task") data.tasks = data.tasks.filter(function (x) { return x !== obj; });
-      if (type === "habit") data.habits = data.habits.filter(function (x) { return x !== obj; });
-      if (type === "class") data.classes = data.classes.filter(function (x) { return x !== obj; });
-      persist(); renderAll(); $("sheet").close();
+      $("sheet").close();
+      undoable("已刪除：" + (obj.title || obj.name), function () {
+        if (type === "task") data.tasks = data.tasks.filter(function (x) { return x !== obj; });
+        if (type === "habit") data.habits = data.habits.filter(function (x) { return x !== obj; });
+        if (type === "class") data.classes = data.classes.filter(function (x) { return x !== obj; });
+      });
     };
     showDialog();
+  }
+  // ---------- exam prep: spread review sessions over the two weeks before an exam ----------
+  var PREP_DAYS = [13, 11, 9, 7, 5, 3, 1];
+  function planReview(ev) {
+    if (data.tasks.some(function (t) { return t.examId === ev.id; })) { toast("「" + ev.title + "」已經排好複習了"); return; }
+    var t0 = todayStr(), dates = PREP_DAYS.map(function (n) { return addDays(ev.date, -n); }).filter(function (d) { return d >= t0; });
+    if (!dates.length) { toast("考試太近了，排不進複習"); return; }
+    undoable("已排 " + dates.length + " 次複習，從 " + label(dates[0]) + " 開始", function () {
+      dates.forEach(function (d, i) {
+        data.tasks.push({ id: "prep-" + ev.id + "-" + i, kind: "task", examId: ev.id, date: d, time: "", cat: "讀書", done: false,
+          title: "複習：" + ev.title + "（第 " + (i + 1) + " 次" + (i === dates.length - 1 ? "・考前總複習" : "") + "）", note: "考試在 " + label(ev.date) });
+      });
+    });
+  }
+
+  // ---------- quick add in plain words: "明天 3 點 微積分小考", "週五晚上 5K" ----------
+  var CN_NUM = { "一": 1, "二": 2, "兩": 2, "三": 3, "四": 4, "五": 5, "六": 6, "七": 7, "八": 8, "九": 9, "十": 10, "十一": 11, "十二": 12 };
+  var WD_CH = { "日": 0, "天": 0, "一": 1, "二": 2, "三": 3, "四": 4, "五": 5, "六": 6 };
+  function parseNL(text, base) {
+    base = base || todayStr();
+    var out = {}, rest = " " + text + " ", m;
+    function cut(x) { rest = rest.replace(x, " "); }
+    // distance first so "5K" isn't read as anything else
+    if ((m = /(\d+(?:\.\d+)?)\s*(?:k|K|公里)(?![a-zA-Z])/.exec(rest))) { out.goalKm = parseFloat(m[1]); out.cat = "跑步"; }
+    // date
+    if ((m = /大後天/.exec(rest))) { out.date = addDays(base, 3); cut(m[0]); }
+    else if ((m = /後天/.exec(rest))) { out.date = addDays(base, 2); cut(m[0]); }
+    else if ((m = /明天|明早|明晚/.exec(rest))) { out.date = addDays(base, 1); if (m[0] !== "明天") out.period = m[0] === "明早" ? "早上" : "晚上"; cut(m[0]); }
+    else if ((m = /今天|今晚/.exec(rest))) { out.date = base; if (m[0] === "今晚") out.period = "晚上"; cut(m[0]); }
+    else if ((m = /(下下|下)?個?(?:週|周|星期|禮拜)([一二三四五六日天])/.exec(rest))) {
+      var cur = (parse(base).getDay() + 6) % 7, want = (WD_CH[m[2]] + 6) % 7, off = want - cur;
+      if (m[1] === "下") off += 7; else if (m[1] === "下下") off += 14; else if (off < 0) off += 7;
+      out.date = addDays(base, off); cut(m[0]);
+    } else if ((m = /(\d{1,2})\s*(?:\/|月)\s*(\d{1,2})\s*(?:日|號)?/.exec(rest))) {
+      var mo = parseInt(m[1], 10), da = parseInt(m[2], 10);
+      if (mo >= 1 && mo <= 12 && da >= 1 && da <= 31) {
+        var y = parseInt(base.slice(0, 4), 10), d = y + "-" + pad(mo) + "-" + pad(da);
+        if (d < addDays(base, -30)) d = (y + 1) + "-" + pad(mo) + "-" + pad(da);
+        out.date = d; cut(m[0]);
+      }
+    }
+    // time, maybe a range: "下午3點到5點", "15:00-17:00", "晚上7點半"
+    var T = "(早上|上午|中午|下午|傍晚|晚上)?\\s*(十一|十二|\\d{1,2}|[一二兩三四五六七八九十])\\s*(?:[:：](\\d{2})|點\\s*(半|\\d{1,2}\\s*分?)?)";
+    if ((m = new RegExp(T + "(?:\\s*(?:-|~|～|到|至)\\s*" + T + ")?").exec(rest))) {
+      var toH = function (per, h, mm, half) {
+        h = CN_NUM[h] || parseInt(h, 10);
+        var mi = mm ? parseInt(mm, 10) : half === "半" ? 30 : half ? parseInt(half, 10) : 0;
+        per = per || out.period;
+        if (per === "下午" || per === "傍晚" || per === "晚上") { if (h < 12) h += 12; }
+        else if (per === "中午") { if (h < 6) h += 12; }
+        else if (!per && h >= 1 && h <= 7) h += 12;   // "3點" alone means 3 pm
+        if (h > 23 || mi > 59) return null;
+        return pad(h) + ":" + pad(mi);
+      };
+      var st = toH(m[1], m[2], m[3], m[4]);
+      if (st) {
+        out.time = st;
+        if (m[6]) { var en = toH(m[5] || m[1], m[6], m[7], m[8]); if (en && en > st) out.end = en; }
+        cut(m[0]);
+      }
+    }
+    if (!out.cat) {
+      if (/考|作業|報告|期中|期末|截止|繳交/.test(text)) out.cat = "作業考試";
+      else if (/跑步|慢跑|間歇|配速|馬拉松/.test(text)) out.cat = "跑步";
+      else if (/健身|重訓|腿日/.test(text)) out.cat = "健身";
+      else if (/英文|單字|EPOP|多益|TOEIC/i.test(text)) out.cat = "英文";
+      else if (/程式|Python|coding|leetcode/i.test(text)) out.cat = "程式";
+      else if (/讀書|複習|預習/.test(text)) out.cat = "讀書";
+      else if (/柳丁/.test(text)) out.cat = "柳丁樹";
+    }
+    if (/考|比賽|聚會|聚餐|面試|活動|演講|典禮|報告|截止|看醫生|回診|旅行|出發/.test(text)) out.kind = "event";
+    out.title = rest.replace(/\s+/g, " ").trim() || text.trim();
+    out.found = !!(out.date || out.time || out.goalKm);
+    return out;
+  }
+  var touched = {};
+  ["fDate", "fTime", "fEnd", "fCat", "fGoal"].forEach(function (id) {
+    ["change", "input"].forEach(function (evn) { $(id).addEventListener(evn, function (ev) { if (ev.isTrusted) touched[id] = true; }); });
+  });
+  $("kEvent").addEventListener("click", function (ev) { if (ev.isTrusted) touched.kind = true; });
+  $("kTask").addEventListener("click", function (ev) { if (ev.isTrusted) touched.kind = true; });
+  $("fTitle").addEventListener("input", function () {
+    if (mode !== "new") return;
+    var raw = $("fTitle").value.trim(), p = parseNL(raw, todayStr()), bits = [];
+    if (p.date && !touched.fDate) bits.push(label(p.date));
+    if (p.time && !touched.fTime) bits.push(p.time + (p.end ? "–" + p.end : ""));
+    if (p.goalKm && !touched.fGoal) bits.push(p.goalKm + " 公里");
+    if (p.kind === "event" && !touched.kind) bits.push("事件");
+    if (p.cat && !touched.fCat && ITEM_CATS.indexOf(p.cat) >= 0) bits.push(catName(p.cat));
+    $("nlHint").textContent = p.found && bits.length ? "→ " + bits.join("・") + (p.title !== raw ? "　標題：" + p.title : "") : "";
+  });
+  function applyNL() {
+    var raw = $("fTitle").value.trim(), p = parseNL(raw, todayStr());
+    if (!p.found && !p.cat && !p.kind) return raw;
+    if (p.date && !touched.fDate) $("fDate").value = p.date;
+    if (p.time && !touched.fTime) $("fTime").value = p.time;
+    if (p.end && !touched.fEnd) $("fEnd").value = p.end;
+    if (p.cat && !touched.fCat && ITEM_CATS.indexOf(p.cat) >= 0) sel.value = p.cat;
+    if (p.goalKm && !touched.fGoal) $("fGoal").value = p.goalKm;
+    if (p.kind && !touched.kind && p.kind !== kind) setKind(p.kind);
+    return p.found ? p.title : raw;
   }
   window.openQuickAdd = function (date) { openSheet(date || todayStr()); };
   function currentView() { var v = document.querySelector(".view:not([hidden])"); return v ? v.id : "v-cal"; }
@@ -547,6 +675,7 @@
   $("addForm").addEventListener("submit", function (ev) {
     ev.preventDefault();
     var title = $("fTitle").value.trim(); if (!title) return;
+    if (mode === "new" && !editing) title = applyNL();
     var start = $("fTime").value || "", end = $("fEnd").value || "", note = $("fNote").value.trim();
     if (mode === "fixed") {
       if (!pickedDays.length) { $("sheetTitle").textContent = "請至少選一天"; return; }
@@ -572,6 +701,7 @@
       viewDate = t.date; month = t.date.slice(0, 7);
     }
     persist(); renderAll(); $("sheet").close(); editing = null;
+    if (t && !rp && isEvent(t) && t.cat === "作業考試" && t.date > addDays(todayStr(), 1)) toast("已加入「" + t.title + "」", function () { planReview(t); }, "📚 排考前複習");
   });
   function applyRemind(o) { var v = $("fRemind").value; if (v === "") delete o.remind; else o.remind = parseInt(v, 10); }
 
@@ -718,6 +848,7 @@
     var top = el("div", { class: "rp-top" }, el("span", { class: "rp-tag" }, r.topic + (r.date === todayStr() ? "・今天" : "・" + r.date.slice(5))));
     if (report && r !== report) { var back = el("button", { class: "ib", type: "button" }, "回到最新的報告"); back.addEventListener("click", function () { openReport(report); }); top.append(back); }
     b.append(top);
+    if (r === report && r.date !== todayStr()) b.append(el("div", { class: "repNote" }, "這是 " + label(r.date) + " 的報告，今天的還沒放上來。電腦和 Claude 都開著的時候，每個整點 40 分會自動檢查並放上來。"));
     b.append(el("h1", {}, r.title));
     b.append(el("div", { class: "rp-meta" }, (r.source || "") + (r.sourceDate ? " ・ " + r.sourceDate : "") + " ・ Claude 整理於 " + r.date));
     if (r.lead) b.append(el("div", { class: "rp-lead" }, r.lead));
@@ -777,6 +908,8 @@
         var a = st.quiz[r.date] = st.quiz[r.date] || [];
         if (a[i] != null) return;
         a[i] = pick;
+        st.quizScore = st.quizScore || {};
+        st.quizScore[r.date] = { right: r.quiz.filter(function (qq, k) { return a[k] === qq.answer; }).length, total: r.quiz.length };
         if (pick !== q.answer) st.quizWrong.push({ date: r.date, q: q.q, options: q.options, answer: q.answer, explain: q.explain || "" });
         st.quizWrong = st.quizWrong.slice(-20);
         persist();
@@ -823,12 +956,13 @@
   }
   $("sQuotes").addEventListener("input", function () { settings().quotes = $("sQuotes").value; renderQuote(); savedSoon(); });
   function renderRemindSettings() {
-    fillRemind($("sRemClass"), false, "class"); fillRemind($("sRemOther"), false, "habit"); fillRemind($("sRemTask"), false, "task");
-    $("sRemClass").value = String(remindDefault("class")); $("sRemOther").value = String(remindDefault("habit")); $("sRemTask").value = String(remindDefault("task"));
+    fillRemind($("sRemClass"), false, "class"); fillRemind($("sRemOther"), false, "habit"); fillRemind($("sRemTask"), false, "task"); fillRemind($("sRemEvent"), false, "event");
+    $("sRemClass").value = String(remindDefault("class")); $("sRemOther").value = String(remindDefault("habit")); $("sRemTask").value = String(remindDefault("task")); $("sRemEvent").value = String(remindDefault("event"));
   }
-  $("sRemTask").addEventListener("change", function () { settings().remindTask = parseInt($("sRemTask").value, 10); persist(); });
+  $("sRemTask").addEventListener("change", function () { settings().remindTask2 = parseInt($("sRemTask").value, 10); persist(); });
+  $("sRemEvent").addEventListener("change", function () { settings().remindEvent = parseInt($("sRemEvent").value, 10); persist(); });
   $("sRemClass").addEventListener("change", function () { settings().remindClass = parseInt($("sRemClass").value, 10); persist(); });
-  $("sRemOther").addEventListener("change", function () { settings().remindOther = parseInt($("sRemOther").value, 10); persist(); });
+  $("sRemOther").addEventListener("change", function () { settings().remindHabit = parseInt($("sRemOther").value, 10); persist(); });
   function renderPush() {
     renderRemindSettings();
     $("sQuotes").value = settings().quotes || "";
@@ -844,36 +978,21 @@
   // ---------- auto check (Android app only) ----------
   function autoMsg(m) { $("autoMsg").textContent = m || ""; }
   function renderAuto() {
+    renderBackup();
     $("sEpop").value = settings().epopMin || 10;
     $("sExtraRun").value = settings().extraRunMin == null ? 1 : settings().extraRunMin;
-    $("sStravaOnly").checked = settings().runStravaOnly !== false;
     if (!NATIVE) { $("autoCard").hidden = true; $("autoWebNote").hidden = false; return; }
     var st = {}; try { st = JSON.parse(window.Android.autoStatus()); } catch (e) {}
-    $("stravaState").textContent = st.strava ? "已連結" : "未連結";
-    if (st.strava) $("stravaBox").open = true;
     $("healthState").textContent = st.health ? "已連結" : st.healthAvail === false ? "這支手機不支援" : "未連結";
     $("healthBtn").textContent = st.health ? "重新檢查權限" : "連結 Health Connect";
-    $("stravaForm").hidden = !!st.strava; $("stravaBtn").hidden = !!st.strava; $("stravaOff").hidden = !st.strava;
-    if (st.clientId && !$("sCid").value) $("sCid").value = st.clientId;
     $("usageState").textContent = st.usage ? "已開啟" : "未開啟";
     $("usageBtn").textContent = st.usage ? "到系統設定查看" : "開啟「使用情形存取權」";
     var a = data.auto;
-    if (a && a.date === todayStr()) autoMsg("今天：" + (a.runKm != null ? "跑了 " + a.runKm + " 公里" : "跑步還沒連結") + "，" + (a.epopMin != null ? "EPOP 共用了 " + a.epopMin + " 分" : "EPOP 未開啟權限"));
+    if (a && a.date === todayStr()) autoMsg("今天：" + (a.runKm != null ? "Samsung Health 記到 " + a.runKm + " 公里" : "跑步還沒連結") + "，" + (a.epopMin != null ? "EPOP 共用了 " + a.epopMin + " 分" : "EPOP 未開啟權限"));
     $("hcInfo").textContent = a && a.date === todayStr() && a.hcInfo ? a.hcInfo : "";
   }
   $("sEpop").addEventListener("change", function () { var n = parseInt($("sEpop").value, 10); if (n > 0) { settings().epopMin = n; persist(); } });
-  $("stravaBtn").onclick = function () {
-    var id = $("sCid").value.trim(), sec = $("sCsec").value.trim();
-    if (!id || !sec) { autoMsg("請先填 Client ID 和 Client Secret。"); return; }
-    window.Android.stravaConnect(id, sec);
-  };
-  var offArmed = false;
-  $("stravaOff").onclick = function () {
-    if (!offArmed) { offArmed = true; $("stravaOff").textContent = "再按一次確認"; return; }
-    window.Android.stravaDisconnect(); offArmed = false; $("stravaOff").textContent = "取消連結"; renderAuto();
-  };
   $("sExtraRun").addEventListener("change", function () { var n = parseFloat($("sExtraRun").value); if (n >= 0) { settings().extraRunMin = n; persist(); } });
-  $("sStravaOnly").addEventListener("change", function () { settings().runStravaOnly = $("sStravaOnly").checked; persist(); if (NATIVE) { autoMsg("檢查中…"); window.Android.checkNow(); } });
   $("healthBtn").onclick = function () { if (window.Android.healthConnect) window.Android.healthConnect(); };
   $("usageBtn").onclick = function () { window.Android.openUsageSettings(); };
   $("checkNow").onclick = function () { autoMsg("檢查中…"); window.Android.checkNow(); };
@@ -883,11 +1002,62 @@
     renderAll(); renderAuto(); if (message) autoMsg(message);
   };
 
+
+  // ---------- automatic backup (Android app): a file in Google Drive + 14 daily copies on the phone ----------
+  var bkArmed = null;
+  function renderBackup() {
+    if (!NATIVE || !window.Android.backupStatus) return;
+    $("autoBackup").hidden = false;
+    var st = {}; try { st = JSON.parse(window.Android.backupStatus()); } catch (e) {}
+    var when = st.last ? new Date(st.last) : null;
+    $("bkState").textContent = !st.target ? "未設定" : st.error ? "上次備份失敗" : when ? "上次 " + (fmt(when) === todayStr() ? "今天 " : (when.getMonth() + 1) + "/" + when.getDate() + " ") + pad(when.getHours()) + ":" + pad(when.getMinutes()) : "已設定";
+    $("bkPick").textContent = st.target ? "換一個備份位置" : "設定備份位置（Google 雲端硬碟）";
+    $("bkPick").className = st.target ? "btn" : "btn primary";
+    $("bkNow").hidden = !st.target; $("bkOff").hidden = !st.target;
+    var box = $("bkDays"); box.replaceChildren();
+    (st.days || []).forEach(function (d) {
+      var md = d.slice(5).replace("-", "/").replace(/^0/, "").replace("/0", "/");
+      var b = el("button", { class: bkArmed === d ? "btn danger" : "btn", type: "button" }, bkArmed === d ? "確定回到 " + md + "？" : md);
+      b.addEventListener("click", function () {
+        if (bkArmed !== d) { bkArmed = d; renderBackup(); return; }
+        bkArmed = null;
+        var json = window.Android.backupLoad(d), parsed = null;
+        try { parsed = JSON.parse(json); } catch (e) {}
+        if (!parsed) { toast("讀不到這天的備份"); renderBackup(); return; }
+        undoable("已回到 " + md + " 的資料", function () { data = normalize(parsed); });
+        refreshEverything();
+      });
+      box.append(b);
+    });
+    if (!box.children.length) box.append(el("span", { class: "status" }, "下次修改後就會有第一份。"));
+  }
+  $("bkPick").onclick = function () { toast("在左上角 ☰ 選「雲端硬碟」，再按儲存"); window.Android.backupPick(); };
+  $("bkNow").onclick = function () { window.Android.backupNow(); toast("備份中…"); setTimeout(renderBackup, 2500); };
+  $("bkOff").onclick = function () {
+    if ($("bkOff").textContent !== "再按一次確認") { $("bkOff").textContent = "再按一次確認"; return; }
+    window.Android.backupOff(); $("bkOff").textContent = "停止自動備份"; renderBackup();
+  };
+
+  // ---------- a newer version of the app is out (Android app) ----------
+  var REL_API = "https://api.github.com/repos/a0906330059-cloud/schedule/releases/tags/android-latest";
+  var APK_URL = "https://github.com/a0906330059-cloud/schedule/releases/download/android-latest/schedule.apk";
+  var updChecked = 0;
+  function checkUpdate() {
+    if (!NATIVE || !window.Android.appVersion || Date.now() - updChecked < 30 * 60 * 1000) return;
+    updChecked = Date.now();
+    var mine = window.Android.appVersion();
+    fetch(REL_API, { cache: "no-store" }).then(function (r) { if (!r.ok) throw 0; return r.json(); }).then(function (rel) {
+      var m = /build (\d+)/.exec(rel.body || ""); if (!m) return;
+      $("updBar").hidden = !(parseInt(m[1], 10) > mine);
+    }).catch(function () {});
+  }
+  $("updBar").onclick = function () { window.Android.openUrl(APK_URL); };
+
   // ---------- boot ----------
   notifyState();
   loadDaily();
   load().then(function () {
-    migrate(); persist(); refreshEverything(); renderDay(true);
+    migrate(); persist(); refreshEverything(); renderDay(true); checkUpdate();
     if (NATIVE) window.Android.setReminder(settings().pushTime == null ? "07:30" : settings().pushTime); if (window.__pendingQuickAdd) { openSheet(window.__pendingQuickAdd); window.__pendingQuickAdd = null; } })
     .catch(function () { $("dayBody").replaceChildren(el("p", { class: "empty" }, "讀不到資料，請連上網路後重新開啟。")); });
   if (!NATIVE && "serviceWorker" in navigator) {
@@ -897,7 +1067,7 @@
   }
   document.addEventListener("visibilitychange", function () {
     if (document.hidden) return;
-    loadReport();
+    loadReport(); checkUpdate(); renderBackup();
     if (NATIVE) { var s = readStored(); if (s) { try { data = normalize(JSON.parse(s)); } catch (e) {} } }
     if (viewDate < todayStr()) { viewDate = todayStr(); month = viewDate.slice(0, 7); loadDaily(); }
     renderQuote(); renderAll();
