@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.health.READ_DISTANCE" />
     <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" tools:ignore="ProtectedPermissions" />
     <queries>
-        <package android:name="com.strava" />
+        <package android:name="com.sec.android.app.shealth" />
         <package android:name="kr.epopsoft.word" />
         <package android:name="com.anthropic.claude" />
     </queries>
@@ -28,12 +28,6 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="wadeschedule" android:host="localhost" />
             </intent-filter>
         </activity>
         <!-- Health Connect asks apps to explain why they read health data -->
