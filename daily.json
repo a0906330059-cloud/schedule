@@ -1,27 +1,27 @@
 {
- "date": "2026-10-06",
- "topic": "科技",
+ "date": "2026-10-07",
+ "topic": "國際",
  "articles": [
   {
-   "title": "MCP for agent-to-agent comms may be the riskiest protocol you've never heard of",
-   "link": "https://arstechnica.com/security/2026/10/vulnerability-in-agents-from-google-and-others-exposes-structural-flaw-in-mcp/",
-   "summary": "Trust gaps in the new protocol spread malicious prompts from one agent to another.",
-   "source": "Ars Technica",
-   "topic": "科技"
+   "title": "US death row inmate Christa Pike awake and speaking after failed execution, lawyers say",
+   "link": "https://www.bbc.co.uk/news/articles/c8kgezxn54qko?at_medium=RSS&at_campaign=rss",
+   "summary": "Experts say her survival after the lethal injections is highly unusual.",
+   "source": "BBC World",
+   "topic": "國際"
   },
   {
-   "title": "Cable lobby to sue Trump FCC over repeal of national TV ownership cap",
-   "link": "https://arstechnica.com/tech-policy/2026/10/cable-lobby-to-sue-trump-fcc-over-repeal-of-national-tv-ownership-cap/",
-   "summary": "Cable industry to sue, says FCC can't repeal TV ownership limit set by Congress.",
-   "source": "Ars Technica",
-   "topic": "科技"
+   "title": "Tear gas in Paris and Marseille as school protests grow across France",
+   "link": "https://www.bbc.co.uk/news/articles/c8x23706pvz3o?at_medium=RSS&at_campaign=rss",
+   "summary": "Crowds of mainly teenagers called for more resources for schools and an end to what they called police repression.",
+   "source": "BBC World",
+   "topic": "國際"
   },
   {
-   "title": "Texas city demands $2M for public records on Flock usage",
-   "link": "https://arstechnica.com/tech-policy/2026/10/texas-city-demands-2m-for-public-records-on-flock-usage/",
-   "summary": "Prices of public records tracking cops' use of Flock go up as backlash swells.",
-   "source": "Ars Technica",
-   "topic": "科技"
+   "title": "Former German spy chief arrested for espionage and treason",
+   "link": "https://www.bbc.co.uk/news/articles/c58jzyer1kr0o?at_medium=RSS&at_campaign=rss",
+   "summary": "August Hanning is accused of obtaining classified information for a foreign power.",
+   "source": "BBC World",
+   "topic": "國際"
   }
  ]
 }
