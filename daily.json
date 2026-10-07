@@ -1,27 +1,27 @@
 {
- "date": "2026-10-07",
- "topic": "國際",
+ "date": "2026-10-08",
+ "topic": "區塊鏈",
  "articles": [
   {
-   "title": "US death row inmate Christa Pike awake and speaking after failed execution, lawyers say",
-   "link": "https://www.bbc.co.uk/news/articles/c8kgezxn54qko?at_medium=RSS&at_campaign=rss",
-   "summary": "Experts say her survival after the lethal injections is highly unusual.",
-   "source": "BBC World",
-   "topic": "國際"
+   "title": "Wells Fargo in talks with Kraken parent Payward for crypto trading liquidity",
+   "link": "https://www.coindesk.com/business/2026/10/05/wells-fargo-in-talks-with-kraken-parent-payward-for-crypto-trading-liquidity",
+   "summary": "The discussions would see Payward supply liquidity for crypto trading as major banks deepen their involvement in digital assets.",
+   "source": "CoinDesk",
+   "topic": "區塊鏈"
   },
   {
-   "title": "Tear gas in Paris and Marseille as school protests grow across France",
-   "link": "https://www.bbc.co.uk/news/articles/c8x23706pvz3o?at_medium=RSS&at_campaign=rss",
-   "summary": "Crowds of mainly teenagers called for more resources for schools and an end to what they called police repression.",
-   "source": "BBC World",
-   "topic": "國際"
+   "title": "Polygon taps TRON’s $94 billion stablecoin supply for seamless cross-border transfers",
+   "link": "https://www.coindesk.com/business/2026/10/07/polygon-and-tron-partner-to-bridge-usd94-billion-usdt-ecosystem-with-u-s-banking-rails",
+   "summary": "Polygon said businesses can also move the world’s largest stablecoin USDT between TRON and EVM networks without connecting to a wallet provider, bridge or fiat-ramp operator.",
+   "source": "CoinDesk",
+   "topic": "區塊鏈"
   },
   {
-   "title": "Former German spy chief arrested for espionage and treason",
-   "link": "https://www.bbc.co.uk/news/articles/c58jzyer1kr0o?at_medium=RSS&at_campaign=rss",
-   "summary": "August Hanning is accused of obtaining classified information for a foreign power.",
-   "source": "BBC World",
-   "topic": "國際"
+   "title": "Gate bets all-in-one money app is crypto’s biggest consumer trend this year and next",
+   "link": "https://www.coindesk.com/business/2026/10/07/gate-bets-all-in-one-money-app-is-crypto-s-biggest-consumer-trend-this-year-and-next",
+   "summary": "Gate rebrands around Gate Money, which combines accounts, asset conversion, savings and card payments as the exchange broadens beyond its trading base.",
+   "source": "CoinDesk",
+   "topic": "區塊鏈"
   }
  ]
 }
