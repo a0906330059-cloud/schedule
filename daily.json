@@ -1,27 +1,27 @@
 {
- "date": "2026-10-09",
- "topic": "科技",
+ "date": "2026-10-10",
+ "topic": "國際",
  "articles": [
   {
-   "title": "R.I.P. Margaret Hamilton, whose code saved the Apollo 11 Moon landing",
-   "link": "https://arstechnica.com/science/2026/10/r-i-p-margaret-hamilton-whose-code-saved-the-apollo-11-moon-landing/",
-   "summary": "Hamilton also coined the term \"software engineering\" and founded two successful software companies.",
-   "source": "Ars Technica",
-   "topic": "科技"
+   "title": "Trump announces deal for Russian diesel as Zelensky criticises 'gift to Putin'",
+   "link": "https://www.bbc.co.uk/news/articles/cm1dwgr666wno?at_medium=RSS&at_campaign=rss",
+   "summary": "Ukraine's president said allowing Russia to sell petroleum products would prolong a war that must be ended.",
+   "source": "BBC World",
+   "topic": "國際"
   },
   {
-   "title": "Let's Encrypt cuts certificate lifetimes to 64 days starting February 2027",
-   "link": "https://arstechnica.com/gadgets/2026/10/lets-encrypt-cuts-certificate-lifetimes-to-64-days-starting-february-2027/",
-   "summary": "Free SSL/TLS certificate lifetimes reduce to 64 days in February.",
-   "source": "Ars Technica",
-   "topic": "科技"
+   "title": "US unveils sanctions on ICC in move court condemns as 'assault on rule of law'",
+   "link": "https://www.bbc.co.uk/news/articles/cj20vkkx3rdvo?at_medium=RSS&at_campaign=rss",
+   "summary": "Several member states of the international tribunal, including the UK, say they \"strongly disagree\" with the sanctions.",
+   "source": "BBC World",
+   "topic": "國際"
   },
   {
-   "title": "Driver wins $76 after ALPR led to bogus traffic stop, drug searches",
-   "link": "https://arstechnica.com/tech-policy/2026/10/driver-wins-76-after-alpr-led-to-bogus-traffic-stop-drug-searches/",
-   "summary": "Mass surveillance gets stupider.",
-   "source": "Ars Technica",
-   "topic": "科技"
+   "title": "JD Vance casts doubt on firing squad execution and says he will not watch it",
+   "link": "https://www.bbc.co.uk/news/articles/ck20r39nl3qzo?at_medium=RSS&at_campaign=rss",
+   "summary": "The planned execution of Nidal Hasan by firing squad would be the first military execution in more than 60 years.",
+   "source": "BBC World",
+   "topic": "國際"
   }
  ]
 }
