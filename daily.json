@@ -1,27 +1,27 @@
 {
- "date": "2026-10-10",
- "topic": "國際",
+ "date": "2026-10-11",
+ "topic": "綜合",
  "articles": [
   {
-   "title": "Trump announces deal for Russian diesel as Zelensky criticises 'gift to Putin'",
-   "link": "https://www.bbc.co.uk/news/articles/cm1dwgr666wno?at_medium=RSS&at_campaign=rss",
-   "summary": "Ukraine's president said allowing Russia to sell petroleum products would prolong a war that must be ended.",
-   "source": "BBC World",
-   "topic": "國際"
+   "title": "One year after 10/10 flash crash, bitcoin and ether liquidity have rebuilt, but altcoins still face risks",
+   "link": "https://www.coindesk.com/markets/2026/10/10/one-year-after-10-10-bitcoin-and-ether-liquidity-have-rebuilt-but-other-altcoins-still-face-risks",
+   "summary": "Bitcoin and ether order books are deeper than before the crash, while altcoin liquidity keeps eroding and spot trading remains well below its October 2025 peak.",
+   "source": "CoinDesk",
+   "topic": "區塊鏈"
   },
   {
-   "title": "US unveils sanctions on ICC in move court condemns as 'assault on rule of law'",
-   "link": "https://www.bbc.co.uk/news/articles/cj20vkkx3rdvo?at_medium=RSS&at_campaign=rss",
-   "summary": "Several member states of the international tribunal, including the UK, say they \"strongly disagree\" with the sanctions.",
-   "source": "BBC World",
-   "topic": "國際"
+   "title": "CFTC Draws the Line Between Prediction Markets and Gambling in New Rules",
+   "link": "https://decrypt.co/380635/cftc-draws-line-prediction-markets-and-gambling-new-rules",
+   "summary": "A proposed rule would expressly fold event contracts tied to sports, politics, culture and weather into the “swap” definition, while an interim rule excludes casino-style gambling—sharpening the agency’s claim to exclusi…",
+   "source": "Decrypt",
+   "topic": "區塊鏈"
   },
   {
-   "title": "JD Vance casts doubt on firing squad execution and says he will not watch it",
-   "link": "https://www.bbc.co.uk/news/articles/ck20r39nl3qzo?at_medium=RSS&at_campaign=rss",
-   "summary": "The planned execution of Nidal Hasan by firing squad would be the first military execution in more than 60 years.",
-   "source": "BBC World",
-   "topic": "國際"
+   "title": "One with the world? A new look at brains transformed by psychedelics.",
+   "link": "https://arstechnica.com/science/2026/10/the-psychedelic-brain-looks-like-chaos-underneath-theres-order/",
+   "summary": "Participants meditated inside an MRI tube, with and without psilocybin.",
+   "source": "Ars Technica",
+   "topic": "科技"
   }
  ]
 }
