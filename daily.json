@@ -1,27 +1,27 @@
 {
- "date": "2026-10-11",
- "topic": "綜合",
+ "date": "2026-10-12",
+ "topic": "區塊鏈",
  "articles": [
   {
-   "title": "One year after 10/10 flash crash, bitcoin and ether liquidity have rebuilt, but altcoins still face risks",
-   "link": "https://www.coindesk.com/markets/2026/10/10/one-year-after-10-10-bitcoin-and-ether-liquidity-have-rebuilt-but-other-altcoins-still-face-risks",
-   "summary": "Bitcoin and ether order books are deeper than before the crash, while altcoin liquidity keeps eroding and spot trading remains well below its October 2025 peak.",
+   "title": "Everyone wants SCOTUS to take up prediction markets: State of Crypto",
+   "link": "https://www.coindesk.com/policy/2026/10/11/everyone-wants-scotus-to-take-up-prediction-markets-state-of-crypto",
+   "summary": "The U.S. Supreme Court hasn't yet indicated whether it will take up cases surrounding prediction markets, but there are now several amicus briefs, an interim final rule and a rule proposal.",
    "source": "CoinDesk",
    "topic": "區塊鏈"
   },
   {
-   "title": "CFTC Draws the Line Between Prediction Markets and Gambling in New Rules",
-   "link": "https://decrypt.co/380635/cftc-draws-line-prediction-markets-and-gambling-new-rules",
-   "summary": "A proposed rule would expressly fold event contracts tied to sports, politics, culture and weather into the “swap” definition, while an interim rule excludes casino-style gambling—sharpening the agency’s claim to exclusi…",
-   "source": "Decrypt",
+   "title": "Clarity's failure could speed crypto innovation while shielding incumbents",
+   "link": "https://www.coindesk.com/policy/2026/10/11/clarity-s-failure-could-speed-crypto-innovation-while-shielding-incumbents",
+   "summary": "Executives see openings for tokenization, DeFi and dealmaking, while lawyers warn agency action leaves spot-market oversight and lasting certainty unresolved.",
+   "source": "CoinDesk",
    "topic": "區塊鏈"
   },
   {
-   "title": "One with the world? A new look at brains transformed by psychedelics.",
-   "link": "https://arstechnica.com/science/2026/10/the-psychedelic-brain-looks-like-chaos-underneath-theres-order/",
-   "summary": "Participants meditated inside an MRI tube, with and without psilocybin.",
-   "source": "Ars Technica",
-   "topic": "科技"
+   "title": "President Trump declares 'energy ceasefire' between Russia and Ukraine",
+   "link": "https://www.coindesk.com/markets/2026/10/11/president-trump-declares-energy-ceasefire-between-russia-and-ukraine",
+   "summary": "\"Ukraine supports the ceasefire, and it is important that Russia support it as well,\" said Ukrainian President Zelensky.",
+   "source": "CoinDesk",
+   "topic": "區塊鏈"
   }
  ]
 }
