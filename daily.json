@@ -1,27 +1,27 @@
 {
- "date": "2026-10-12",
- "topic": "區塊鏈",
+ "date": "2026-10-13",
+ "topic": "科技",
  "articles": [
   {
-   "title": "Everyone wants SCOTUS to take up prediction markets: State of Crypto",
-   "link": "https://www.coindesk.com/policy/2026/10/11/everyone-wants-scotus-to-take-up-prediction-markets-state-of-crypto",
-   "summary": "The U.S. Supreme Court hasn't yet indicated whether it will take up cases surrounding prediction markets, but there are now several amicus briefs, an interim final rule and a rule proposal.",
-   "source": "CoinDesk",
-   "topic": "區塊鏈"
+   "title": "Epic Games reportedly pivoting to \"AI first\" game development model",
+   "link": "https://arstechnica.com/gaming/2026/10/report-epic-games-goes-all-in-on-ai-for-disney-collaboration/",
+   "summary": "\"No more hand-written code\" or AI-free art for delayed Marvel/Star Wars shooter.",
+   "source": "Ars Technica",
+   "topic": "科技"
   },
   {
-   "title": "Clarity's failure could speed crypto innovation while shielding incumbents",
-   "link": "https://www.coindesk.com/policy/2026/10/11/clarity-s-failure-could-speed-crypto-innovation-while-shielding-incumbents",
-   "summary": "Executives see openings for tokenization, DeFi and dealmaking, while lawyers warn agency action leaves spot-market oversight and lasting certainty unresolved.",
-   "source": "CoinDesk",
-   "topic": "區塊鏈"
+   "title": "After a 10-year redemption arc, No Man's Sky is coming to the iPhone and iPad",
+   "link": "https://arstechnica.com/gaming/2026/10/after-a-10-year-redemption-arc-no-mans-sky-is-coming-to-the-iphone-and-ipad/",
+   "summary": "You can get a universe in your pocket if you have an iPhone 11 or later.",
+   "source": "Ars Technica",
+   "topic": "科技"
   },
   {
-   "title": "President Trump declares 'energy ceasefire' between Russia and Ukraine",
-   "link": "https://www.coindesk.com/markets/2026/10/11/president-trump-declares-energy-ceasefire-between-russia-and-ukraine",
-   "summary": "\"Ukraine supports the ceasefire, and it is important that Russia support it as well,\" said Ukrainian President Zelensky.",
-   "source": "CoinDesk",
-   "topic": "區塊鏈"
+   "title": "WHO report on Russian lab worker death highlights \"key uncertainty\"",
+   "link": "https://arstechnica.com/health/2026/10/who-report-on-russian-lab-worker-death-highlights-key-uncertainty/",
+   "summary": "Without a cause of death, it's unclear if Russia's precautions were the right ones.",
+   "source": "Ars Technica",
+   "topic": "科技"
   }
  ]
 }
