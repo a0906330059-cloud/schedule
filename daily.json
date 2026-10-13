@@ -1,27 +1,27 @@
 {
- "date": "2026-10-13",
- "topic": "科技",
+ "date": "2026-10-14",
+ "topic": "國際",
  "articles": [
   {
-   "title": "Epic Games reportedly pivoting to \"AI first\" game development model",
-   "link": "https://arstechnica.com/gaming/2026/10/report-epic-games-goes-all-in-on-ai-for-disney-collaboration/",
-   "summary": "\"No more hand-written code\" or AI-free art for delayed Marvel/Star Wars shooter.",
-   "source": "Ars Technica",
-   "topic": "科技"
+   "title": "Pope diagnosed with lung cancer but had successful surgery, Vatican says",
+   "link": "https://www.bbc.co.uk/news/articles/ck1wvd9dvv22o?at_medium=RSS&at_campaign=rss",
+   "summary": "Pope Leo had successful surgery to remove a lower lobe of his right lung, the Vatican said.",
+   "source": "BBC World",
+   "topic": "國際"
   },
   {
-   "title": "After a 10-year redemption arc, No Man's Sky is coming to the iPhone and iPad",
-   "link": "https://arstechnica.com/gaming/2026/10/after-a-10-year-redemption-arc-no-mans-sky-is-coming-to-the-iphone-and-ipad/",
-   "summary": "You can get a universe in your pocket if you have an iPhone 11 or later.",
-   "source": "Ars Technica",
-   "topic": "科技"
+   "title": "Saudi man charged with planting 'sophisticated' recording device in OpenAI office",
+   "link": "https://www.bbc.co.uk/news/articles/cwg5jq4vlddzo?at_medium=RSS&at_campaign=rss",
+   "summary": "Prosecutors say the device, wrapped in toilet paper, was found inserted in a USB port on the back of a TV in an executive conference room.",
+   "source": "BBC World",
+   "topic": "國際"
   },
   {
-   "title": "WHO report on Russian lab worker death highlights \"key uncertainty\"",
-   "link": "https://arstechnica.com/health/2026/10/who-report-on-russian-lab-worker-death-highlights-key-uncertainty/",
-   "summary": "Without a cause of death, it's unclear if Russia's precautions were the right ones.",
-   "source": "Ars Technica",
-   "topic": "科技"
+   "title": "MI5 chief warns of threats to UK from Russia, Iran and AI",
+   "link": "https://www.bbc.co.uk/news/articles/c60rl5vwpk02o?at_medium=RSS&at_campaign=rss",
+   "summary": "Sir Ken McCallum says operations to tackle terrorism and state threats are now roughly of an \"equal scale\".",
+   "source": "BBC World",
+   "topic": "國際"
   }
  ]
 }
