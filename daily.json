@@ -1,27 +1,27 @@
 {
- "date": "2026-10-14",
- "topic": "國際",
+ "date": "2026-10-15",
+ "topic": "區塊鏈",
  "articles": [
   {
-   "title": "Pope diagnosed with lung cancer but had successful surgery, Vatican says",
-   "link": "https://www.bbc.co.uk/news/articles/ck1wvd9dvv22o?at_medium=RSS&at_campaign=rss",
-   "summary": "Pope Leo had successful surgery to remove a lower lobe of his right lung, the Vatican said.",
-   "source": "BBC World",
-   "topic": "國際"
+   "title": "Kalshi CEO says state-led oversight of U.S. prediction markets would push them out",
+   "link": "https://www.coindesk.com/policy/2026/10/14/kalshi-ceo-says-state-led-oversight-of-u-s-prediction-markets-would-push-them-out",
+   "summary": "CEO Tarek Mansour said he feels \"pretty good\" about the pending outcome of the current legal fight over who has the right to regulate prediction markets.",
+   "source": "CoinDesk",
+   "topic": "區塊鏈"
   },
   {
-   "title": "Saudi man charged with planting 'sophisticated' recording device in OpenAI office",
-   "link": "https://www.bbc.co.uk/news/articles/cwg5jq4vlddzo?at_medium=RSS&at_campaign=rss",
-   "summary": "Prosecutors say the device, wrapped in toilet paper, was found inserted in a USB port on the back of a TV in an executive conference room.",
-   "source": "BBC World",
-   "topic": "國際"
+   "title": "AI agents make 138 million crypto payments as U.S. dominates spending on AI models",
+   "link": "https://www.coindesk.com/business/2026/10/14/ai-agents-make-138-million-crypto-payments-as-u-s-dominates-spending-on-ai-models",
+   "summary": "U.S.-linked wallets account for just over 88% of tracked AI model payments, dwarfing China’s 0.1% share, according to new Chainalysis research.",
+   "source": "CoinDesk",
+   "topic": "區塊鏈"
   },
   {
-   "title": "MI5 chief warns of threats to UK from Russia, Iran and AI",
-   "link": "https://www.bbc.co.uk/news/articles/c60rl5vwpk02o?at_medium=RSS&at_campaign=rss",
-   "summary": "Sir Ken McCallum says operations to tackle terrorism and state threats are now roughly of an \"equal scale\".",
-   "source": "BBC World",
-   "topic": "國際"
+   "title": "Crypto Long & Short: Why gold and bitcoin belong in the same portfolio",
+   "link": "https://www.coindesk.com/coindesk-indices/2026/10/14/crypto-long-and-short-why-gold-and-bitcoin-belong-in-the-same-portfolio",
+   "summary": "",
+   "source": "CoinDesk",
+   "topic": "區塊鏈"
   }
  ]
 }
