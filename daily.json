@@ -1,27 +1,27 @@
 {
- "date": "2026-10-15",
- "topic": "區塊鏈",
+ "date": "2026-10-16",
+ "topic": "科技",
  "articles": [
   {
-   "title": "Kalshi CEO says state-led oversight of U.S. prediction markets would push them out",
-   "link": "https://www.coindesk.com/policy/2026/10/14/kalshi-ceo-says-state-led-oversight-of-u-s-prediction-markets-would-push-them-out",
-   "summary": "CEO Tarek Mansour said he feels \"pretty good\" about the pending outcome of the current legal fight over who has the right to regulate prediction markets.",
-   "source": "CoinDesk",
-   "topic": "區塊鏈"
+   "title": "Plex now helps sell movie theater tickets",
+   "link": "https://arstechnica.com/gadgets/2026/10/plex-now-helps-sell-movie-theater-tickets/",
+   "summary": "Discovery data from Plex users will help studios, advertisers.",
+   "source": "Ars Technica",
+   "topic": "科技"
   },
   {
-   "title": "AI agents make 138 million crypto payments as U.S. dominates spending on AI models",
-   "link": "https://www.coindesk.com/business/2026/10/14/ai-agents-make-138-million-crypto-payments-as-u-s-dominates-spending-on-ai-models",
-   "summary": "U.S.-linked wallets account for just over 88% of tracked AI model payments, dwarfing China’s 0.1% share, according to new Chainalysis research.",
-   "source": "CoinDesk",
-   "topic": "區塊鏈"
+   "title": "Hegseth’s dubious low-T screening may flag up to 25 percent of the Army",
+   "link": "https://arstechnica.com/health/2026/10/hegseths-dubious-low-t-screening-may-flag-up-to-25-percent-of-the-army/",
+   "summary": "Medical experts explicitly recommend against blanket screenings.",
+   "source": "Ars Technica",
+   "topic": "科技"
   },
   {
-   "title": "Crypto Long & Short: Why gold and bitcoin belong in the same portfolio",
-   "link": "https://www.coindesk.com/coindesk-indices/2026/10/14/crypto-long-and-short-why-gold-and-bitcoin-belong-in-the-same-portfolio",
-   "summary": "",
-   "source": "CoinDesk",
-   "topic": "區塊鏈"
+   "title": "Targeted ads delivered 0-click exploits to install mercenary malware",
+   "link": "https://arstechnica.com/security/2026/10/targeted-ads-delivered-0-click-exploits-to-install-mercenary-malware/",
+   "summary": "The incident is likely 1st confirmation of mercenary spyware delivered by targeted ads.",
+   "source": "Ars Technica",
+   "topic": "科技"
   }
  ]
 }
