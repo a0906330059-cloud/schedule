@@ -1,27 +1,27 @@
 {
- "date": "2026-10-16",
- "topic": "科技",
+ "date": "2026-10-17",
+ "topic": "國際",
  "articles": [
   {
-   "title": "Plex now helps sell movie theater tickets",
-   "link": "https://arstechnica.com/gadgets/2026/10/plex-now-helps-sell-movie-theater-tickets/",
-   "summary": "Discovery data from Plex users will help studios, advertisers.",
-   "source": "Ars Technica",
-   "topic": "科技"
+   "title": "Inside Ukrainian offensive pushing Russia back - with Starlink playing a key role",
+   "link": "https://www.bbc.co.uk/news/articles/cvx284w16z1po?at_medium=RSS&at_campaign=rss",
+   "summary": "The BBC joins Ukraine's Operation Vivaldi as it regains crucial territory in the Donbas, but optimism has been dampened by souring relations with President Trump.",
+   "source": "BBC World",
+   "topic": "國際"
   },
   {
-   "title": "Hegseth’s dubious low-T screening may flag up to 25 percent of the Army",
-   "link": "https://arstechnica.com/health/2026/10/hegseths-dubious-low-t-screening-may-flag-up-to-25-percent-of-the-army/",
-   "summary": "Medical experts explicitly recommend against blanket screenings.",
-   "source": "Ars Technica",
-   "topic": "科技"
+   "title": "Palestinians and US journalist injured by Israeli settlers in West Bank harvest attack",
+   "link": "https://www.bbc.co.uk/news/articles/c65ynk7212vqo?at_medium=RSS&at_campaign=rss",
+   "summary": "The BBC sees masked settlers attack Palestinians trying to harvest olives, amid a surge in similar incidents.",
+   "source": "BBC World",
+   "topic": "國際"
   },
   {
-   "title": "Targeted ads delivered 0-click exploits to install mercenary malware",
-   "link": "https://arstechnica.com/security/2026/10/targeted-ads-delivered-0-click-exploits-to-install-mercenary-malware/",
-   "summary": "The incident is likely 1st confirmation of mercenary spyware delivered by targeted ads.",
-   "source": "Ars Technica",
-   "topic": "科技"
+   "title": "Trump denies limiting Ukraine access to Starlink network",
+   "link": "https://www.bbc.co.uk/news/articles/ckz65g34wyd8o?at_medium=RSS&at_campaign=rss",
+   "summary": "Speed curbs limited Ukraine's defences against deadly Russian attacks on Tuesday night.",
+   "source": "BBC World",
+   "topic": "國際"
   }
  ]
 }
