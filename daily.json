@@ -1,27 +1,27 @@
 {
- "date": "2026-10-19",
- "topic": "區塊鏈",
+ "date": "2026-10-20",
+ "topic": "科技",
  "articles": [
   {
-   "title": "The White House's crypto chief departs: State of Crypto",
-   "link": "https://www.coindesk.com/policy/2026/10/18/the-white-house-s-crypto-chief-departs-state-of-crypto",
-   "summary": "Patrick Witt announced his departure from the White House last week.",
-   "source": "CoinDesk",
-   "topic": "區塊鏈"
+   "title": "Russian spacecraft maneuvers in \"extreme proximity\" to satellite used by Ukraine",
+   "link": "https://arstechnica.com/space/2026/10/russian-spacecraft-maneuvers-in-extreme-proximity-to-satellite-used-by-ukraine/",
+   "summary": "\"Kosmos 2612 closed from hundreds of kilometers away to extreme proximity to ICEYE-X36.\"",
+   "source": "Ars Technica",
+   "topic": "科技"
   },
   {
-   "title": "Wall Street freaked out Friday. VIX and bitcoin say the fear may fade Monday.",
-   "link": "https://www.coindesk.com/markets/2026/10/18/wall-street-freaked-out-friday-vix-and-bitcoin-say-it-may-not-last",
-   "summary": "Wall Street's fear gauge, the VIX index, spiked on Friday as stocks dropped. History says Friday panics usually fade on Monday. Seasonality and calm bitcoin suggest the same.",
-   "source": "CoinDesk",
-   "topic": "區塊鏈"
+   "title": "Accused OpenAI spy had folder called “Saudi Gov Docs,” FBI says",
+   "link": "https://arstechnica.com/tech-policy/2026/10/accused-openai-spy-had-folder-called-saudi-gov-docs-fbi-says/",
+   "summary": "US fears Saudi government will help ex-OpenAI engineer flee spying charges.",
+   "source": "Ars Technica",
+   "topic": "科技"
   },
   {
-   "title": "Latvia eyes crypto tax payments in 2027 as parliament overhauls crypto taxation",
-   "link": "https://www.coindesk.com/policy/2026/10/18/latvia-eyes-crypto-tax-payments-in-2027-as-parliament-overhauls-crypto-taxation",
-   "summary": "Parliament passed a law taxing crypto withdrawals above deposits rather than individual trades, featuring a one-time declaration mechanism.",
-   "source": "CoinDesk",
-   "topic": "區塊鏈"
+   "title": "Batteries help reduce emissions, but how do we reduce their emissions?",
+   "link": "https://arstechnica.com/science/2026/10/batteries-have-a-small-carbon-footprint-we-can-make-it-smaller/",
+   "summary": "One way to make batteries cleaner is to make fewer of them.",
+   "source": "Ars Technica",
+   "topic": "科技"
   }
  ]
 }
