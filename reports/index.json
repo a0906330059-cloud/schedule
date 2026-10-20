@@ -1,5 +1,10 @@
 [
   {
+    "date": "2026-10-20",
+    "topic": "科技",
+    "title": "Modal 改用 Nvidia Arm 架構 Vera CPU 跑 AI agent 沙盒，自測負載下吞吐量達 Intel 兩倍"
+  },
+  {
     "date": "2026-10-19",
     "topic": "區塊鏈",
     "title": "Ledger 硬體錢包在經銷鏈遭動手腳、約 9,000 萬美元被盜：冷錢包也有供應鏈風險"

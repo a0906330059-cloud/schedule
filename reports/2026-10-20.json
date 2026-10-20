@@ -1,0 +1,94 @@
+{
+  "date": "2026-10-20",
+  "topic": "科技",
+  "title": "Modal 改用 Nvidia Arm 架構 Vera CPU 跑 AI agent 沙盒，自測負載下吞吐量達 Intel 兩倍",
+  "source": "The Next Web",
+  "sourceDate": "2026-10-19",
+  "link": "https://thenextweb.com/news/modal-nvidia-vera-cpu-sandboxes",
+  "lead": "雲端平台 Modal 準備把讓 AI agent 執行程式碼的「沙盒」搬到 Nvidia 的 Arm 架構 Vera CPU 上，這是它第一次離開 Intel、AMD 的 x86 晶片。Modal 自己的測試顯示，伺服器塞滿容器時，Vera 完成的任務數最多可達 Intel 伺服器的兩倍。",
+  "summary": [
+    "AI agent 寫完程式後，需要一台隔離的電腦來實際執行，這就是 Modal 的 Sandboxes（沙盒）產品，每年營收約 3 億美元。Modal 計畫把沙盒部署到 Nvidia 今年 3 月發表、號稱專為 AI agent 設計的 88 核心 Arm 架構 Vera CPU 上；Nvidia 上週親自把第一台 Vera 伺服器送到 Modal 的舊金山辦公室。",
+    "Modal 用自己設計的 50 項程式任務（例如編譯軟體、搜尋檔案）來測試。只跑單一任務時，Vera 通常比 Intel、AMD 和 Amazon 的晶片快，但差距不大，也不是每次都贏。真正的差別出現在伺服器塞滿容器的時候：其他晶片碰到效能天花板，Vera 卻能維持同樣的速度，處理的任務數最多可達 Intel 伺服器的兩倍。文章提到 Vera 的高記憶體頻寬是原因之一。",
+    "沙盒的負載很難預測：agent 等 AI 模型回覆時幾乎閒置，一開始安裝軟體，運算需求可能突然飆高十倍。每台伺服器同時跑上百個沙盒，一個客戶的尖峰就可能拖慢其他人。另一個重要場景是強化學習，昂貴的 GPU 常常只能閒著等 CPU 把環境算完。",
+    "要注意的是，這是 Modal 自己的測試，沒有說明 Intel 伺服器型號、容器數量等條件，也還沒經過第三方驗證；Modal 也還沒公布客戶何時能用到 Vera 沙盒。改用 Arm 也代表 Modal 要調整基礎設施和建置軟體映像檔的系統。其他動向包括：Nvidia 點名 Anthropic、OpenAI 為 Vera 早期用戶，Perplexity 表示程式任務快 1.5 倍；Modal 上週以 157.5 億美元估值募資 7.5 億美元。"
+  ],
+  "points": [
+    "Modal 首次從 x86 轉向 Arm，把 AI agent 沙盒搬到 Nvidia 88 核心的 Vera CPU。",
+    "單一任務時 Vera 只快一點；伺服器塞滿容器時，任務吞吐量最多達 Intel 伺服器的兩倍。",
+    "差距來自多租戶下共用資源（記憶體頻寬、快取）的爭搶，Vera 核心多、頻寬高，較不會撞到天花板。",
+    "數據來自 Modal 自測、條件未完整公開、尚未獨立驗證，看待時要保留空間。"
+  ],
+  "why": "這篇是計算機組織裡「記憶體牆」的真實案例：CPU 再快，如果資料從記憶體送不過來，核心就只能空等。評估系統時，單一任務的跑分和滿載時的吞吐量可能差很多，就像你寫程式時單執行緒測很快、開很多執行緒卻卡在共用資源上。它也顯示 AI 時代不只需要 GPU，CPU 架構（x86 vs. Arm）的競爭重新變熱，而台積電正是這些晶片的主要代工者。",
+  "vocab": [
+    {
+      "en": "hit a ceiling",
+      "zh": "碰到天花板／達到極限"
+    },
+    {
+      "en": "sit idle",
+      "zh": "閒置"
+    },
+    {
+      "en": "spike",
+      "zh": "突然飆高"
+    },
+    {
+      "en": "throughput",
+      "zh": "吞吐量（單位時間完成的工作量）"
+    },
+    {
+      "en": "sandbox",
+      "zh": "沙盒（隔離的執行環境）"
+    },
+    {
+      "en": "memory bandwidth",
+      "zh": "記憶體頻寬"
+    }
+  ],
+  "quiz": [
+    {
+      "q": "為什麼 Vera 跑單一任務只快一點，伺服器塞滿容器時卻能快到兩倍？",
+      "options": [
+        "單一任務時 Vera 會自動降頻省電",
+        "上百個容器同時搶記憶體頻寬和快取，Vera 核心多、頻寬高，每個任務分到的資源較多",
+        "容器越多，Vera 的時脈就會自動提高",
+        "Intel 晶片無法同時執行多個容器"
+      ],
+      "answer": 1,
+      "explain": "滿載時瓶頸在共用的記憶體頻寬與快取，頻寬不夠的晶片核心只能空等；Vera 頻寬較高，所以負載越重差距越大。"
+    },
+    {
+      "q": "在強化學習中，為什麼 CPU 太慢會造成浪費？",
+      "options": [
+        "CPU 太慢會讓模型的準確率下降",
+        "CPU 會和 GPU 搶同一塊顯示記憶體",
+        "CPU 太慢會讓電費計價方式改變",
+        "昂貴的 GPU 要等 CPU 把環境算完才能繼續，只能閒置"
+      ],
+      "answer": 3,
+      "explain": "強化學習中 CPU 負責跑環境、產生資料，GPU 負責訓練；CPU 跟不上，GPU 就閒著，等於浪費最貴的硬體。"
+    },
+    {
+      "q": "如果 Modal 的測試條件（Intel 型號、容器數量）都沒公開，讀者最合理的看法是？",
+      "options": [
+        "結果有參考價值，但要等獨立驗證才能確定 Vera 普遍快兩倍",
+        "結果一定是假的，可以完全忽略",
+        "既然是公司自己測，Vera 在任何情況都快兩倍",
+        "沒公開條件代表 Intel 其實比較快"
+      ],
+      "answer": 0,
+      "explain": "自測數據能顯示趨勢，但缺少條件就無法判斷是否適用其他情境，需要第三方用相同條件重測。"
+    },
+    {
+      "q": "文中「The agent may sit idle while waiting for the model」的 sit idle 是什麼意思？",
+      "options": [
+        "突然飆高",
+        "碰到天花板",
+        "閒置",
+        "遷移"
+      ],
+      "answer": 2,
+      "explain": "sit idle 指沒在做事、閒置；spike 才是突然飆高，hit a ceiling 是碰到極限。"
+    }
+  ]
+}
