@@ -1,27 +1,27 @@
 {
- "date": "2026-10-20",
- "topic": "科技",
+ "date": "2026-10-21",
+ "topic": "國際",
  "articles": [
   {
-   "title": "Russian spacecraft maneuvers in \"extreme proximity\" to satellite used by Ukraine",
-   "link": "https://arstechnica.com/space/2026/10/russian-spacecraft-maneuvers-in-extreme-proximity-to-satellite-used-by-ukraine/",
-   "summary": "\"Kosmos 2612 closed from hundreds of kilometers away to extreme proximity to ICEYE-X36.\"",
-   "source": "Ars Technica",
-   "topic": "科技"
+   "title": "Zelensky says US intelligence sharing 'works now' after talks with Trump envoy in Oslo",
+   "link": "https://www.bbc.co.uk/news/articles/cq5ynkx3xy11o?at_medium=RSS&at_campaign=rss",
+   "summary": "Ukraine had accused the US of withholding key intelligence - a claim rejected as \"scandalous\" by Washington.",
+   "source": "BBC World",
+   "topic": "國際"
   },
   {
-   "title": "Accused OpenAI spy had folder called “Saudi Gov Docs,” FBI says",
-   "link": "https://arstechnica.com/tech-policy/2026/10/accused-openai-spy-had-folder-called-saudi-gov-docs-fbi-says/",
-   "summary": "US fears Saudi government will help ex-OpenAI engineer flee spying charges.",
-   "source": "Ars Technica",
-   "topic": "科技"
+   "title": "Marseille braces for more unrest after protests give way to 'apocalyptic' disorder",
+   "link": "https://www.bbc.co.uk/news/articles/cm5ynkk570pno?at_medium=RSS&at_campaign=rss",
+   "summary": "France's second city saw some of the worst violence as chaos gripped the country on Saturday.",
+   "source": "BBC World",
+   "topic": "國際"
   },
   {
-   "title": "Batteries help reduce emissions, but how do we reduce their emissions?",
-   "link": "https://arstechnica.com/science/2026/10/batteries-have-a-small-carbon-footprint-we-can-make-it-smaller/",
-   "summary": "One way to make batteries cleaner is to make fewer of them.",
-   "source": "Ars Technica",
-   "topic": "科技"
+   "title": "Man charged with attack on Australia MP to face court",
+   "link": "https://www.bbc.co.uk/news/articles/c678pnn9mpgno?at_medium=RSS&at_campaign=rss",
+   "summary": "Brendan Nugent's family say they have known Helen Haines, who remains in a critical condition, for more than 20 years.",
+   "source": "BBC World",
+   "topic": "國際"
   }
  ]
 }
