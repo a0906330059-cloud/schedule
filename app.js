@@ -172,6 +172,26 @@
       el("div", { class: "acts" }, chk));
   }
 
+  // ---------- YunTech 115-1 academic calendar (from the official PDF / events site) ----------
+  var SCHOOL = [
+    ["2026-09-25", "中秋節"], ["2026-09-28", "教師節"],
+    ["2026-10-09", "國慶日補假", 1], ["2026-10-10", "國慶日", 1],
+    ["2026-10-25", "光復節", 1], ["2026-10-26", "光復節補假", 1],
+    ["2026-10-27", "期中退選開始", 0, 1], ["2026-10-30", "期中退選截止", 0, 1],
+    ["2026-11-02", "期中考週", 0, 1, "2026-11-08"],
+    ["2026-12-05", "校慶、園遊會"],
+    ["2026-12-25", "行憲紀念日"],
+    ["2027-01-01", "元旦", 1],
+    ["2027-01-04", "期末考週", 0, 1, "2027-01-10"],
+    ["2027-01-11", "寒假開始", 1],
+    ["2027-02-04", "小年夜", 1], ["2027-02-05", "春節假期", 1, 0, "2027-02-10"]
+  ];
+  function schoolOn(ds) {
+    var out = [];
+    SCHOOL.forEach(function (x) { if (ds === x[0] || (x[4] && ds > x[0] && ds <= x[4])) out.push({ name: x[1], off: !!x[2], exam: !!x[3] }); });
+    return out;
+  }
+
   // ---------- month ----------
   function renderMonth() {
     var grid = $("mgrid"); grid.replaceChildren();
@@ -188,6 +208,9 @@
       var evs = all.filter(isEvent).sort(byTime), tks = all.filter(function (t) { return !isEvent(t); });
       var cell = el("button", { class: "mcell" + (dow === 0 ? " sun" : dow === 6 ? " sat" : "") + (ds.slice(0, 7) !== month ? " other" : "") + (ds === t0 ? " today" : "") + (ds === viewDate ? " sel" : ""), "aria-label": label(ds) },
         el("span", { class: "mnum" }, d.getDate()));
+      var sch = schoolOn(ds);
+      if (sch.some(function (x) { return x.off; })) cell.classList.add("off");
+      if (sch.length) cell.append(el("span", { class: "hol" + (sch[0].exam ? " ex" : "") }, sch[0].name));
       evs.slice(0, 2).forEach(function (t) { cell.append(el("span", { class: "bar", style: tc(t.cat) }, t.short || t.title)); });
       if (evs.length > 2) cell.append(el("span", { class: "more" }, "+" + (evs.length - 2)));
       if (tks.length) {
@@ -215,9 +238,7 @@
 
     // untimed + overdue on top
     var top = el("div", { class: "allday" });
-    if (isToday) data.tasks.filter(function (t) { return !t.done && t.date < viewDate && !isEvent(t); })
-      .sort(function (a, b) { return a.date.localeCompare(b.date); })
-      .forEach(function (t) { top.append(topItem({ type: "task", obj: t, title: t.title, cat: t.cat, event: false, done: false }, "逾期 " + label(t.date), true)); });
+    schoolOn(viewDate).forEach(function (x) { body.append(el("div", { class: "schoolDay" + (x.exam ? " ex" : "") }, x.off ? "🏖️ " : "🏫 ", x.name + (x.off ? "（放假）" : ""))); });
     ens.filter(function (e) { return e.start == null; }).forEach(function (e) { top.append(topItem(e, e.event ? "整天" : "未排時間")); });
     if (top.children.length) body.append(top);
 
@@ -268,11 +289,13 @@
       var focus = isToday ? new Date().getHours() * 60 + new Date().getMinutes() - 60 : (timed.length ? timed[0].start - 30 : wk);
       wrap.scrollTop = Math.max(0, focus / 60 * HOUR);
       // on the day page the whole page scrolls (one smooth scroll, no box-inside-a-box)
-      if (scroll && calMode === "day" && !$("v-cal").hidden) {
+      if (scroll && calMode === "day" && !$("v-cal").hidden && isToday && forgotten().length) window.scrollTo(0, 0);   // show the forgotten list first
+      else if (scroll && calMode === "day" && !$("v-cal").hidden) {
         var y = wrap.getBoundingClientRect().top + window.scrollY + Math.max(0, focus) / 60 * HOUR - 110;
         window.scrollTo(0, Math.max(0, y));
       }
     } else wrap.scrollTop = keepScroll;
+    if ($("forgot")) $("forgot").hidden = !forgotten().length || !isToday;
   }
   function topItem(e, tag, overdue) {
     var chk = el("input", { type: "checkbox", class: "chk", "aria-label": "完成：" + e.title });
@@ -289,9 +312,38 @@
     tl.append(gap);
   }
 
+  // ---------- things you forgot: unfinished tasks from the past 7 days ----------
+  function forgotten() {
+    var t0 = todayStr(), from = addDays(t0, -7);
+    return data.tasks.filter(function (t) { return !t.done && !isEvent(t) && t.date < t0 && t.date >= from; })
+      .sort(function (a, b) { return a.date.localeCompare(b.date) || byTime(a, b); });
+  }
+  function renderForgot() {
+    var list = forgotten(), box = $("forgot"), bar = $("forgotBar");
+    $("fdot").hidden = !list.length;
+    bar.hidden = !list.length; box.hidden = !list.length || viewDate !== todayStr();
+    if (!list.length) return;
+    bar.textContent = "⚠️ 有 " + list.length + " 件之前忘記做的事，點這裡看";
+    box.replaceChildren();
+    var all = el("button", { type: "button" }, "全部移到今天");
+    all.addEventListener("click", function () { undoable("已把 " + list.length + " 件移到今天", function () { list.forEach(function (t) { t.date = todayStr(); delete t.short; }); }); });
+    box.append(el("h3", {}, "⚠️ 忘記做的（" + list.length + "）", all));
+    var ul = el("ul", { class: "rows" });
+    list.forEach(function (t) {
+      var li = itemRow(t), mv = el("button", { type: "button", class: "mv" }, "移到今天");
+      mv.addEventListener("click", function (e) { e.stopPropagation(); undoable("已移到今天：" + t.title, function () { t.date = todayStr(); delete t.short; }); });
+      var line = el("div", { class: "fline" }, el("small", {}, "原本在 " + label(t.date) + (t.time ? " " + t.time : "")), mv);
+      line.addEventListener("click", function (e) { e.stopPropagation(); });
+      (li.querySelector(".main") || li).append(line);
+      ul.append(li);
+    });
+    box.append(ul);
+  }
+  $("forgotBar").onclick = function () { viewDate = todayStr(); month = viewDate.slice(0, 7); setCalMode("day"); };
+
   // ---------- other views ----------
   function renderFilters() {
-    var box = $("filters"); box.replaceChildren();
+    var box = $("filters"); if (!box) return; box.replaceChildren();
     ["全部", "事件", "任務"].concat(ITEM_CATS).forEach(function (c) {
       var b = el("button", { class: "chip", "aria-pressed": String(filter === c) }, catName(c));
       b.addEventListener("click", function () { filter = c; renderFilters(); renderUpcoming(); });
@@ -299,7 +351,7 @@
     });
   }
   function renderUpcoming() {
-    var box = $("upcoming"); box.replaceChildren();
+    var box = $("upcoming"); if (!box) return; box.replaceChildren();
     var start = todayStr(), end = addDays(start, 13);
     var list = data.tasks.filter(function (t) {
       if (t.date < start || t.date > end) return false;
@@ -386,7 +438,7 @@
         box.append(el("span", { class: "cd" }, t.short || t.title, el("b", {}, n === 0 ? "今天" : "D-" + n)));
       });
   }
-  function renderAll() { renderCountdowns(); renderMonth(); renderDay(); renderUpcoming(); renderWeek(); renderWeekly(); }
+  function renderAll() { renderCountdowns(); renderMonth(); renderDay(); renderForgot(); renderWeek(); renderWeekly(); }
 
   // ---------- reminders ----------
   // minutes before; for events & tasks also "days before" (rings at 20:00 that evening). -31 = 3 days AND 1 day before
@@ -712,25 +764,33 @@
   function setCalMode(m) {
     calMode = m; measureTop();
     $("v-cal").dataset.mode = m;
-    $("cmMonth").setAttribute("aria-pressed", String(m === "month"));
-    $("cmDay").setAttribute("aria-pressed", String(m === "day"));
+    markNav();
     window.scrollTo(0, 0);
     if (m === "day") renderDay(true); else renderMonth();
   }
-  $("cmMonth").onclick = function () { setCalMode("month"); };
-  $("cmDay").onclick = function () { setCalMode("day"); };
+  function markNav() {
+    var cur = document.querySelector(".view:not([hidden])"), id = cur ? cur.id : "v-cal";
+    document.querySelectorAll("nav.tabs button").forEach(function (x) {
+      var on = x.dataset.view === id && (id !== "v-cal" || x.dataset.mode === calMode);
+      if (on) x.setAttribute("aria-current", "page"); else x.removeAttribute("aria-current");
+    });
+  }
 
   // ---------- tabs & nav ----------
   function showView(id) {
     if (id === "v-report") loadReport();   // always check for a newer report
     if (id === "v-report") { if (report) { settings().readReport = report.date; persist(); $("rdot").hidden = true; } openReport(report); }
-    document.querySelectorAll("nav.tabs button").forEach(function (x) { if (x.dataset.view === id) x.setAttribute("aria-current", "page"); else x.removeAttribute("aria-current"); });
     document.querySelectorAll(".view").forEach(function (v) { v.hidden = v.id !== id; });
+    markNav();
     $("fab").hidden = id === "v-set" || id === "v-report";
     window.scrollTo(0, 0);
   }
   document.querySelectorAll("nav.tabs button").forEach(function (b) {
-    b.addEventListener("click", function () { showView(b.dataset.view); });
+    b.addEventListener("click", function () {
+      showView(b.dataset.view);
+      if (b.dataset.mode === "day") { viewDate = todayStr(); month = viewDate.slice(0, 7); setCalMode("day"); }
+      else if (b.dataset.mode === "month") setCalMode("month");
+    });
   });
   function pick(d) { viewDate = d; month = d.slice(0, 7); renderMonth(); renderDay(true); }
   $("prev").onclick = function () { pick(addDays(viewDate, -1)); };
@@ -776,6 +836,19 @@
     var f = e.target.files[0]; if (!f) return;
     f.text().then(function (txt) {
       var d = JSON.parse(txt);
+      // an "add-on" file: adds / replaces items by id and keeps everything else
+      if (d && d.merge) {
+        var rm = d.removeIds || [], add = d.tasks || [], addH = d.habits || [], n = 0;
+        undoable("已加入 " + (add.length + addH.length) + " 項" + (rm.length ? "、移除 " + rm.length + " 項舊的" : ""), function () {
+          var ids = rm.concat(add.map(function (t) { return t.id; }));
+          data.tasks = data.tasks.filter(function (t) { if (ids.indexOf(t.id) >= 0) { n++; return false; } return true; }).concat(add);
+          var hids = rm.concat(addH.map(function (h) { return h.id; }));
+          data.habits = data.habits.filter(function (h) { return hids.indexOf(h.id) < 0; }).concat(addH);
+          data = normalize(data);
+        });
+        refreshEverything(); setStatus("已合併匯入，原本的資料都還在。");
+        return;
+      }
       if (!d || !Array.isArray(d.tasks) || !Array.isArray(d.classes)) throw new Error("bad");
       data = normalize(d); loaded = true; migrate(); persist(); refreshEverything(); setStatus("已匯入。");
     }).catch(function () { setStatus("這不是這個 App 的備份檔。"); });

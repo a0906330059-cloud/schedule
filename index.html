@@ -56,7 +56,8 @@ h2{font-size:.74rem;letter-spacing:.12em;color:var(--muted);margin:16px 2px 6px}
 .calseg{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;margin-bottom:12px;background:var(--surface);border:1px solid var(--line);border-radius:12px}
 .calseg button{border:0;border-radius:9px;padding:9px;font:inherit;font-weight:800;font-size:.92rem;background:transparent;color:var(--muted);cursor:pointer}
 .calseg button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent)}
-#v-cal[data-mode="month"] .daycard{display:none}
+#v-cal[data-mode="month"] .daycard,#v-cal[data-mode="month"] .forgot{display:none}
+#v-cal[data-mode="day"] .weekwrap,#v-cal[data-mode="day"] .forgotBar{display:none}
 #v-cal[data-mode="day"] .monthcard,#v-cal[data-mode="day"] .todaycard{display:none}
 #v-cal[data-mode="day"] .daycard{margin-top:0;overflow:visible}
 #v-cal[data-mode="day"] .dayhead{position:sticky;top:var(--toph,0px);z-index:4;background:var(--bg);border-radius:14px 14px 0 0}
@@ -230,6 +231,21 @@ textarea{font:inherit;font-size:.92rem;color:var(--fg);background:var(--surface)
 .nlHint{font-size:.8rem;color:var(--accent);margin:4px 2px 0;min-height:1em}
 .repNote{background:rgba(255,184,77,.12);border:1px solid rgba(255,184,77,.35);color:#ffcf85;border-radius:10px;padding:8px 12px;font-size:.85rem;line-height:1.6;margin:0 0 12px}
 .repNote[hidden]{display:none}
+.forgotBar{display:flex;align-items:center;gap:8px;width:100%;text-align:left;margin:0 0 10px;padding:10px 14px;border-radius:12px;border:1px solid rgba(255,107,111,.45);background:rgba(255,107,111,.12);color:#ffb3b5;font:inherit;font-weight:700;font-size:.9rem}
+.forgotBar[hidden],.forgot[hidden]{display:none!important}
+.forgot{padding:12px 14px;margin-bottom:12px;border-color:rgba(255,107,111,.45)}
+.forgot h3{margin:0 0 6px;font-size:.95rem;color:#ffb3b5;display:flex;justify-content:space-between;align-items:center}
+.forgot h3 button{font:inherit;font-size:.78rem;font-weight:600;border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:999px;padding:4px 10px}
+.forgot .rows{margin:0}.forgot .mv{font:inherit;font-size:.74rem;border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:999px;padding:4px 9px;margin-left:6px;flex:none}
+.fdot{background:#ff6b6f}
+.forgot .row{grid-template-columns:1fr auto;padding:9px 4px}.forgot .row>.t{display:none}.forgot .note{display:none}
+.fline{display:flex;align-items:center;gap:8px;margin-top:4px}.fline small{color:#ff8a8d;font-size:.76rem}
+.mcell.off .mnum{color:#ff6b6f!important}
+.hol{display:block;font-size:.56rem;line-height:1.45;white-space:nowrap;overflow:hidden;color:#ff8a8d;font-weight:700;padding:0 2px}
+.hol.ex{color:#fbbf24}
+.schoolDay{display:flex;gap:8px;align-items:center;margin:0 0 8px;padding:8px 12px;border-radius:10px;background:rgba(255,107,111,.12);color:#ffb3b5;font-size:.86rem;font-weight:700}
+.schoolDay.ex{background:rgba(251,191,36,.12);color:#fcd34d}
+.weekwrap h2{margin-top:18px}
 </style>
 </head>
 <body>
@@ -241,10 +257,8 @@ textarea{font:inherit;font-size:.92rem;color:var(--fg);background:var(--surface)
 <main>
   <button type="button" id="updBar" hidden>有新版本，點這裡下載安裝</button>
   <section class="view" id="v-cal" data-mode="month">
-    <div class="calseg" role="group" aria-label="月曆或當天日程">
-      <button type="button" id="cmMonth" aria-pressed="true">月曆</button>
-      <button type="button" id="cmDay" aria-pressed="false">當天日程</button>
-    </div>
+    <button type="button" class="forgotBar" id="forgotBar" hidden></button>
+    <div class="card forgot" id="forgot" hidden></div>
     <div class="card todaycard" id="todayCard">
       <div class="quote" id="quote"></div>
     </div>
@@ -256,6 +270,7 @@ textarea{font:inherit;font-size:.92rem;color:var(--fg);background:var(--surface)
       </div>
       <div class="mgrid" id="mgrid"></div>
     </div>
+    <div class="weekwrap"><h2>每週回顧</h2><div class="card wk" id="weekly"></div></div>
     <div class="card daycard">
       <div class="dayhead">
         <button class="ib" id="prev" aria-label="前一天">‹</button>
@@ -270,13 +285,6 @@ textarea{font:inherit;font-size:.92rem;color:var(--fg);background:var(--surface)
     <article id="reportBody"></article>
   </section>
 
-  <section class="view" id="v-up" hidden>
-    <h2>每週回顧</h2>
-    <div class="card wk" id="weekly"></div>
-    <h2>接下來 14 天</h2>
-    <div class="chips" id="filters"></div>
-    <div id="upcoming"></div>
-  </section>
 
   <section class="view" id="v-week" hidden>
     <h2>每週固定行程</h2>
@@ -373,8 +381,8 @@ textarea{font:inherit;font-size:.92rem;color:var(--fg);background:var(--surface)
 </dialog>
 
 <nav class="tabs" aria-label="主選單">
-  <button data-view="v-cal" aria-current="page"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg>月曆</button>
-  <button data-view="v-up"><svg viewBox="0 0 24 24"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>接下來</button>
+  <button data-view="v-cal" data-mode="month" aria-current="page"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg>月曆</button>
+  <button data-view="v-cal" data-mode="day"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.5 2"/></svg>日程<span class="rdot fdot" id="fdot" hidden></span></button>
   <button data-view="v-report"><svg viewBox="0 0 24 24"><path d="M6 3.5h9l3.5 3.5v13.5H6z"/><path d="M14.5 3.5V7.5h4M9 11h6M9 14.5h6M9 18h4"/></svg>報告<span class="rdot" id="rdot" hidden></span></button>
   <button data-view="v-week"><svg viewBox="0 0 24 24"><rect x="3.5" y="4" width="17" height="16" rx="2"/><path d="M3.5 9h17M9 9v11"/></svg>固定行程</button>
   <button data-view="v-set"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/></svg>設定</button>
