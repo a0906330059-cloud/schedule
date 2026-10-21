@@ -1,27 +1,27 @@
 {
- "date": "2026-10-21",
- "topic": "國際",
+ "date": "2026-10-22",
+ "topic": "區塊鏈",
  "articles": [
   {
-   "title": "Zelensky says US intelligence sharing 'works now' after talks with Trump envoy in Oslo",
-   "link": "https://www.bbc.co.uk/news/articles/cq5ynkx3xy11o?at_medium=RSS&at_campaign=rss",
-   "summary": "Ukraine had accused the US of withholding key intelligence - a claim rejected as \"scandalous\" by Washington.",
-   "source": "BBC World",
-   "topic": "國際"
+   "title": "Trump to throw spotlight on overseas crypto abuses at White House event",
+   "link": "https://www.coindesk.com/policy/2026/10/21/trump-to-throw-spotlight-on-overseas-crypto-abuses-in-white-house-event",
+   "summary": "The president is hosting a cybercrime event that will highlight U.S. authorities' efforts to crack down on crypto scams run by foreign criminal organizations.",
+   "source": "CoinDesk",
+   "topic": "區塊鏈"
   },
   {
-   "title": "Marseille braces for more unrest after protests give way to 'apocalyptic' disorder",
-   "link": "https://www.bbc.co.uk/news/articles/cm5ynkk570pno?at_medium=RSS&at_campaign=rss",
-   "summary": "France's second city saw some of the worst violence as chaos gripped the country on Saturday.",
-   "source": "BBC World",
-   "topic": "國際"
+   "title": "How a16z-backed DATA is rethinking its blockchain strategy after $30 million Sui deal",
+   "link": "https://www.coindesk.com/business/2026/10/21/how-a16z-backed-data-is-rethinking-its-blockchain-strategy-after-usd30-million-sui-deal",
+   "summary": "The startup is retiring its own blockchain and moving to Sui with a $30 million investment as it narrows its focus to AI training data.",
+   "source": "CoinDesk",
+   "topic": "區塊鏈"
   },
   {
-   "title": "Man charged with attack on Australia MP to face court",
-   "link": "https://www.bbc.co.uk/news/articles/c678pnn9mpgno?at_medium=RSS&at_campaign=rss",
-   "summary": "Brendan Nugent's family say they have known Helen Haines, who remains in a critical condition, for more than 20 years.",
-   "source": "BBC World",
-   "topic": "國際"
+   "title": "Bybit will look for big broker partnerships to take on Robinhood in the U.S.",
+   "link": "https://www.coindesk.com/business/2026/10/16/bybit-will-look-for-big-broker-partnerships-to-take-on-robinhood-in-the-u-s",
+   "summary": "When it comes to the U.S., Bybit will look to work with with someone like Interactive Brokers (IB), for example, said CEO Ben Zhou.",
+   "source": "CoinDesk",
+   "topic": "區塊鏈"
   }
  ]
 }
