@@ -1,27 +1,27 @@
 {
- "date": "2026-10-22",
- "topic": "區塊鏈",
+ "date": "2026-10-23",
+ "topic": "科技",
  "articles": [
   {
-   "title": "Trump to throw spotlight on overseas crypto abuses at White House event",
-   "link": "https://www.coindesk.com/policy/2026/10/21/trump-to-throw-spotlight-on-overseas-crypto-abuses-in-white-house-event",
-   "summary": "The president is hosting a cybercrime event that will highlight U.S. authorities' efforts to crack down on crypto scams run by foreign criminal organizations.",
-   "source": "CoinDesk",
-   "topic": "區塊鏈"
+   "title": "Disgraced eMudhra drops out of TLS business after using cert private key of 4",
+   "link": "https://arstechnica.com/security/2026/10/disgraced-emudhra-drops-out-of-tls-business-following-certificate-debacle/",
+   "summary": "Flubbed key signing \"ceremony\" allowed minting of web credentials for any site.",
+   "source": "Ars Technica",
+   "topic": "科技"
   },
   {
-   "title": "How a16z-backed DATA is rethinking its blockchain strategy after $30 million Sui deal",
-   "link": "https://www.coindesk.com/business/2026/10/21/how-a16z-backed-data-is-rethinking-its-blockchain-strategy-after-usd30-million-sui-deal",
-   "summary": "The startup is retiring its own blockchain and moving to Sui with a $30 million investment as it narrows its focus to AI training data.",
-   "source": "CoinDesk",
-   "topic": "區塊鏈"
+   "title": "Leaked Mass Effect: Universe trailer gives a taste of what we're all missing",
+   "link": "https://arstechnica.com/gaming/2026/10/leaked-mass-effect-universe-trailer-gives-a-taste-of-what-were-all-missing/",
+   "summary": "We can't have nice things, but at least we can get trailers for them.",
+   "source": "Ars Technica",
+   "topic": "科技"
   },
   {
-   "title": "Bybit will look for big broker partnerships to take on Robinhood in the U.S.",
-   "link": "https://www.coindesk.com/business/2026/10/16/bybit-will-look-for-big-broker-partnerships-to-take-on-robinhood-in-the-u-s",
-   "summary": "When it comes to the U.S., Bybit will look to work with with someone like Interactive Brokers (IB), for example, said CEO Ben Zhou.",
-   "source": "CoinDesk",
-   "topic": "區塊鏈"
+   "title": "Ink droplets in motion snag top prize in Nikon Small World contest",
+   "link": "https://arstechnica.com/science/2026/10/meet-the-2026-winner-of-nikons-small-world-photomicrography-contest/",
+   "summary": "Ole Bielfeldt of Germany captured a microscopic view of an inkjet printer depositing ink onto paper.",
+   "source": "Ars Technica",
+   "topic": "科技"
   }
  ]
 }
