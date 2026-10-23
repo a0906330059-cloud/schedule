@@ -1,27 +1,27 @@
 {
- "date": "2026-10-23",
- "topic": "科技",
+ "date": "2026-10-24",
+ "topic": "國際",
  "articles": [
   {
-   "title": "Disgraced eMudhra drops out of TLS business after using cert private key of 4",
-   "link": "https://arstechnica.com/security/2026/10/disgraced-emudhra-drops-out-of-tls-business-following-certificate-debacle/",
-   "summary": "Flubbed key signing \"ceremony\" allowed minting of web credentials for any site.",
-   "source": "Ars Technica",
-   "topic": "科技"
+   "title": "Deadly shooting near Paris is a 'racist terrorist attack', Macron says",
+   "link": "https://www.bbc.co.uk/news/articles/c6ev38dj1g8zo?at_medium=RSS&at_campaign=rss",
+   "summary": "One person is killed and five wounded in a series of attacks and the suspected gunman has been apprehended.",
+   "source": "BBC World",
+   "topic": "國際"
   },
   {
-   "title": "Leaked Mass Effect: Universe trailer gives a taste of what we're all missing",
-   "link": "https://arstechnica.com/gaming/2026/10/leaked-mass-effect-universe-trailer-gives-a-taste-of-what-were-all-missing/",
-   "summary": "We can't have nice things, but at least we can get trailers for them.",
-   "source": "Ars Technica",
-   "topic": "科技"
+   "title": "Seven shot dead by gunmen at church funeral in Jordan, officials say",
+   "link": "https://www.bbc.co.uk/news/articles/ck87zlpzny15o?at_medium=RSS&at_campaign=rss",
+   "summary": "Thirty-four people are also injured in the attack in southern Karak governorate, and a manhunt is now under way.",
+   "source": "BBC World",
+   "topic": "國際"
   },
   {
-   "title": "Ink droplets in motion snag top prize in Nikon Small World contest",
-   "link": "https://arstechnica.com/science/2026/10/meet-the-2026-winner-of-nikons-small-world-photomicrography-contest/",
-   "summary": "Ole Bielfeldt of Germany captured a microscopic view of an inkjet printer depositing ink onto paper.",
-   "source": "Ars Technica",
-   "topic": "科技"
+   "title": "Freed US citizen was tortured in Russian jail, former Ukrainian prisoners say",
+   "link": "https://www.bbc.co.uk/news/articles/cx7vpmn6qzmlo?at_medium=RSS&at_campaign=rss",
+   "summary": "Ukrainians held alongside the American say they witnessed beatings and sexual humiliation by Russian guards during his detention.",
+   "source": "BBC World",
+   "topic": "國際"
   }
  ]
 }
