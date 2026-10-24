@@ -1,27 +1,27 @@
 {
- "date": "2026-10-24",
- "topic": "國際",
+ "date": "2026-10-25",
+ "topic": "綜合",
  "articles": [
   {
-   "title": "Deadly shooting near Paris is a 'racist terrorist attack', Macron says",
-   "link": "https://www.bbc.co.uk/news/articles/c6ev38dj1g8zo?at_medium=RSS&at_campaign=rss",
-   "summary": "One person is killed and five wounded in a series of attacks and the suspected gunman has been apprehended.",
-   "source": "BBC World",
-   "topic": "國際"
+   "title": "Strategy, Strive face balancing act between bitcoin buying and preferred stock dividends",
+   "link": "https://www.coindesk.com/business/2026/10/24/strategy-strive-face-balancing-act-between-bitcoin-buying-and-preferred-stock-dividends",
+   "summary": "The securities have financed purchases of nearly 136,000 bitcoin, opening a funding channel that analysts expect to complement the larger ETF market.",
+   "source": "CoinDesk",
+   "topic": "區塊鏈"
   },
   {
-   "title": "Seven shot dead by gunmen at church funeral in Jordan, officials say",
-   "link": "https://www.bbc.co.uk/news/articles/ck87zlpzny15o?at_medium=RSS&at_campaign=rss",
-   "summary": "Thirty-four people are also injured in the attack in southern Karak governorate, and a manhunt is now under way.",
-   "source": "BBC World",
-   "topic": "國際"
+   "title": "Google Quietly Updates Privacy Policy to Let Gmail and Photos Data Feed Ads",
+   "link": "https://decrypt.co/381775/google-quietly-updates-privacy-policy-gmail-photos-ads",
+   "summary": "A policy change effective Oct. 16 carves out an exception to Google’s long-standing pledge—letting connected Gmail, Drive, and Photos data personalize ads through its Personal Intelligence AI features.",
+   "source": "Decrypt",
+   "topic": "區塊鏈"
   },
   {
-   "title": "Freed US citizen was tortured in Russian jail, former Ukrainian prisoners say",
-   "link": "https://www.bbc.co.uk/news/articles/cx7vpmn6qzmlo?at_medium=RSS&at_campaign=rss",
-   "summary": "Ukrainians held alongside the American say they witnessed beatings and sexual humiliation by Russian guards during his detention.",
-   "source": "BBC World",
-   "topic": "國際"
+   "title": "A 1,000-mile cloud on Mars may reveal physics never seen in nature",
+   "link": "https://arstechnica.com/science/2026/10/a-1000-mile-cloud-on-mars-may-reveal-physics-never-seen-in-nature/",
+   "summary": "A new model suggests Mars may host ice-forming physics never directly observed before.",
+   "source": "Ars Technica",
+   "topic": "科技"
   }
  ]
 }
