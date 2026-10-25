@@ -32,6 +32,12 @@ public class WidgetService extends RemoteViewsService {
         String sortKey() { return time.isEmpty() ? (event ? "00" : "99") : time; }
     }
 
+    /** A habit can be paused for a while (e.g. regular study slots during exam weeks). */
+    static boolean paused(JSONObject h, String date) {
+        String a = h.optString("pauseFrom"), b = h.optString("pauseTo");
+        return !a.isEmpty() && date.compareTo(a) >= 0 && (b.isEmpty() || date.compareTo(b) <= 0);
+    }
+
     static String fmtKm(double k) { return k == Math.floor(k) ? String.valueOf((int) k) : String.valueOf(k); }
 
     static int colorFor(String cat) {
@@ -120,7 +126,7 @@ public class WidgetService extends RemoteViewsService {
                     boolean on = false;
                     for (int d = 0; days != null && d < days.length(); d++) if (days.optInt(d) == dow) on = true;
                     String start = h.optString("start"), end = h.optString("end");
-                    if (!on || today.compareTo(start) < 0 || (!end.isEmpty() && today.compareTo(end) > 0)) continue;
+                    if (!on || today.compareTo(start) < 0 || (!end.isEmpty() && today.compareTo(end) > 0) || paused(h, today)) continue;
                     JSONObject done = h.optJSONObject("doneDates");
                     Item hi = new Item(h.optString("time"), h.optString("title"), colorFor(h.optString("cat")), false,
                             "habit", h.optString("id"), done != null && done.optBoolean(today));

@@ -114,7 +114,7 @@ public class ItemReminder extends BroadcastReceiver {
                     for (int d = 0; days != null && d < days.length(); d++) if (days.optInt(d) == dow) on = true;
                     String start = h.optString("start"), end = h.optString("end");
                     JSONObject dd = h.optJSONObject("doneDates");
-                    if (!on || date.compareTo(start) < 0 || (!end.isEmpty() && date.compareTo(end) > 0) || (dd != null && dd.optBoolean(date))) continue;
+                    if (!on || date.compareTo(start) < 0 || (!end.isEmpty() && date.compareTo(end) > 0) || WidgetService.paused(h, date) || (dd != null && dd.optBoolean(date))) continue;
                     int hr = h.has("remind") ? h.optInt("remind") : defOther;
                     if (hr == BOTH_DAYS || hr >= DAY) hr = defOther;   // "days before" makes no sense for something daily
                     add(out, date, h.optString("time"), hr,

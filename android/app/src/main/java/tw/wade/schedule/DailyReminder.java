@@ -94,7 +94,7 @@ public class DailyReminder extends BroadcastReceiver {
             boolean on = false;
             for (int d = 0; days != null && d < days.length(); d++) if (days.optInt(d) == dow) on = true;
             String start = h.optString("start"), end = h.optString("end");
-            if (on && today.compareTo(start) >= 0 && (end.isEmpty() || today.compareTo(end) <= 0))
+            if (on && today.compareTo(start) >= 0 && (end.isEmpty() || today.compareTo(end) <= 0) && !WidgetService.paused(h, today))
                 lines.add(new String[]{h.optString("time"), h.optString("title")});
         }
         Collections.sort(lines, (a, b) -> (a[0].isEmpty() ? "99" : a[0]).compareTo(b[0].isEmpty() ? "99" : b[0]));
