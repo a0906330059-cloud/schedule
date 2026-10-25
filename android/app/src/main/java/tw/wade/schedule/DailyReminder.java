@@ -79,7 +79,7 @@ public class DailyReminder extends BroadcastReceiver {
         JSONArray classes = data.optJSONArray("classes");
         for (int i = 0; classes != null && i < classes.length(); i++) {
             JSONObject o = classes.getJSONObject(i);
-            if (o.optInt("day", -1) == dow && WidgetService.termCovers(terms, o.optString("termId"), today))
+            if (o.optInt("day", -1) == dow && WidgetService.termCovers(terms, o.optString("termId"), today) && !SchoolCalendar.skipClass(o, today))
                 lines.add(new String[]{o.optString("start"), o.optString("name")});
         }
         JSONArray tasks = data.optJSONArray("tasks");

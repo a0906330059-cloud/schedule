@@ -103,7 +103,7 @@ public class WidgetService extends RemoteViewsService {
                 JSONArray classes = data.optJSONArray("classes");
                 for (int i = 0; classes != null && i < classes.length(); i++) {
                     JSONObject c = classes.getJSONObject(i);
-                    if (c.optInt("day", -1) != dow || !termCovers(terms, c.optString("termId"), today)) continue;
+                    if (c.optInt("day", -1) != dow || !termCovers(terms, c.optString("termId"), today) || SchoolCalendar.skipClass(c, today)) continue;
                     // fixed schedule items (classes, team practice) are shown but never ticked
                     items.add(new Item(c.optString("start"), c.optString("name"), colorFor(c.optString("kind")), true,
                             "class", "", false));

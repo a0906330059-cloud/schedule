@@ -102,7 +102,7 @@ public class ItemReminder extends BroadcastReceiver {
                 JSONArray classes = data.optJSONArray("classes");
                 for (int i = 0; classes != null && i < classes.length(); i++) {
                     JSONObject o = classes.getJSONObject(i);
-                    if (o.optInt("day", -1) != dow || !WidgetService.termCovers(terms, o.optString("termId"), date)) continue;
+                    if (o.optInt("day", -1) != dow || !WidgetService.termCovers(terms, o.optString("termId"), date) || SchoolCalendar.skipClass(o, date)) continue;
                     add(out, date, o.optString("start"), o.has("remind") ? o.optInt("remind") : defClass,
                             o.optString("name"), o.optString("room"), o.optString("id") + date);
                 }
