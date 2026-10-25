@@ -860,6 +860,20 @@
     e.target.value = "";
   };
   var resetArmed = false;
+  var freshArmed = false;
+  $("freshBtn").onclick = function () {
+    if (!freshArmed) { freshArmed = true; $("freshBtn").textContent = "再按一次確認"; setTimeout(function () { freshArmed = false; $("freshBtn").textContent = "清除"; }, 3000); return; }
+    freshArmed = false; $("freshBtn").textContent = "清除";
+    var t0 = todayStr();
+    undoable("已清除紀錄，從今天重新開始", function () {
+      data.tasks = data.tasks.filter(function (t) { return t.date >= t0; });
+      data.tasks.forEach(function (t) { t.done = false; delete t.doneKm; });
+      data.habits.forEach(function (h) { h.doneDates = {}; if (!h.start || h.start < t0) h.start = t0; });
+      var st = settings(); st.quiz = {}; st.quizScore = {}; st.quizWrong = []; delete st.readReport;
+      delete data.auto;
+    });
+    weekOffset = 0; refreshEverything(); setStatus("已清除紀錄。");
+  };
   $("resetBtn").onclick = function () {
     if (!resetArmed) { resetArmed = true; $("resetBtn").textContent = "再按一次確認"; setTimeout(function () { resetArmed = false; $("resetBtn").textContent = "還原"; }, 3000); return; }
     seed().then(function () { refreshEverything(); setStatus("已還原成初始日程。"); });

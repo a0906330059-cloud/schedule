@@ -345,6 +345,8 @@ textarea{font:inherit;font-size:.92rem;color:var(--fg);background:var(--surface)
         <div id="bkDays" style="display:flex;gap:6px;flex-wrap:wrap"></div></div>
       <div class="setting"><strong>備份</strong><span style="display:flex;gap:6px"><button class="btn" id="exportBtn">匯出</button><label class="btn" style="font-size:inherit;color:inherit;flex-direction:row">匯入<input id="importFile" type="file" accept="application/json,.json" hidden></label></span>
         <p>手動匯出一份 JSON 檔，或從備份檔匯入。</p></div>
+      <div class="setting"><strong>清除紀錄、重新開始</strong><button class="btn danger" id="freshBtn">清除</button>
+        <p>保留課表、固定行程、習慣和今天以後的事（讀書計畫、跑步、考試）；刪掉今天以前的事、所有打勾紀錄、報告測驗的作答和每週回顧的分數。按錯了可以馬上按「復原」。</p></div>
       <div class="setting"><strong>還原成初始日程</strong><button class="btn danger" id="resetBtn">還原</button>
         <p>會清掉你新增的事項和打勾紀錄。</p></div>
     </div>
