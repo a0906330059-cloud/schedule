@@ -1,27 +1,27 @@
 {
- "date": "2026-10-25",
- "topic": "綜合",
+ "date": "2026-10-26",
+ "topic": "區塊鏈",
  "articles": [
+  {
+   "title": "Latvia targets tokenization rules in 2027 with commercial property in focus",
+   "link": "https://www.coindesk.com/business/2026/10/25/latvia-targets-tokenization-rules-in-2027-with-commercial-property-in-focus",
+   "summary": "Economics Minister Viktors Valainis says rules could arrive in the first half of next year, but an overdue assessment remains unfinished and no sovereign-bond issuance was identified.",
+   "source": "CoinDesk",
+   "topic": "區塊鏈"
+  },
+  {
+   "title": "UK banks face 10,000 complaints in 3 months over crypto restrictions",
+   "link": "https://www.coindesk.com/policy/2026/10/22/uk-banks-face-10-000-complaints-in-3-months-over-crypto-restrictions",
+   "summary": "The U.K. claims to aspire to become a global cryptocurrency hub, an ambition that would appear to be at odds with the attitude to crypto purchases of its major banks.",
+   "source": "CoinDesk",
+   "topic": "區塊鏈"
+  },
   {
    "title": "Strategy, Strive face balancing act between bitcoin buying and preferred stock dividends",
    "link": "https://www.coindesk.com/business/2026/10/24/strategy-strive-face-balancing-act-between-bitcoin-buying-and-preferred-stock-dividends",
    "summary": "The securities have financed purchases of nearly 136,000 bitcoin, opening a funding channel that analysts expect to complement the larger ETF market.",
    "source": "CoinDesk",
    "topic": "區塊鏈"
-  },
-  {
-   "title": "Google Quietly Updates Privacy Policy to Let Gmail and Photos Data Feed Ads",
-   "link": "https://decrypt.co/381775/google-quietly-updates-privacy-policy-gmail-photos-ads",
-   "summary": "A policy change effective Oct. 16 carves out an exception to Google’s long-standing pledge—letting connected Gmail, Drive, and Photos data personalize ads through its Personal Intelligence AI features.",
-   "source": "Decrypt",
-   "topic": "區塊鏈"
-  },
-  {
-   "title": "A 1,000-mile cloud on Mars may reveal physics never seen in nature",
-   "link": "https://arstechnica.com/science/2026/10/a-1000-mile-cloud-on-mars-may-reveal-physics-never-seen-in-nature/",
-   "summary": "A new model suggests Mars may host ice-forming physics never directly observed before.",
-   "source": "Ars Technica",
-   "topic": "科技"
   }
  ]
 }
