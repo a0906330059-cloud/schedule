@@ -37,7 +37,7 @@
   function isEvent(t) { return t.kind ? t.kind === "event" : !!t.milestone; }
   function habitsOn(date) {
     var dow = parse(date).getDay();
-    return (data.habits || []).filter(function (h) { return h.days.indexOf(dow) >= 0 && date >= h.start && (!h.end || date <= h.end); });
+    return (data.habits || []).filter(function (h) { return h.days.indexOf(dow) >= 0 && date >= h.start && (!h.end || date <= h.end) && !(h.pauseFrom && date >= h.pauseFrom && (!h.pauseTo || date <= h.pauseTo)); });
   }
   function byTime(a, b) { return (a.time || "99").localeCompare(b.time || "99"); }
   // ---------- semesters (timetables) ----------
@@ -498,7 +498,7 @@
         el("div", { class: "wk-tile t-run" }, el("small", {}, "跑步"), el("b", {}, (Math.round(w.runDone * 10) / 10), el("span", {}, " / " + w.runPlan + " K")),
           el("div", { class: "wk-mini" }, el("i", { style: "width:" + runPct + "%" }))))));
     var qs = settings().quizScore || {}, qr = 0, qt = 0, qd = 0;
-    Object.keys(qs).forEach(function (d) { if (d >= w.mon && d <= w.last) { qr += qs[d].right; qt += qs[d].total; qd++; } });
+    Object.keys(qs).forEach(function (d) { var dd = d.slice(0, 10); if (dd >= w.mon && dd <= w.last) { qr += qs[d].right; qt += qs[d].total; qd++; } });
     var pending = (settings().quizWrong || []).length;
     if (weekOffset === 0 || qt) box.append(el("div", { class: "wk-quiz" },
       el("span", {}, "📖 每日報告測驗"),
@@ -840,10 +840,15 @@
       if (d && d.merge) {
         var rm = d.removeIds || [], add = d.tasks || [], addH = d.habits || [], n = 0;
         undoable("已加入 " + (add.length + addH.length) + " 項" + (rm.length ? "、移除 " + rm.length + " 項舊的" : ""), function () {
+          (d.removeIdPrefixes || []).forEach(function (px) { data.tasks = data.tasks.filter(function (t) { return String(t.id).indexOf(px) !== 0; }); });
           var ids = rm.concat(add.map(function (t) { return t.id; }));
           data.tasks = data.tasks.filter(function (t) { if (ids.indexOf(t.id) >= 0) { n++; return false; } return true; }).concat(add);
           var hids = rm.concat(addH.map(function (h) { return h.id; }));
           data.habits = data.habits.filter(function (h) { return hids.indexOf(h.id) < 0; }).concat(addH);
+          (d.habitPause || []).forEach(function (p) {
+            data.habits.forEach(function (h) { if ((p.titlePrefix && h.title.indexOf(p.titlePrefix) === 0) || (p.ids && p.ids.indexOf(h.id) >= 0)) { h.pauseFrom = p.from; h.pauseTo = p.to; } });
+          });
+
           data = normalize(data);
         });
         refreshEverything(); setStatus("已合併匯入，原本的資料都還在。");
@@ -970,7 +975,7 @@
     return box;
   }
   function renderQuiz(r) {
-    var st = quizStore(), ans = st.quiz[r.date] || [];
+    var qk = r.date + (r.rev ? "#" + r.rev : ""), st = quizStore(), ans = st.quiz[qk] || [];   // a remade report starts fresh
     var wrap = el("section", { class: "quiz" });
     var done = r.quiz.filter(function (_, i) { return ans[i] != null; }).length;
     var right = r.quiz.filter(function (q, i) { return ans[i] === q.answer; }).length;
@@ -978,11 +983,12 @@
     if (!done) wrap.append(el("p", { class: "status" }, "先別往上偷看，憑記憶選。選錯也沒關係，錯的題目過幾天會再出現一次。"));
     r.quiz.forEach(function (q, i) {
       wrap.append(qBlock(q, ans[i], function (pick) {
-        var a = st.quiz[r.date] = st.quiz[r.date] || [];
+        var a = st.quiz[qk] = st.quiz[qk] || [];
         if (a[i] != null) return;
         a[i] = pick;
         st.quizScore = st.quizScore || {};
-        st.quizScore[r.date] = { right: r.quiz.filter(function (qq, k) { return a[k] === qq.answer; }).length, total: r.quiz.length };
+        if (r.rev) delete st.quizScore[r.date];
+        st.quizScore[qk] = { right: r.quiz.filter(function (qq, k) { return a[k] === qq.answer; }).length, total: r.quiz.length };
         if (pick !== q.answer) st.quizWrong.push({ date: r.date, q: q.q, options: q.options, answer: q.answer, explain: q.explain || "" });
         st.quizWrong = st.quizWrong.slice(-20);
         persist();
