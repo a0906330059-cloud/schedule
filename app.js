@@ -45,7 +45,11 @@
   function termOf(c) { var ts = terms(); for (var i = 0; i < ts.length; i++) if (ts[i].id === c.termId) return ts[i]; return ts[0]; }
   function termCovers(t, date) { return (!t.start || date >= t.start) && (!t.end || date <= t.end); }
   function termFor(date) { var ts = terms(); for (var i = ts.length - 1; i >= 0; i--) if (termCovers(ts[i], date)) return ts[i]; return null; }
-  function classesOn(date) { var dow = parse(date).getDay(); return data.classes.filter(function (c) { return c.day === dow && termCovers(termOf(c), date); }); }
+  function classesOn(date) {
+    var dow = parse(date).getDay(), off = schoolOn(date).some(function (x) { return x.off; });
+    // days off in the school calendar: no classes (team practice and clubs still show)
+    return data.classes.filter(function (c) { return c.day === dow && termCovers(termOf(c), date) && !(off && (!c.kind || c.kind === "課程")); });
+  }
   var weekTerm = null;
   function wakeMin() { return mins(settings().wake || "07:00"); }
   function sleepMin() { var s = mins(settings().sleep || "00:00"); return s <= wakeMin() ? s + 1440 : s; }
@@ -183,7 +187,7 @@
     ["2026-12-25", "行憲紀念日"],
     ["2027-01-01", "元旦", 1],
     ["2027-01-04", "期末考週", 0, 1, "2027-01-10"],
-    ["2027-01-11", "寒假開始", 1],
+    ["2027-01-11", "寒假", 1, 0, "2027-02-21"],
     ["2027-02-04", "小年夜", 1], ["2027-02-05", "春節假期", 1, 0, "2027-02-10"]
   ];
   function schoolOn(ds) {
