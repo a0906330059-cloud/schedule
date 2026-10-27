@@ -15,10 +15,16 @@ final class SchoolCalendar {
         return false;
     }
 
-    /** Classes (課程) are skipped on days off; team practice and clubs still show. */
+    /** Classes (課程) are skipped on days off; any fixed item can also be paused for some dates. */
     static boolean skipClass(JSONObject c, String date) {
         String k = c.optString("kind");
-        return (k.isEmpty() || "課程".equals(k)) && isOff(date);
+        if ((k.isEmpty() || "課程".equals(k)) && isOff(date)) return true;
+        org.json.JSONArray p = c.optJSONArray("pauses");
+        for (int i = 0; p != null && i < p.length(); i++) {
+            org.json.JSONArray r = p.optJSONArray(i);
+            if (r != null && date.compareTo(r.optString(0)) >= 0 && date.compareTo(r.optString(1)) <= 0) return true;
+        }
+        return false;
     }
 
     private SchoolCalendar() {}
