@@ -852,6 +852,9 @@
           data.tasks = data.tasks.filter(function (t) { if (ids.indexOf(t.id) >= 0) { n++; return false; } return true; }).concat(add);
           var hids = rm.concat(addH.map(function (h) { return h.id; }));
           data.habits = data.habits.filter(function (h) { return hids.indexOf(h.id) < 0; }).concat(addH);
+          (d.classUnpause || []).forEach(function (p) {
+            data.classes.forEach(function (c) { if (p.kinds && p.kinds.indexOf(c.kind) >= 0) delete c.pauses; });
+          });
           (d.classPause || []).forEach(function (p) {
             data.classes.forEach(function (c) {
               if ((p.kinds && p.kinds.indexOf(c.kind) >= 0) || (p.names && p.names.some(function (n) { return c.name.indexOf(n) >= 0; }))) {
