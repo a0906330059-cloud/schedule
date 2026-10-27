@@ -48,7 +48,10 @@
   function classesOn(date) {
     var dow = parse(date).getDay(), off = schoolOn(date).some(function (x) { return x.off; });
     // days off in the school calendar: no classes (team practice and clubs still show)
-    return data.classes.filter(function (c) { return c.day === dow && termCovers(termOf(c), date) && !(off && (!c.kind || c.kind === "課程")); });
+    return data.classes.filter(function (c) {
+      if (c.day !== dow || !termCovers(termOf(c), date) || (off && (!c.kind || c.kind === "課程"))) return false;
+      return !(c.pauses || []).some(function (r) { return date >= r[0] && date <= r[1]; });   // e.g. no practice during exam weeks
+    });
   }
   var weekTerm = null;
   function wakeMin() { return mins(settings().wake || "07:00"); }
@@ -849,6 +852,13 @@
           data.tasks = data.tasks.filter(function (t) { if (ids.indexOf(t.id) >= 0) { n++; return false; } return true; }).concat(add);
           var hids = rm.concat(addH.map(function (h) { return h.id; }));
           data.habits = data.habits.filter(function (h) { return hids.indexOf(h.id) < 0; }).concat(addH);
+          (d.classPause || []).forEach(function (p) {
+            data.classes.forEach(function (c) {
+              if ((p.kinds && p.kinds.indexOf(c.kind) >= 0) || (p.names && p.names.some(function (n) { return c.name.indexOf(n) >= 0; }))) {
+                c.pauses = (c.pauses || []).filter(function (r) { return !(r[0] === p.from && r[1] === p.to); }).concat([[p.from, p.to]]);
+              }
+            });
+          });
           (d.habitPause || []).forEach(function (p) {
             data.habits.forEach(function (h) { if ((p.titlePrefix && h.title.indexOf(p.titlePrefix) === 0) || (p.ids && p.ids.indexOf(h.id) >= 0)) { h.pauseFrom = p.from; h.pauseTo = p.to; } });
           });
