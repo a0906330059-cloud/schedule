@@ -1,27 +1,27 @@
 {
- "date": "2026-10-30",
- "topic": "科技",
+ "date": "2026-10-31",
+ "topic": "國際",
  "articles": [
   {
-   "title": "Reddit is moving to “a logged-in-only experience,” CEO says",
-   "link": "https://arstechnica.com/gadgets/2026/10/reddit-will-require-you-to-log-in-eventually-ceo-confirms/",
-   "summary": "Reddit's search traffic \"was down meaningfully\" last quarter.",
-   "source": "Ars Technica",
-   "topic": "科技"
+   "title": "US approves sale of 500 Patriot missiles to Ukraine",
+   "link": "https://www.bbc.co.uk/news/articles/c3vgxznlx7jzo?at_medium=RSS&at_campaign=rss",
+   "summary": "The American-made interceptors are the only effective weapon for downing Russia's ballistic missiles.",
+   "source": "BBC World",
+   "topic": "國際"
   },
   {
-   "title": "Microsoft fixes a Windows 11 annoyance as PC revenue declines",
-   "link": "https://arstechnica.com/gadgets/2026/10/windows-11-gets-right-click-menu-improvements-as-pc-revenue-slides/",
-   "summary": "The latest update also brings a cloud recovery option for PCs that won't boot.",
-   "source": "Ars Technica",
-   "topic": "科技"
+   "title": "Crypto giant Binance attempting to recover $6.3bn stolen in hack linked to North Korea",
+   "link": "https://www.bbc.co.uk/news/articles/cwe8lp7zy07zo?at_medium=RSS&at_campaign=rss",
+   "summary": "The cyber-attack, which the company describes as complex, is believed to be the largest ever of its kind.",
+   "source": "BBC World",
+   "topic": "國際"
   },
   {
-   "title": "Pentagon IG refuses to investigate Starlink/Starshield slowdown in Ukraine",
-   "link": "https://arstechnica.com/tech-policy/2026/10/pentagon-ig-refuses-to-investigate-starlink-starshield-slowdown-in-ukraine/",
-   "summary": "Inspector general rejected request from Democratic and Republican senators.",
-   "source": "Ars Technica",
-   "topic": "科技"
+   "title": "US inmate Christa Pike says she woke up 'confused and in pain' after failed execution",
+   "link": "https://www.bbc.co.uk/news/articles/ck62ydn7dj9eo?at_medium=RSS&at_campaign=rss",
+   "summary": "It is Pike's first public statement since she survived an execution attempt by lethal injection in September.",
+   "source": "BBC World",
+   "topic": "國際"
   }
  ]
 }
