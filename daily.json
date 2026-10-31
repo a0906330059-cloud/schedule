@@ -1,27 +1,27 @@
 {
- "date": "2026-10-31",
- "topic": "國際",
+ "date": "2026-11-01",
+ "topic": "綜合",
  "articles": [
   {
-   "title": "US approves sale of 500 Patriot missiles to Ukraine",
-   "link": "https://www.bbc.co.uk/news/articles/c3vgxznlx7jzo?at_medium=RSS&at_campaign=rss",
-   "summary": "The American-made interceptors are the only effective weapon for downing Russia's ballistic missiles.",
-   "source": "BBC World",
-   "topic": "國際"
+   "title": "Bitcoin's white paper turns 18, and small businesses are still paying for the bailouts it answered",
+   "link": "https://www.coindesk.com/opinion/2026/10/31/bitcoin-s-white-paper-turns-18-and-small-businesses-are-still-paying-for-the-bailouts-it-answered",
+   "summary": "Eighteen years after Satoshi published the Bitcoin white paper, business owners are still covering the cost of a system built on bailouts, and they can protect part of their surplus by keeping it in bitcoin, argues Onram…",
+   "source": "CoinDesk",
+   "topic": "區塊鏈"
   },
   {
-   "title": "Crypto giant Binance attempting to recover $6.3bn stolen in hack linked to North Korea",
-   "link": "https://www.bbc.co.uk/news/articles/cwe8lp7zy07zo?at_medium=RSS&at_campaign=rss",
-   "summary": "The cyber-attack, which the company describes as complex, is believed to be the largest ever of its kind.",
-   "source": "BBC World",
-   "topic": "國際"
+   "title": "Binance Hack: Everything You Need to Know About the Biggest Crypto Heist in History",
+   "link": "https://decrypt.co/382306/binance-hack-everything-you-need-to-know",
+   "summary": "Attackers tied to North Korea drained roughly $6.4 billion from the world’s largest crypto exchange. Here’s what we know about how it happened, who’s behind it, and what comes next.",
+   "source": "Decrypt",
+   "topic": "區塊鏈"
   },
   {
-   "title": "US inmate Christa Pike says she woke up 'confused and in pain' after failed execution",
-   "link": "https://www.bbc.co.uk/news/articles/ck62ydn7dj9eo?at_medium=RSS&at_campaign=rss",
-   "summary": "It is Pike's first public statement since she survived an execution attempt by lethal injection in September.",
-   "source": "BBC World",
-   "topic": "國際"
+   "title": "Seabirds racing home over the ocean can get jet-lagged",
+   "link": "https://arstechnica.com/science/2026/10/seabirds-racing-home-over-the-ocean-can-get-jet-lagged/",
+   "summary": "A long flight home from feeding grounds messes with birds' internal clocks.",
+   "source": "Ars Technica",
+   "topic": "科技"
   }
  ]
 }
