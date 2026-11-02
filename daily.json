@@ -1,27 +1,27 @@
 {
- "date": "2026-11-01",
- "topic": "綜合",
+ "date": "2026-11-02",
+ "topic": "區塊鏈",
  "articles": [
   {
-   "title": "Bitcoin's white paper turns 18, and small businesses are still paying for the bailouts it answered",
-   "link": "https://www.coindesk.com/opinion/2026/10/31/bitcoin-s-white-paper-turns-18-and-small-businesses-are-still-paying-for-the-bailouts-it-answered",
-   "summary": "Eighteen years after Satoshi published the Bitcoin white paper, business owners are still covering the cost of a system built on bailouts, and they can protect part of their surplus by keeping it in bitcoin, argues Onram…",
+   "title": "The crypto reader's guide to the 2026 midterm election: State of Crypto",
+   "link": "https://www.coindesk.com/policy/2026/11/01/the-crypto-reader-s-guide-to-the-2026-midterm-election-state-of-crypto",
+   "summary": "America is going to the polls, and the results will shape crypto legislation and regulation over the next two years. Here's what to know.",
    "source": "CoinDesk",
    "topic": "區塊鏈"
   },
   {
-   "title": "Binance Hack: Everything You Need to Know About the Biggest Crypto Heist in History",
-   "link": "https://decrypt.co/382306/binance-hack-everything-you-need-to-know",
-   "summary": "Attackers tied to North Korea drained roughly $6.4 billion from the world’s largest crypto exchange. Here’s what we know about how it happened, who’s behind it, and what comes next.",
-   "source": "Decrypt",
+   "title": "AI agents bypassed crypto spending limits without human approval, researchers find in a new test",
+   "link": "https://www.coindesk.com/tech/2026/11/01/ai-agents-bypassed-crypto-spending-limits-without-human-approval-researchers-find-in-a-new-test",
+   "summary": "The researchers say any approval an agent can reach is unreliable, and they built Countersign, an app tying approval to a physical action the agent can’t fake.",
+   "source": "CoinDesk",
    "topic": "區塊鏈"
   },
   {
-   "title": "Seabirds racing home over the ocean can get jet-lagged",
-   "link": "https://arstechnica.com/science/2026/10/seabirds-racing-home-over-the-ocean-can-get-jet-lagged/",
-   "summary": "A long flight home from feeding grounds messes with birds' internal clocks.",
-   "source": "Ars Technica",
-   "topic": "科技"
+   "title": "The key races to watch for the 2026 election",
+   "link": "https://www.coindesk.com/policy/2026/11/01/the-key-races-to-watch-for-the-2026-election",
+   "summary": "While crypto isn't a major issue in the 2026 election, the industry will be shaped by who takes office in January. Here are the main races CoinDesk is tracking.",
+   "source": "CoinDesk",
+   "topic": "區塊鏈"
   }
  ]
 }
