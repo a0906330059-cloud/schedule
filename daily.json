@@ -1,27 +1,27 @@
 {
- "date": "2026-11-02",
- "topic": "區塊鏈",
+ "date": "2026-11-03",
+ "topic": "科技",
  "articles": [
   {
-   "title": "The crypto reader's guide to the 2026 midterm election: State of Crypto",
-   "link": "https://www.coindesk.com/policy/2026/11/01/the-crypto-reader-s-guide-to-the-2026-midterm-election-state-of-crypto",
-   "summary": "America is going to the polls, and the results will shape crypto legislation and regulation over the next two years. Here's what to know.",
-   "source": "CoinDesk",
-   "topic": "區塊鏈"
+   "title": "\"At Home in Space\" opens, caps Air and Space Museum renovation",
+   "link": "https://arstechnica.com/space/2026/11/at-home-in-space-opens-caps-air-and-space-museum-renovation/",
+   "summary": "The Smithsonian's National Air and Space Museum has all of its \"space\" back open.",
+   "source": "Ars Technica",
+   "topic": "科技"
   },
   {
-   "title": "AI agents bypassed crypto spending limits without human approval, researchers find in a new test",
-   "link": "https://www.coindesk.com/tech/2026/11/01/ai-agents-bypassed-crypto-spending-limits-without-human-approval-researchers-find-in-a-new-test",
-   "summary": "The researchers say any approval an agent can reach is unreliable, and they built Countersign, an app tying approval to a physical action the agent can’t fake.",
-   "source": "CoinDesk",
-   "topic": "區塊鏈"
+   "title": "Why large dogs age faster than small ones, and other October research highlights",
+   "link": "https://arstechnica.com/science/2026/11/research-roundup-6-cool-science-stories-we-almost-missed-7/",
+   "summary": "Plus invisible tattoos, medieval skeleton gets an ID, trapping a single antimatter particle, and more.",
+   "source": "Ars Technica",
+   "topic": "科技"
   },
   {
-   "title": "The key races to watch for the 2026 election",
-   "link": "https://www.coindesk.com/policy/2026/11/01/the-key-races-to-watch-for-the-2026-election",
-   "summary": "While crypto isn't a major issue in the 2026 election, the industry will be shaped by who takes office in January. Here are the main races CoinDesk is tracking.",
-   "source": "CoinDesk",
-   "topic": "區塊鏈"
+   "title": "Third person dies of bird flu since virus started jumping to livestock",
+   "link": "https://arstechnica.com/health/2026/11/third-person-dies-of-bird-flu-since-virus-started-jumping-to-livestock/",
+   "summary": "The threat is still considered to be low, but the virus continues to spread.",
+   "source": "Ars Technica",
+   "topic": "科技"
   }
  ]
 }
