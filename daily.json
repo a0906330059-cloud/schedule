@@ -1,27 +1,27 @@
 {
- "date": "2026-11-03",
- "topic": "科技",
+ "date": "2026-11-04",
+ "topic": "國際",
  "articles": [
   {
-   "title": "\"At Home in Space\" opens, caps Air and Space Museum renovation",
-   "link": "https://arstechnica.com/space/2026/11/at-home-in-space-opens-caps-air-and-space-museum-renovation/",
-   "summary": "The Smithsonian's National Air and Space Museum has all of its \"space\" back open.",
-   "source": "Ars Technica",
-   "topic": "科技"
+   "title": "Spanish transport minister resigns days after deadly train crash",
+   "link": "https://www.bbc.co.uk/news/articles/c6wydqd4yxdyo?at_medium=RSS&at_campaign=rss",
+   "summary": "At least 69 people were killed and dozens injured in the collision south of the capital, Madrid.",
+   "source": "BBC World",
+   "topic": "國際"
   },
   {
-   "title": "Why large dogs age faster than small ones, and other October research highlights",
-   "link": "https://arstechnica.com/science/2026/11/research-roundup-6-cool-science-stories-we-almost-missed-7/",
-   "summary": "Plus invisible tattoos, medieval skeleton gets an ID, trapping a single antimatter particle, and more.",
-   "source": "Ars Technica",
-   "topic": "科技"
+   "title": "Seven flights across Europe targeted by suspected bomb threats",
+   "link": "https://www.bbc.co.uk/news/articles/c6x2wd4v04eeo?at_medium=RSS&at_campaign=rss",
+   "summary": "Planes in Poland, Spain, Bulgaria and Italy have been checked for explosives following separate threats.",
+   "source": "BBC World",
+   "topic": "國際"
   },
   {
-   "title": "Third person dies of bird flu since virus started jumping to livestock",
-   "link": "https://arstechnica.com/health/2026/11/third-person-dies-of-bird-flu-since-virus-started-jumping-to-livestock/",
-   "summary": "The threat is still considered to be low, but the virus continues to spread.",
-   "source": "Ars Technica",
-   "topic": "科技"
+   "title": "Binance says fake job interviews used as part of $6.3bn crypto hack",
+   "link": "https://www.bbc.co.uk/news/articles/ck5ynwz9gy67o?at_medium=RSS&at_campaign=rss",
+   "summary": "An engineer was contacted through a legitimate job-hunting platform and invited to bogus job interviews with fake company representatives, Binance says.",
+   "source": "BBC World",
+   "topic": "國際"
   }
  ]
 }
