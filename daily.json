@@ -1,27 +1,27 @@
 {
- "date": "2026-11-04",
- "topic": "國際",
+ "date": "2026-11-05",
+ "topic": "區塊鏈",
  "articles": [
   {
-   "title": "Spanish transport minister resigns days after deadly train crash",
-   "link": "https://www.bbc.co.uk/news/articles/c6wydqd4yxdyo?at_medium=RSS&at_campaign=rss",
-   "summary": "At least 69 people were killed and dozens injured in the collision south of the capital, Madrid.",
-   "source": "BBC World",
-   "topic": "國際"
+   "title": "Tokenization and stablecoins may weather Democrats' sweep as broader crypto rules face uncertainty",
+   "link": "https://www.coindesk.com/policy/2026/11/04/tokenization-and-stablecoins-may-weather-democrats-sweep-as-broader-crypto-rules-face-uncertainty",
+   "summary": "Wall Street's push to bring finance onto blockchain rails may continue under existing laws, though the SEC and CFTC face tougher oversight and questions over how long their rules will last, experts said.",
+   "source": "CoinDesk",
+   "topic": "區塊鏈"
   },
   {
-   "title": "Seven flights across Europe targeted by suspected bomb threats",
-   "link": "https://www.bbc.co.uk/news/articles/c6x2wd4v04eeo?at_medium=RSS&at_campaign=rss",
-   "summary": "Planes in Poland, Spain, Bulgaria and Italy have been checked for explosives following separate threats.",
-   "source": "BBC World",
-   "topic": "國際"
+   "title": "Crypto's Washington hopes fade, but Grayscale and BlackRock see growth ahead",
+   "link": "https://www.coindesk.com/business/2026/11/04/crypto-s-washington-hopes-fade-but-grayscale-and-blackrock-see-growth-ahead",
+   "summary": "The asset manager says global demand and institutional adoption will sustain the industry despite a political setback, while BlackRock sees little impact on its crypto business.",
+   "source": "CoinDesk",
+   "topic": "區塊鏈"
   },
   {
-   "title": "Binance says fake job interviews used as part of $6.3bn crypto hack",
-   "link": "https://www.bbc.co.uk/news/articles/ck5ynwz9gy67o?at_medium=RSS&at_campaign=rss",
-   "summary": "An engineer was contacted through a legitimate job-hunting platform and invited to bogus job interviews with fake company representatives, Binance says.",
-   "source": "BBC World",
-   "topic": "國際"
+   "title": "Crypto's powerhouse super PAC suffers costly setback as Democrats sweep Congress",
+   "link": "https://www.coindesk.com/news-analysis/2026/11/04/crypto-s-powerhouse-super-pac-fairshake-found-its-kryptonite",
+   "summary": "The industry's primary campaign arm had cultivated a reputation as an unstoppable force, but more than a third of its spending failed to hit the mark, especially in Ohio.",
+   "source": "CoinDesk",
+   "topic": "區塊鏈"
   }
  ]
 }
