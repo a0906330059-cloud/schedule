@@ -1,27 +1,27 @@
 {
- "date": "2026-11-05",
- "topic": "區塊鏈",
+ "date": "2026-11-06",
+ "topic": "科技",
  "articles": [
   {
-   "title": "Tokenization and stablecoins may weather Democrats' sweep as broader crypto rules face uncertainty",
-   "link": "https://www.coindesk.com/policy/2026/11/04/tokenization-and-stablecoins-may-weather-democrats-sweep-as-broader-crypto-rules-face-uncertainty",
-   "summary": "Wall Street's push to bring finance onto blockchain rails may continue under existing laws, though the SEC and CFTC face tougher oversight and questions over how long their rules will last, experts said.",
-   "source": "CoinDesk",
-   "topic": "區塊鏈"
+   "title": "Blue Origin says it is building a higher-performing rocket engine at 1/4 the cost",
+   "link": "https://arstechnica.com/space/2026/11/blue-origin-announces-rocket-upgrades-aimed-at-lower-costs-more-performance/",
+   "summary": "\"This is going to be a game-changer.\"",
+   "source": "Ars Technica",
+   "topic": "科技"
   },
   {
-   "title": "Crypto's Washington hopes fade, but Grayscale and BlackRock see growth ahead",
-   "link": "https://www.coindesk.com/business/2026/11/04/crypto-s-washington-hopes-fade-but-grayscale-and-blackrock-see-growth-ahead",
-   "summary": "The asset manager says global demand and institutional adoption will sustain the industry despite a political setback, while BlackRock sees little impact on its crypto business.",
-   "source": "CoinDesk",
-   "topic": "區塊鏈"
+   "title": "Meet *sshole, the vulnerability that lets hackers SSH into Linux devices",
+   "link": "https://arstechnica.com/security/2026/11/vulnerability-allows-attackers-to-log-into-some-linux-devices-sans-password/",
+   "summary": "Certain configurations of Alpine are affected. Other distros may be as well.",
+   "source": "Ars Technica",
+   "topic": "科技"
   },
   {
-   "title": "Crypto's powerhouse super PAC suffers costly setback as Democrats sweep Congress",
-   "link": "https://www.coindesk.com/news-analysis/2026/11/04/crypto-s-powerhouse-super-pac-fairshake-found-its-kryptonite",
-   "summary": "The industry's primary campaign arm had cultivated a reputation as an unstoppable force, but more than a third of its spending failed to hit the mark, especially in Ohio.",
-   "source": "CoinDesk",
-   "topic": "區塊鏈"
+   "title": "NASA unveils mysterious X-70 experimental aircraft using AI-generated image",
+   "link": "https://arstechnica.com/gadgets/2026/11/nasas-experimental-x-70-aircraft-is-a-big-question-mark/",
+   "summary": "NASA’s X-70 Fractal announcement comes as agency aims to grow X-plane fleet.",
+   "source": "Ars Technica",
+   "topic": "科技"
   }
  ]
 }
