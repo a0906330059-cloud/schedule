@@ -1,27 +1,27 @@
 {
- "date": "2026-11-06",
- "topic": "科技",
+ "date": "2026-11-07",
+ "topic": "國際",
  "articles": [
   {
-   "title": "Blue Origin says it is building a higher-performing rocket engine at 1/4 the cost",
-   "link": "https://arstechnica.com/space/2026/11/blue-origin-announces-rocket-upgrades-aimed-at-lower-costs-more-performance/",
-   "summary": "\"This is going to be a game-changer.\"",
-   "source": "Ars Technica",
-   "topic": "科技"
+   "title": "AI stocks climb after trillions wiped from market values",
+   "link": "https://www.bbc.co.uk/news/articles/c35ynnpzdq51o?at_medium=RSS&at_campaign=rss",
+   "summary": "Investors had been selling off tech shares in part due to concerns the Democrat election victory would mean slower AI development.",
+   "source": "BBC World",
+   "topic": "國際"
   },
   {
-   "title": "Meet *sshole, the vulnerability that lets hackers SSH into Linux devices",
-   "link": "https://arstechnica.com/security/2026/11/vulnerability-allows-attackers-to-log-into-some-linux-devices-sans-password/",
-   "summary": "Certain configurations of Alpine are affected. Other distros may be as well.",
-   "source": "Ars Technica",
-   "topic": "科技"
+   "title": "Four midterms takeaways for 2028 White House race",
+   "link": "https://www.bbc.co.uk/news/articles/cq1m41n3v7mmo?at_medium=RSS&at_campaign=rss",
+   "summary": "The buzz about the presidential election is already under way - here's what we learned this week.",
+   "source": "BBC World",
+   "topic": "國際"
   },
   {
-   "title": "NASA unveils mysterious X-70 experimental aircraft using AI-generated image",
-   "link": "https://arstechnica.com/gadgets/2026/11/nasas-experimental-x-70-aircraft-is-a-big-question-mark/",
-   "summary": "NASA’s X-70 Fractal announcement comes as agency aims to grow X-plane fleet.",
-   "source": "Ars Technica",
-   "topic": "科技"
+   "title": "Two dead after bus crashes in France, officials say",
+   "link": "https://www.bbc.co.uk/news/articles/cmly00l4p3lwo?at_medium=RSS&at_campaign=rss",
+   "summary": "One child and one young adult were killed in the crash, local authorities say, with more injured.",
+   "source": "BBC World",
+   "topic": "國際"
   }
  ]
 }
