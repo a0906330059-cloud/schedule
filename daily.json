@@ -1,27 +1,27 @@
 {
- "date": "2026-11-07",
- "topic": "國際",
+ "date": "2026-11-08",
+ "topic": "綜合",
  "articles": [
   {
-   "title": "AI stocks climb after trillions wiped from market values",
-   "link": "https://www.bbc.co.uk/news/articles/c35ynnpzdq51o?at_medium=RSS&at_campaign=rss",
-   "summary": "Investors had been selling off tech shares in part due to concerns the Democrat election victory would mean slower AI development.",
-   "source": "BBC World",
-   "topic": "國際"
+   "title": "Binance users in some European countries told to pull crypto before fees kick in, with accounts closing by year end",
+   "link": "https://www.coindesk.com/business/2026/11/07/binance-users-in-some-european-countries-told-to-pull-crypto-before-fees-kick-in-with-accounts-closing-by-year-end",
+   "summary": "Affected accounts are reportedly set to close on Dec. 31. Users in Spain, France, and Poland say they've received similar notices.",
+   "source": "CoinDesk",
+   "topic": "區塊鏈"
   },
   {
-   "title": "Four midterms takeaways for 2028 White House race",
-   "link": "https://www.bbc.co.uk/news/articles/cq1m41n3v7mmo?at_medium=RSS&at_campaign=rss",
-   "summary": "The buzz about the presidential election is already under way - here's what we learned this week.",
-   "source": "BBC World",
-   "topic": "國際"
+   "title": "Apple Completes the Set: Every Magnificent Seven Stock Opts Out of OKX-ICE Venue",
+   "link": "https://decrypt.co/382768/apple-meta-every-magnificent-seven-stock-opts-out-okx-ice-venue",
+   "summary": "Apple and Meta’s objections mean all seven of the biggest U.S. tech companies have now asked to keep their shares off the planned OKX-ICE venue.",
+   "source": "Decrypt",
+   "topic": "區塊鏈"
   },
   {
-   "title": "Two dead after bus crashes in France, officials say",
-   "link": "https://www.bbc.co.uk/news/articles/cmly00l4p3lwo?at_medium=RSS&at_campaign=rss",
-   "summary": "One child and one young adult were killed in the crash, local authorities say, with more injured.",
-   "source": "BBC World",
-   "topic": "國際"
+   "title": "The Bantu expansion changed Africa. Scientists are still tracing how.",
+   "link": "https://arstechnica.com/science/2026/11/the-migration-that-transformed-africas-languages-genes-and-cultures/",
+   "summary": "Genes and archaeology are revealing how Bantu speakers spread across much of Africa.",
+   "source": "Ars Technica",
+   "topic": "科技"
   }
  ]
 }
