@@ -1,27 +1,27 @@
 {
- "date": "2026-11-08",
- "topic": "綜合",
+ "date": "2026-11-09",
+ "topic": "區塊鏈",
  "articles": [
   {
-   "title": "Binance users in some European countries told to pull crypto before fees kick in, with accounts closing by year end",
-   "link": "https://www.coindesk.com/business/2026/11/07/binance-users-in-some-european-countries-told-to-pull-crypto-before-fees-kick-in-with-accounts-closing-by-year-end",
-   "summary": "Affected accounts are reportedly set to close on Dec. 31. Users in Spain, France, and Poland say they've received similar notices.",
+   "title": "What the election results mean for crypto: State of Crypto",
+   "link": "https://www.coindesk.com/policy/2026/11/08/what-the-election-results-mean-for-crypto-state-of-crypto",
+   "summary": "Democrats had an astoundingly good night, smashing all expectations. Is that actually bad news for the industry?",
    "source": "CoinDesk",
    "topic": "區塊鏈"
   },
   {
-   "title": "Apple Completes the Set: Every Magnificent Seven Stock Opts Out of OKX-ICE Venue",
-   "link": "https://decrypt.co/382768/apple-meta-every-magnificent-seven-stock-opts-out-okx-ice-venue",
-   "summary": "Apple and Meta’s objections mean all seven of the biggest U.S. tech companies have now asked to keep their shares off the planned OKX-ICE venue.",
-   "source": "Decrypt",
+   "title": "Stablecoin growth has stalled. The payments boom hasn't",
+   "link": "https://www.coindesk.com/business/2026/11/08/stablecoin-growth-has-stalled-the-payments-boom-hasn-t",
+   "summary": "Stablecoin supply has barely grown this year, even as payments using the tokens surge. Circle's latest earnings offer another example of the divergence between dollars outstanding and activity on blockchain networks.",
+   "source": "CoinDesk",
    "topic": "區塊鏈"
   },
   {
-   "title": "The Bantu expansion changed Africa. Scientists are still tracing how.",
-   "link": "https://arstechnica.com/science/2026/11/the-migration-that-transformed-africas-languages-genes-and-cultures/",
-   "summary": "Genes and archaeology are revealing how Bantu speakers spread across much of Africa.",
-   "source": "Ars Technica",
-   "topic": "科技"
+   "title": "These Finland homes get free heat from bitcoin miners (as long as BTC stays above $70,000)",
+   "link": "https://www.coindesk.com/markets/2026/11/08/these-finland-homes-get-free-heat-from-bitcoin-miners-as-long-as-btc-stays-above-usd70-000",
+   "summary": "A Finnish startup has 30 bitcoin mining systems working as central heating, and at today’s prices each one earns slightly more than the electricity it burns.",
+   "source": "CoinDesk",
+   "topic": "區塊鏈"
   }
  ]
 }
