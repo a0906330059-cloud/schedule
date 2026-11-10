@@ -1,27 +1,27 @@
 {
- "date": "2026-11-09",
- "topic": "區塊鏈",
+ "date": "2026-11-10",
+ "topic": "科技",
  "articles": [
   {
-   "title": "What the election results mean for crypto: State of Crypto",
-   "link": "https://www.coindesk.com/policy/2026/11/08/what-the-election-results-mean-for-crypto-state-of-crypto",
-   "summary": "Democrats had an astoundingly good night, smashing all expectations. Is that actually bad news for the industry?",
-   "source": "CoinDesk",
-   "topic": "區塊鏈"
+   "title": "DCU shake-up: James Gunn and Peter Safran out post-merger",
+   "link": "https://arstechnica.com/culture/2026/11/dcu-shake-up-james-gunn-and-peter-safran-out-post-merger/",
+   "summary": "Producer and former Kevin Feige protege Jeremy Latcham will replace Gunn and Safran.",
+   "source": "Ars Technica",
+   "topic": "科技"
   },
   {
-   "title": "Stablecoin growth has stalled. The payments boom hasn't",
-   "link": "https://www.coindesk.com/business/2026/11/08/stablecoin-growth-has-stalled-the-payments-boom-hasn-t",
-   "summary": "Stablecoin supply has barely grown this year, even as payments using the tokens surge. Circle's latest earnings offer another example of the divergence between dollars outstanding and activity on blockchain networks.",
-   "source": "CoinDesk",
-   "topic": "區塊鏈"
+   "title": "Man who lost $308,000 on sports bets sues Kalshi for offering illegal gambling",
+   "link": "https://arstechnica.com/tech-policy/2026/11/man-who-lost-308000-on-sports-bets-sues-kalshi-for-offering-illegal-gambling/",
+   "summary": "Lawsuit demands Kalshi return losses because online betting is illegal in Washington.",
+   "source": "Ars Technica",
+   "topic": "科技"
   },
   {
-   "title": "These Finland homes get free heat from bitcoin miners (as long as BTC stays above $70,000)",
-   "link": "https://www.coindesk.com/markets/2026/11/08/these-finland-homes-get-free-heat-from-bitcoin-miners-as-long-as-btc-stays-above-usd70-000",
-   "summary": "A Finnish startup has 30 bitcoin mining systems working as central heating, and at today’s prices each one earns slightly more than the electricity it burns.",
-   "source": "CoinDesk",
-   "topic": "區塊鏈"
+   "title": "A Sam Altman parody offers an amusing lesson in memory management",
+   "link": "https://arstechnica.com/gadgets/2026/11/a-sam-altman-parody-offers-an-amusing-lesson-in-memory-management/",
+   "summary": "We verified the RAM numbers are real without sending any emails to OpenAI.",
+   "source": "Ars Technica",
+   "topic": "科技"
   }
  ]
 }
