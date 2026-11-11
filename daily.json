@@ -1,27 +1,27 @@
 {
- "date": "2026-11-10",
- "topic": "科技",
+ "date": "2026-11-11",
+ "topic": "國際",
  "articles": [
   {
-   "title": "DCU shake-up: James Gunn and Peter Safran out post-merger",
-   "link": "https://arstechnica.com/culture/2026/11/dcu-shake-up-james-gunn-and-peter-safran-out-post-merger/",
-   "summary": "Producer and former Kevin Feige protege Jeremy Latcham will replace Gunn and Safran.",
-   "source": "Ars Technica",
-   "topic": "科技"
+   "title": "Three Iran-backed suspects plotted attacks including RAF Fairford incident, US says",
+   "link": "https://www.bbc.co.uk/news/articles/c3rryrryk59zo?at_medium=RSS&at_campaign=rss",
+   "summary": "The US Department of Justice says the men were involved in a string of plots, including a major incident near the UK airbase that is used by US armed forces.",
+   "source": "BBC World",
+   "topic": "國際"
   },
   {
-   "title": "Man who lost $308,000 on sports bets sues Kalshi for offering illegal gambling",
-   "link": "https://arstechnica.com/tech-policy/2026/11/man-who-lost-308000-on-sports-bets-sues-kalshi-for-offering-illegal-gambling/",
-   "summary": "Lawsuit demands Kalshi return losses because online betting is illegal in Washington.",
-   "source": "Ars Technica",
-   "topic": "科技"
+   "title": "US Army soldier suspected of spying for Russia arrested in UK",
+   "link": "https://www.bbc.co.uk/news/articles/c6d7q77xgw0vo?at_medium=RSS&at_campaign=rss",
+   "summary": "The 41-year-old senior soldier is accused of national security offences and is being questioned in London.",
+   "source": "BBC World",
+   "topic": "國際"
   },
   {
-   "title": "A Sam Altman parody offers an amusing lesson in memory management",
-   "link": "https://arstechnica.com/gadgets/2026/11/a-sam-altman-parody-offers-an-amusing-lesson-in-memory-management/",
-   "summary": "We verified the RAM numbers are real without sending any emails to OpenAI.",
-   "source": "Ars Technica",
-   "topic": "科技"
+   "title": "US House blocks bid to impeach Defence Secretary Pete Hegseth, for now",
+   "link": "https://www.bbc.co.uk/news/articles/cxly4y5jzl0qo?at_medium=RSS&at_campaign=rss",
+   "summary": "Trump welcomes the outcome, praising Hegseth as a \"Great American Patriot\", but Democrats can try again next year.",
+   "source": "BBC World",
+   "topic": "國際"
   }
  ]
 }
