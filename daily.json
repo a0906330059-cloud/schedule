@@ -1,27 +1,27 @@
 {
- "date": "2026-11-11",
- "topic": "國際",
+ "date": "2026-11-12",
+ "topic": "區塊鏈",
  "articles": [
   {
-   "title": "Three Iran-backed suspects plotted attacks including RAF Fairford incident, US says",
-   "link": "https://www.bbc.co.uk/news/articles/c3rryrryk59zo?at_medium=RSS&at_campaign=rss",
-   "summary": "The US Department of Justice says the men were involved in a string of plots, including a major incident near the UK airbase that is used by US armed forces.",
-   "source": "BBC World",
-   "topic": "國際"
+   "title": "Crypto Long & Short: The GENIUS Act’s guarantees don’t cover DeFi lending",
+   "link": "https://www.coindesk.com/coindesk-indices/2026/11/11/crypto-long-and-short-the-genius-act-s-guarantees-don-t-cover-defi-lending",
+   "summary": "Institutions weighing DeFi lending tend to ask which markets are safest. Mike Hathaway and Joseph Quintilian of Ajna argue the better question is who can change a loan’s terms after the money is lent, and why a fully bac…",
+   "source": "CoinDesk",
+   "topic": "區塊鏈"
   },
   {
-   "title": "US Army soldier suspected of spying for Russia arrested in UK",
-   "link": "https://www.bbc.co.uk/news/articles/c6d7q77xgw0vo?at_medium=RSS&at_campaign=rss",
-   "summary": "The 41-year-old senior soldier is accused of national security offences and is being questioned in London.",
-   "source": "BBC World",
-   "topic": "國際"
+   "title": "OKXICE to debut tokenized stock trading with Strategy, Coinbase, Circle this month",
+   "link": "https://www.coindesk.com/business/2026/11/10/okxice-to-debut-tokenized-stock-trading-with-strategy-coinbase-circle-this-month",
+   "summary": "After initial issuer pushback, the blockchain venue is set to start trading on Nov. 23 and said will list over 70 assets, including Strategy’s common and preferred shares and 59 of Direxion's ETFs.",
+   "source": "CoinDesk",
+   "topic": "區塊鏈"
   },
   {
-   "title": "US House blocks bid to impeach Defence Secretary Pete Hegseth, for now",
-   "link": "https://www.bbc.co.uk/news/articles/cxly4y5jzl0qo?at_medium=RSS&at_campaign=rss",
-   "summary": "Trump welcomes the outcome, praising Hegseth as a \"Great American Patriot\", but Democrats can try again next year.",
-   "source": "BBC World",
-   "topic": "國際"
+   "title": "Meet Spiko, the largest tokenized fund in the world you’ve probably never heard about",
+   "link": "https://www.coindesk.com/business/2026/11/11/meet-spiko-the-largest-tokenized-fund-in-the-world-you-ve-probably-never-heard-about",
+   "summary": "The firm’s flagship Spiko Amundi Overnight Swap Fund (SAFO) held $2.39 billion in assets under management as of late last month.",
+   "source": "CoinDesk",
+   "topic": "區塊鏈"
   }
  ]
 }
