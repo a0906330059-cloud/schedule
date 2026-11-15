@@ -180,8 +180,29 @@
   // ---------- list rows (upcoming tab) ----------
   function editable(node, type, obj) {
     node.setAttribute("role", "button"); node.setAttribute("tabindex", "0");
-    node.addEventListener("click", function (e) { if (e.target.tagName !== "INPUT") openEdit(type, obj); });
+    node.addEventListener("click", function (e) { if (node._lp) { node._lp = false; return; } if (e.target.tagName !== "INPUT") openEdit(type, obj); });
+    longPress(node, type, obj);
     return node;
+  }
+  // press and hold ~0.6 s on an item → delete it (with 復原)
+  function delItem(type, obj) {
+    var name = obj.title || obj.name;
+    undoable("已刪除：" + name + (type === "habit" ? "（整個重複項目）" : type === "class" ? "（這個固定行程）" : ""), function () {
+      if (type === "task") data.tasks = data.tasks.filter(function (x) { return x !== obj; });
+      if (type === "habit") data.habits = data.habits.filter(function (x) { return x !== obj; });
+      if (type === "class") data.classes = data.classes.filter(function (x) { return x !== obj; });
+    });
+  }
+  function longPress(node, type, obj) {
+    var timer = null, sx = 0, sy = 0;
+    function start(x, y) { sx = x; sy = y; clearTimeout(timer); timer = setTimeout(function () { timer = null; node._lp = true; if (navigator.vibrate) navigator.vibrate(30); delItem(type, obj); }, 600); }
+    function cancel() { clearTimeout(timer); timer = null; }
+    node.addEventListener("touchstart", function (e) { if (e.target.tagName === "INPUT") return; var t = e.touches[0]; start(t.clientX, t.clientY); }, { passive: true });
+    node.addEventListener("touchmove", function (e) { var t = e.touches[0]; if (Math.abs(t.clientX - sx) > 10 || Math.abs(t.clientY - sy) > 10) cancel(); }, { passive: true });
+    node.addEventListener("touchend", cancel); node.addEventListener("touchcancel", cancel);
+    node.addEventListener("mousedown", function (e) { if (e.target.tagName !== "INPUT") start(e.clientX, e.clientY); });
+    node.addEventListener("mouseup", cancel); node.addEventListener("mouseleave", cancel);
+    node.addEventListener("contextmenu", function (e) { e.preventDefault(); });
   }
   function itemRow(t) {
     var ev = isEvent(t);
@@ -227,13 +248,25 @@
       var d = new Date(start); d.setDate(start.getDate() + i);
       var ds = fmt(d), dow = d.getDay();
       var all = data.tasks.filter(function (t) { return onDate(t, ds); });
-      var evs = all.filter(isEvent).sort(function (a, b) { return pri(b) - pri(a) || byTime(a, b); }), tks = all.filter(function (t) { return !isEvent(t); });
+      var evs = all.filter(isEvent).sort(function (a, b) {
+        var ma = a.endDate && a.endDate > a.date, mb = b.endDate && b.endDate > b.date;   // multi-day first, in a stable order so the bar lines up
+        if (ma !== mb) return ma ? -1 : 1;
+        if (ma) return a.date.localeCompare(b.date) || String(a.id).localeCompare(String(b.id));
+        return pri(b) - pri(a) || byTime(a, b);
+      }), tks = all.filter(function (t) { return !isEvent(t); });
       var cell = el("button", { class: "mcell" + (dow === 0 ? " sun" : dow === 6 ? " sat" : "") + (ds.slice(0, 7) !== month ? " other" : "") + (ds === t0 ? " today" : "") + (ds === viewDate ? " sel" : ""), "aria-label": label(ds) },
         el("span", { class: "mnum" }, d.getDate()));
       var sch = schoolOn(ds);
       if (sch.some(function (x) { return x.off; })) cell.classList.add("off");
       if (sch.length) cell.append(el("span", { class: "hol" + (sch[0].exam ? " ex" : "") }, sch[0].name));
-      evs.slice(0, 2).forEach(function (t) { cell.append(el("span", { class: "bar" + priCls(t), style: tc(t.cat) }, priMark(t) + (t.short || t.title))); });
+      evs.slice(0, 2).forEach(function (t) {
+        var multi = t.endDate && t.endDate > t.date, cls = "bar" + priCls(t), txt = priMark(t) + (t.short || t.title);
+        if (multi) {
+          cls += " span" + (ds === t.date ? " s0" : "") + (ds === t.endDate ? " s1" : "");
+          if (ds !== t.date && dow !== 0) txt = "\u00a0";   // text only where the bar starts (or a new week starts)
+        }
+        cell.append(el("span", { class: cls, style: tc(t.cat) }, txt));
+      });
       if (evs.length > 2) cell.append(el("span", { class: "more" }, "+" + (evs.length - 2)));
       if (tks.length) {
         var dots = el("span", { class: "dots" });
@@ -324,7 +357,8 @@
     chk.checked = e.done;
     chk.addEventListener("change", function () { setDone(e, viewDate, chk.checked); });
     var tx = el("span", { class: "tx" }, priMark(e.obj) + e.title);
-    tx.addEventListener("click", function () { openEdit(e.type, e.obj); });
+    tx.addEventListener("click", function () { if (tx._lp) { tx._lp = false; return; } openEdit(e.type, e.obj); });
+    longPress(tx, e.type, e.obj);
     return el("div", { class: "adi" + (e.event ? "" : " adot") + (e.done ? " done" : "") + (overdue ? " overdue" : "") + priCls(e.obj), style: tc(e.cat) }, tx, el("small", {}, tag), chk);
   }
   function addGap(tl, a, b) {
