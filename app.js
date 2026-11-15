@@ -40,6 +40,10 @@
   function settings() { data.settings = data.settings || {}; data.settings.labels = data.settings.labels || {}; data.settings.apps = data.settings.apps || {}; return data.settings; }
   function catName(cat) { return (data.settings && data.settings.labels && data.settings.labels[cat]) || cat; }
   function appName(a) { return (data.settings && data.settings.apps && data.settings.apps[a.cls]) || a.name; }
+  // priority: 0 normal, 1 important (orange), 2 urgent (red)
+  function pri(o) { return (o && +o.pri) || 0; }
+  function priCls(o) { var p = pri(o); return p ? " p" + p : ""; }
+  function priMark(o) { var p = pri(o); return p === 2 ? "‼ " : p === 1 ? "! " : ""; }
   function catColor(cat) { var c = data.settings && data.settings.colors && data.settings.colors[cat]; return c || null; }
   function tc(cat) { var c = catColor(cat); return "--tc:" + (c || "var(" + (CATS[cat] || "--c-misc") + ")"); }
   function isEvent(t) { return t.kind ? t.kind === "event" : !!t.milestone; }
@@ -184,9 +188,9 @@
     var chk = el("input", { type: "checkbox", class: "chk", "aria-label": "完成：" + t.title });
     chk.checked = !!t.done;
     chk.addEventListener("change", function () { var v = chk.checked; undoable((v ? "已完成：" : "取消完成：") + t.title, function () { t.done = v; }); });
-    return el("li", { class: "row" + (t.done ? " done" : ""), style: tc(t.cat) },
+    return el("li", { class: "row" + (t.done ? " done" : "") + priCls(t), style: tc(t.cat) },
       el("div", { class: "t" }, t.time || (ev ? "整天" : "—")),
-      editable(el("div", { class: "main" }, el("div", { class: "title" }, el("span", { class: ev ? "mk" : "mkdot" }), el("span", { class: "tx" }, t.title)), el("div", { class: "note" }, catName(t.cat) + (t.note ? " ・ " + t.note : ""))), "task", t),
+      editable(el("div", { class: "main" }, el("div", { class: "title" }, el("span", { class: ev ? "mk" : "mkdot" }), el("span", { class: "tx" }, priMark(t) + t.title)), el("div", { class: "note" }, catName(t.cat) + (t.note ? " ・ " + t.note : ""))), "task", t),
       el("div", { class: "acts" }, chk));
   }
 
@@ -223,17 +227,17 @@
       var d = new Date(start); d.setDate(start.getDate() + i);
       var ds = fmt(d), dow = d.getDay();
       var all = data.tasks.filter(function (t) { return onDate(t, ds); });
-      var evs = all.filter(isEvent).sort(byTime), tks = all.filter(function (t) { return !isEvent(t); });
+      var evs = all.filter(isEvent).sort(function (a, b) { return pri(b) - pri(a) || byTime(a, b); }), tks = all.filter(function (t) { return !isEvent(t); });
       var cell = el("button", { class: "mcell" + (dow === 0 ? " sun" : dow === 6 ? " sat" : "") + (ds.slice(0, 7) !== month ? " other" : "") + (ds === t0 ? " today" : "") + (ds === viewDate ? " sel" : ""), "aria-label": label(ds) },
         el("span", { class: "mnum" }, d.getDate()));
       var sch = schoolOn(ds);
       if (sch.some(function (x) { return x.off; })) cell.classList.add("off");
       if (sch.length) cell.append(el("span", { class: "hol" + (sch[0].exam ? " ex" : "") }, sch[0].name));
-      evs.slice(0, 2).forEach(function (t) { cell.append(el("span", { class: "bar", style: tc(t.cat) }, t.short || t.title)); });
+      evs.slice(0, 2).forEach(function (t) { cell.append(el("span", { class: "bar" + priCls(t), style: tc(t.cat) }, priMark(t) + (t.short || t.title))); });
       if (evs.length > 2) cell.append(el("span", { class: "more" }, "+" + (evs.length - 2)));
       if (tks.length) {
         var dots = el("span", { class: "dots" });
-        tks.slice(0, 6).forEach(function (t) { dots.append(el("span", { class: "dot" + (t.done ? " done" : ""), style: tc(t.cat) })); });
+        tks.slice().sort(function (a, b) { return pri(b) - pri(a); }).slice(0, 6).forEach(function (t) { dots.append(el("span", { class: "dot" + (t.done ? " done" : "") + priCls(t), style: tc(t.cat) })); });
         cell.append(dots);
       }
       (function (ds) {
@@ -295,8 +299,8 @@
         chk.checked = e.done;
         chk.addEventListener("change", function () { setDone(e, viewDate, chk.checked); });
       }
-      var blk = el("div", { class: "blk " + (e.event ? "event" : "task") + (e.fixed ? " fixed" : "") + (e.done ? " done" : ""), style: tc(e.cat) + ";top:" + top + "px;height:" + hgt + "px;left:calc(" + (e.col * w) + "% + 1px);width:calc(" + w + "% - 3px)" },
-        el("b", {}, e.title), el("small", {}, hhmm(e.start) + "–" + hhmm(e.end) + (e.sub && e.sub !== "↻" ? " ・ " + e.sub : e.sub === "↻" ? " ↻" : "") + (autoInfo(e.obj, viewDate) ? " ・ " + autoInfo(e.obj, viewDate) : "")), chk);
+      var blk = el("div", { class: "blk " + (e.event ? "event" : "task") + (e.fixed ? " fixed" : "") + (e.done ? " done" : "") + (e.fixed ? "" : priCls(e.obj)), style: tc(e.cat) + ";top:" + top + "px;height:" + hgt + "px;left:calc(" + (e.col * w) + "% + 1px);width:calc(" + w + "% - 3px)" },
+        el("b", {}, (e.fixed ? "" : priMark(e.obj)) + e.title), el("small", {}, hhmm(e.start) + "–" + hhmm(e.end) + (e.sub && e.sub !== "↻" ? " ・ " + e.sub : e.sub === "↻" ? " ↻" : "") + (autoInfo(e.obj, viewDate) ? " ・ " + autoInfo(e.obj, viewDate) : "")), chk);
       editable(blk, e.type, e.obj);
       tl.append(blk);
     });
@@ -319,9 +323,9 @@
     var chk = el("input", { type: "checkbox", class: "chk", "aria-label": "完成：" + e.title });
     chk.checked = e.done;
     chk.addEventListener("change", function () { setDone(e, viewDate, chk.checked); });
-    var tx = el("span", { class: "tx" }, e.title);
+    var tx = el("span", { class: "tx" }, priMark(e.obj) + e.title);
     tx.addEventListener("click", function () { openEdit(e.type, e.obj); });
-    return el("div", { class: "adi" + (e.event ? "" : " adot") + (e.done ? " done" : "") + (overdue ? " overdue" : ""), style: tc(e.cat) }, tx, el("small", {}, tag), chk);
+    return el("div", { class: "adi" + (e.event ? "" : " adot") + (e.done ? " done" : "") + (overdue ? " overdue" : "") + priCls(e.obj), style: tc(e.cat) }, tx, el("small", {}, tag), chk);
   }
   function addGap(tl, a, b) {
     var top = a / 60 * HOUR + 2, hgt = (b - a) / 60 * HOUR - 4;
@@ -590,6 +594,7 @@
     $("repeatWrap").hidden = m !== "new" || kind === "event";
     $("endDateWrap").hidden = !((m === "new" && kind === "event") || (m === "task" && editing && isEvent(editing.obj)));
     $("roomWrap").hidden = !fixed;
+    $("priWrap").hidden = fixed;
     $("daySel").hidden = m !== "fixed";
     $("timeLbl").textContent = fixed ? "開始" : "開始時間（可空白）";
     $("fTime").required = fixed; $("fEnd").required = fixed;
@@ -604,7 +609,7 @@
   function toggleGoal() { $("goalWrap").hidden = !(sel.value === "跑步" && (mode === "new" || mode === "task")); }
   sel.addEventListener("change", toggleGoal);
   function showDialog() { var dlg = $("sheet"); if (dlg.showModal) dlg.showModal(); else dlg.setAttribute("open", ""); }
-  function clearFields() { ["fTitle", "fNote", "fTime", "fEnd", "fRoom", "fGoal", "fEndDate"].forEach(function (id) { $(id).value = ""; }); $("fRepeat").value = ""; }
+  function clearFields() { $("fPri").value = "0"; ["fTitle", "fNote", "fTime", "fEnd", "fRoom", "fGoal", "fEndDate"].forEach(function (id) { $(id).value = ""; }); $("fRepeat").value = ""; }
   function openSheet(date, start, end) {
     editing = null; clearFields(); touched = {};
     $("fDate").value = date || viewDate;
@@ -625,6 +630,7 @@
     showFields(type);
     $("fTitle").value = type === "class" ? obj.name : obj.title;
     $("fNote").value = obj.note || "";
+    $("fPri").value = String(pri(obj));
     if (obj.remind != null) $("fRemind").value = String(obj.remind);
     if (type === "class") { $("fTime").value = obj.start; $("fEnd").value = obj.end; $("fRoom").value = obj.room || ""; sel.value = obj.kind || "課程"; $("sheetTitle").textContent = "編輯固定行程（星期" + WD[obj.day] + "）"; }
     else {
@@ -781,6 +787,7 @@
       if (editing.type === "class") { o.name = title; o.start = start || o.start; o.end = end || o.end; o.room = $("fRoom").value.trim(); o.note = note; o.kind = sel.value; }
       else {
         o.title = title; o.time = start; o.cat = sel.value; o.note = note;
+        var pv = +$("fPri").value; if (pv) o.pri = pv; else delete o.pri;
         if (end) o.endTime = end; else delete o.endTime;
         if (editing.type === "task" && $("fDate").value) { if (o.date !== $("fDate").value) delete o.short; o.date = $("fDate").value; }
         if (editing.type === "task") { var g = parseFloat($("fGoal").value); if (o.cat === "跑步" && g > 0) o.goalKm = g; else delete o.goalKm; }
@@ -789,11 +796,12 @@
     } else {
       var t = { id: "u" + Date.now(), kind: kind, title: title, date: $("fDate").value, time: start, cat: sel.value, note: note, done: false };
       if (end) t.endTime = end;
+      if (+$("fPri").value) t.pri = +$("fPri").value;
       var ed0 = $("fEndDate").value; if (kind === "event" && ed0 && ed0 > t.date) t.endDate = ed0;
       var gk = parseFloat($("fGoal").value); if (t.cat === "跑步" && gk > 0) t.goalKm = gk;
       var rp = kind === "task" ? $("fRepeat").value : "";
       applyRemind(t);
-      if (rp) { var hb = { id: t.id, title: title, cat: t.cat, time: start, endTime: end || undefined, note: note, start: t.date, end: "", days: rp === "daily" ? [0, 1, 2, 3, 4, 5, 6] : [parse(t.date).getDay()], doneDates: {} }; if (t.remind != null && t.remind >= -1 && t.remind < 1440) hb.remind = t.remind; data.habits.push(hb); }
+      if (rp) { var hb = { id: t.id, title: title, cat: t.cat, time: start, endTime: end || undefined, note: note, start: t.date, end: "", days: rp === "daily" ? [0, 1, 2, 3, 4, 5, 6] : [parse(t.date).getDay()], doneDates: {} }; if (t.remind != null && t.remind >= -1 && t.remind < 1440) hb.remind = t.remind; if (t.pri) hb.pri = t.pri; data.habits.push(hb); }
       else data.tasks.push(t);
       viewDate = t.date; month = t.date.slice(0, 7);
     }

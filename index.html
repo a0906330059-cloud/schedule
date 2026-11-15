@@ -254,6 +254,11 @@ textarea{font:inherit;font-size:.92rem;color:var(--fg);background:var(--surface)
 .cpick .creset{width:auto;border-radius:999px;padding:0 10px;background:var(--surface);color:var(--fg);font:inherit;font-size:.78rem}
 .wsel{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px}
 .cls.picked{outline:2px solid #ff6b6f;background:rgba(255,107,111,.15)}
+.blk.p1{box-shadow:inset 0 0 0 2px #fb923c}.blk.p2{box-shadow:inset 0 0 0 2px #ff4d4f;background:color-mix(in srgb,#ff4d4f 14%,var(--surface))}
+.blk.p1 b,.adi.p1 .tx,.row.p1 .tx{color:#fdba74}.blk.p2 b,.adi.p2 .tx,.row.p2 .tx{color:#ff8a8d}
+.adi.p1{box-shadow:inset 0 0 0 1px #fb923c}.adi.p2{box-shadow:inset 0 0 0 1px #ff4d4f;background:color-mix(in srgb,#ff4d4f 12%,var(--surface))}
+.bar.p1{box-shadow:0 0 0 1.5px #fb923c}.bar.p2{box-shadow:0 0 0 1.5px #ff4d4f}
+.dot.p1{box-shadow:0 0 0 2px #fb923c}.dot.p2{box-shadow:0 0 0 2px #ff4d4f}
 </style>
 </head>
 <body>
@@ -382,6 +387,7 @@ textarea{font:inherit;font-size:.92rem;color:var(--fg);background:var(--surface)
     <label id="catWrap"><span id="catLbl">分類</span><select id="fCat"></select></label>
     <label id="repeatWrap">重複<select id="fRepeat"><option value="">不重複</option><option value="daily">每天</option><option value="weekly">每週同一天</option></select></label>
     <label id="remindWrap">提醒<select id="fRemind"></select></label>
+    <label id="priWrap">重要程度<select id="fPri"><option value="0">一般</option><option value="1">! 重要（橘）</option><option value="2">‼ 緊急（紅）</option></select></label>
     <label id="goalWrap" hidden>目標距離（公里）<input id="fGoal" type="number" step="0.1" min="0"></label>
     <label class="full">備註<input id="fNote" placeholder="選填" autocomplete="off"></label>
     <button class="btn" type="button" id="cancelBtn">取消</button>
