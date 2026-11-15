@@ -2,8 +2,15 @@
   var KEY = "sched-data-v1";
   var NATIVE = typeof window.Android !== "undefined";
   var CATS = { "課程": "--c-class", "校隊": "--c-team", "作業考試": "--c-hw", "跑步": "--c-run", "英文": "--c-eng", "程式": "--c-code", "柳丁樹": "--c-tree", "閱讀": "--c-read", "讀書": "--c-study", "社團": "--c-club", "健身": "--c-gym", "其他": "--c-misc" };
-  var ITEM_CATS = ["作業考試", "讀書", "跑步", "健身", "英文", "程式", "柳丁樹", "閱讀", "其他"];
-  var FIXED_CATS = ["課程", "校隊", "社團"].concat(ITEM_CATS);
+  var BASE_CATS = ["作業考試", "讀書", "跑步", "健身", "英文", "程式", "柳丁樹", "閱讀", "其他"];
+  var ITEM_CATS = BASE_CATS.slice(), FIXED_CATS = ["課程", "校隊", "社團"].concat(ITEM_CATS);
+  // categories the user added in Settings come after the built-in ones
+  function syncCats() {
+    var extra = (data.settings && data.settings.customCats) || [];
+    ITEM_CATS.length = 0; Array.prototype.push.apply(ITEM_CATS, BASE_CATS.concat(extra));
+    FIXED_CATS.length = 0; Array.prototype.push.apply(FIXED_CATS, ["課程", "校隊", "社團"].concat(ITEM_CATS));
+  }
+  var PALETTE = ["#4d82ff", "#ff6b6f", "#5bb8ff", "#22d3ee", "#34d399", "#a3e635", "#fbbf24", "#fb923c", "#f472b6", "#c084fc", "#8b96ff", "#94a3b8", "#e8edf5"];
   var APPS = [
     { cls: "shealth", name: "Samsung Health", letter: "S", pkg: "com.sec.android.app.shealth", web: "https://play.google.com/store/apps/details?id=com.sec.android.app.shealth" },
     { cls: "epop", name: "EPOP", letter: "E", pkg: "kr.epopsoft.word", web: "https://play.google.com/store/apps/details?id=kr.epopsoft.word" },
@@ -33,7 +40,8 @@
   function settings() { data.settings = data.settings || {}; data.settings.labels = data.settings.labels || {}; data.settings.apps = data.settings.apps || {}; return data.settings; }
   function catName(cat) { return (data.settings && data.settings.labels && data.settings.labels[cat]) || cat; }
   function appName(a) { return (data.settings && data.settings.apps && data.settings.apps[a.cls]) || a.name; }
-  function tc(cat) { return "--tc:var(" + (CATS[cat] || "--c-misc") + ")"; }
+  function catColor(cat) { var c = data.settings && data.settings.colors && data.settings.colors[cat]; return c || null; }
+  function tc(cat) { var c = catColor(cat); return "--tc:" + (c || "var(" + (CATS[cat] || "--c-misc") + ")"); }
   function isEvent(t) { return t.kind ? t.kind === "event" : !!t.milestone; }
   function habitsOn(date) {
     var dow = parse(date).getDay();
@@ -63,8 +71,9 @@
     classesOn(date).forEach(function (c) {
       out.push({ type: "class", obj: c, title: c.name, cat: c.kind, start: mins(c.start), end: mins(c.end), event: true, fixed: true, sub: c.room || "", done: false });
     });
-    data.tasks.filter(function (t) { return t.date === date; }).forEach(function (t) {
+    data.tasks.filter(function (t) { return onDate(t, date); }).forEach(function (t) {
       var ev = isEvent(t), s = mins(t.time), e = mins(t.endTime);
+      if (t.endDate && t.endDate > t.date) { var first = date === t.date, last = date === t.endDate; s = first ? s : null; e = last ? e : null; if (!first && !last) s = null; }
       out.push({ type: "task", obj: t, title: t.title, cat: t.cat, start: s, end: s == null ? null : (e != null && e > s ? e : s + (ev ? 60 : 30)), event: ev, sub: t.note || "", done: !!t.done });
     });
     habitsOn(date).forEach(function (h) {
@@ -111,7 +120,9 @@
       }).catch(function () {});
     }
   }
-  function normalize(d) { d.habits = d.habits || []; d.classes = d.classes || []; d.tasks = d.tasks || []; d.settings = d.settings || {}; data = d; terms(); return d; }
+  function normalize(d) { d.habits = d.habits || []; d.classes = d.classes || []; d.tasks = d.tasks || []; d.settings = d.settings || {}; data = d; terms(); syncCats(); return d; }
+  // an event can span several days (date … endDate)
+  function onDate(t, d) { return t.date === d || (!!t.endDate && d > t.date && d <= t.endDate); }
   function readStored() {
     var s = null;
     if (NATIVE) { try { s = window.Android.load(); } catch (e) {} }   // the widget may have changed it
@@ -211,7 +222,7 @@
     for (var i = 0; i < weeks * 7; i++) {
       var d = new Date(start); d.setDate(start.getDate() + i);
       var ds = fmt(d), dow = d.getDay();
-      var all = data.tasks.filter(function (t) { return t.date === ds; });
+      var all = data.tasks.filter(function (t) { return onDate(t, ds); });
       var evs = all.filter(isEvent).sort(byTime), tks = all.filter(function (t) { return !isEvent(t); });
       var cell = el("button", { class: "mcell" + (dow === 0 ? " sun" : dow === 6 ? " sat" : "") + (ds.slice(0, 7) !== month ? " other" : "") + (ds === t0 ? " today" : "") + (ds === viewDate ? " sel" : ""), "aria-label": label(ds) },
         el("span", { class: "mnum" }, d.getDate()));
@@ -416,17 +427,40 @@
       el("p", { class: "status", style: "margin:8px 0 0" }, "日期留空代表不限。到了結束日期之後，這份課表就不會再出現在月曆和小工具上。"),
       del ? el("div", { style: "margin-top:10px" }, del) : null));
     var mine = data.classes.filter(function (c) { return termOf(c) === t; });
+    if (mine.length) {
+      var selBtn = el("button", { class: "btn" + (weekSel ? " primary" : ""), type: "button" }, weekSel ? "取消選取" : "選取多個來刪除");
+      selBtn.addEventListener("click", function () { weekSel = weekSel ? null : []; renderWeek(); });
+      var bar = el("div", { class: "wsel" }, selBtn);
+      if (weekSel) {
+        var allB = el("button", { class: "btn", type: "button" }, "全選");
+        allB.addEventListener("click", function () { weekSel = mine.slice(); renderWeek(); });
+        var dB = el("button", { class: "btn danger", type: "button" }, "刪除選取的 " + weekSel.length + " 項");
+        dB.disabled = !weekSel.length;
+        dB.addEventListener("click", function () {
+          var pick = weekSel.slice(); weekSel = null;
+          undoable("已刪除 " + pick.length + " 個固定行程", function () { data.classes = data.classes.filter(function (c) { return pick.indexOf(c) < 0; }); });
+        });
+        bar.append(allB, dB);
+      }
+      box.append(bar);
+    }
     if (!mine.length) { box.append(el("p", { class: "empty" }, "這份課表還沒有固定行程。按上面的按鈕新增，或到「設定 → 備份 → 匯入」選 Claude 給你的檔案。")); return; }
     [1, 2, 3, 4, 5, 6, 0].forEach(function (d) {
       var cs = mine.filter(function (c) { return c.day === d; }).sort(function (a, b) { return a.start.localeCompare(b.start); });
       if (!cs.length) return;
       var card = el("div", { class: "card wd" }, el("h3", {}, "星期" + WD[d]));
       cs.forEach(function (c) {
-        card.append(editable(el("div", { class: "cls", style: tc(c.kind) }, el("span", { class: "t" }, c.start + "–" + c.end), el("span", { style: "min-width:0" }, c.name + (c.room ? "（" + c.room + "）" : ""))), "class", c));
+        var row = el("div", { class: "cls" + (weekSel && weekSel.indexOf(c) >= 0 ? " picked" : ""), style: tc(c.kind) }, el("span", { class: "t" }, c.start + "–" + c.end), el("span", { style: "min-width:0" }, c.name + (c.room ? "（" + c.room + "）" : "")));
+        if (weekSel) {
+          row.setAttribute("role", "button");
+          row.addEventListener("click", function () { var i = weekSel.indexOf(c); if (i >= 0) weekSel.splice(i, 1); else weekSel.push(c); renderWeek(); });
+          card.append(row);
+        } else card.append(editable(row, "class", c));
       });
       box.append(card);
     });
   }
+  var weekSel = null;
   function newTerm() {
     var ts = terms(), today = todayStr(), cur = termFor(today);
     var t = { id: "term" + Date.now(), name: "新課表", start: today, end: "" };
@@ -542,6 +576,7 @@
     $("kEvent").setAttribute("aria-pressed", String(k === "event"));
     $("kTask").setAttribute("aria-pressed", String(k === "task"));
     $("repeatWrap").hidden = k === "event" || mode !== "new";
+    $("endDateWrap").hidden = k !== "event" || !(mode === "new" || mode === "task");
     $("kindHint").textContent = k === "event" ? "事件：考試、聚會、比賽這類偶發的事，月曆上顯示成色條。" : "任務：要完成的事，月曆上顯示成小圓點。可以設定每天或每週重複。";
   }
   $("kEvent").onclick = function () { setKind("event"); };
@@ -549,10 +584,11 @@
   function showFields(m) {
     mode = m;
     var fixed = m === "class" || m === "fixed";
-    $("kindSeg").hidden = m !== "new"; $("kindHint").hidden = m !== "new";
+    $("kindSeg").hidden = m !== "new" && m !== "task"; $("kindHint").hidden = m !== "new";
     $("dateWrap").hidden = fixed || m === "habit";
     $("fDate").required = !fixed && m !== "habit";
     $("repeatWrap").hidden = m !== "new" || kind === "event";
+    $("endDateWrap").hidden = !((m === "new" && kind === "event") || (m === "task" && editing && isEvent(editing.obj)));
     $("roomWrap").hidden = !fixed;
     $("daySel").hidden = m !== "fixed";
     $("timeLbl").textContent = fixed ? "開始" : "開始時間（可空白）";
@@ -568,7 +604,7 @@
   function toggleGoal() { $("goalWrap").hidden = !(sel.value === "跑步" && (mode === "new" || mode === "task")); }
   sel.addEventListener("change", toggleGoal);
   function showDialog() { var dlg = $("sheet"); if (dlg.showModal) dlg.showModal(); else dlg.setAttribute("open", ""); }
-  function clearFields() { ["fTitle", "fNote", "fTime", "fEnd", "fRoom", "fGoal"].forEach(function (id) { $(id).value = ""; }); $("fRepeat").value = ""; }
+  function clearFields() { ["fTitle", "fNote", "fTime", "fEnd", "fRoom", "fGoal", "fEndDate"].forEach(function (id) { $(id).value = ""; }); $("fRepeat").value = ""; }
   function openSheet(date, start, end) {
     editing = null; clearFields(); touched = {};
     $("fDate").value = date || viewDate;
@@ -594,7 +630,7 @@
     else {
       $("fTime").value = obj.time || ""; $("fEnd").value = obj.endTime || "";
       if (ITEM_CATS.indexOf(obj.cat) >= 0) sel.value = obj.cat;
-      if (type === "task") { $("fDate").value = obj.date; $("fGoal").value = obj.goalKm || ""; }
+      if (type === "task") { $("fDate").value = obj.date; $("fGoal").value = obj.goalKm || ""; $("fEndDate").value = obj.endDate || ""; setKind(isEvent(obj) ? "event" : "task"); }
       toggleGoal();
       $("sheetTitle").textContent = type === "habit" ? "編輯重複任務" : (isEvent(obj) ? "編輯事件" : "編輯任務");
     }
@@ -748,10 +784,12 @@
         if (end) o.endTime = end; else delete o.endTime;
         if (editing.type === "task" && $("fDate").value) { if (o.date !== $("fDate").value) delete o.short; o.date = $("fDate").value; }
         if (editing.type === "task") { var g = parseFloat($("fGoal").value); if (o.cat === "跑步" && g > 0) o.goalKm = g; else delete o.goalKm; }
+        if (editing.type === "task") { o.kind = kind; var ed = $("fEndDate").value; if (kind === "event" && ed && ed > o.date) o.endDate = ed; else delete o.endDate; }
       }
     } else {
       var t = { id: "u" + Date.now(), kind: kind, title: title, date: $("fDate").value, time: start, cat: sel.value, note: note, done: false };
       if (end) t.endTime = end;
+      var ed0 = $("fEndDate").value; if (kind === "event" && ed0 && ed0 > t.date) t.endDate = ed0;
       var gk = parseFloat($("fGoal").value); if (t.cat === "跑步" && gk > 0) t.goalKm = gk;
       var rp = kind === "task" ? $("fRepeat").value : "";
       applyRemind(t);
@@ -908,14 +946,53 @@
     FIXED_CATS.forEach(function (c) {
       var inp = el("input", { value: catName(c), maxlength: "8", "aria-label": c + " 的新名稱" });
       inp.addEventListener("input", function () { var v = inp.value.trim(); if (v && v !== c) settings().labels[c] = v; else delete settings().labels[c]; fillCats(); renderFilters(); renderAll(); savedSoon(); });
-      cb.append(el("span", { style: tc(c) }, el("i"), c), inp);
+      var sw = el("button", { type: "button", class: "csw", style: tc(c), "aria-label": "換 " + catName(c) + " 的顏色" });
+      sw.addEventListener("click", function () { pickColor(c, sw); });
+      var row = el("span", { class: "catrow" }, inp);
+      if ((settings().customCats || []).indexOf(c) >= 0) {
+        var x = el("button", { type: "button", class: "cdel", "aria-label": "刪除分類 " + c }, "✕");
+        x.addEventListener("click", function () {
+          undoable("已刪除分類：" + catName(c) + "（用這個分類的事改成「其他」）", function () {
+            var st = settings(); st.customCats = st.customCats.filter(function (k) { return k !== c; });
+            data.tasks.concat(data.habits).forEach(function (t) { if (t.cat === c) t.cat = "其他"; });
+            data.classes.forEach(function (k) { if (k.kind === c) k.kind = "其他"; });
+            syncCats();
+          });
+          refreshEverything();
+        });
+        row.append(x);
+      }
+      cb.append(sw, row);
     });
+    var ni = el("input", { placeholder: "新分類名稱，例如：報告", maxlength: "8", "aria-label": "新分類名稱" });
+    var nb = el("button", { type: "button", class: "btn" }, "＋ 新增分類");
+    nb.addEventListener("click", function () {
+      var v = ni.value.trim(); if (!v) { ni.focus(); return; }
+      var st = settings(); st.customCats = st.customCats || [];
+      if (FIXED_CATS.indexOf(v) >= 0 || FIXED_CATS.some(function (k) { return catName(k) === v; })) { toast("已經有「" + v + "」這個分類了"); return; }
+      st.customCats.push(v); st.colors = st.colors || {}; st.colors[v] = PALETTE[st.customCats.length % PALETTE.length];
+      syncCats(); persist(); refreshEverything(); toast("已新增分類「" + v + "」，點左邊的色塊可以換顏色");
+    });
+    cb.append(el("span", {}), el("span", { class: "catrow" }, ni, nb));
     var ab = $("appRename"); ab.replaceChildren();
     APPS.forEach(function (a) {
       var inp = el("input", { value: appName(a), maxlength: "10", "aria-label": a.name + " 按鈕的名稱" });
       inp.addEventListener("input", function () { var v = inp.value.trim(); if (v && v !== a.name) settings().apps[a.cls] = v; else delete settings().apps[a.cls]; renderShortcuts(); savedSoon(); });
       ab.append(el("span", {}, a.name), inp);
     });
+  }
+  function pickColor(cat, anchor) {
+    var old = document.querySelector(".cpick"); if (old) { old.remove(); if (old.dataset.cat === cat) return; }
+    var box = el("div", { class: "cpick" }); box.dataset.cat = cat;
+    PALETTE.forEach(function (col) {
+      var b = el("button", { type: "button", style: "background:" + col, "aria-label": col });
+      b.addEventListener("click", function () { var st = settings(); st.colors = st.colors || {}; st.colors[cat] = col; persist(); box.remove(); refreshEverything(); });
+      box.append(b);
+    });
+    var r = el("button", { type: "button", class: "creset" }, "預設");
+    r.addEventListener("click", function () { var st = settings(); if (st.colors) delete st.colors[cat]; persist(); box.remove(); refreshEverything(); });
+    box.append(r);
+    anchor.parentNode.insertBefore(box, anchor.nextSibling.nextSibling);
   }
   $("sTitle").addEventListener("input", function () { var v = $("sTitle").value.trim(); if (v) settings().title = v; else delete settings().title; applyTitle(); savedSoon(); });
   $("sWake").addEventListener("change", function () { if ($("sWake").value) settings().wake = $("sWake").value; renderDay(); savedSoon(); });

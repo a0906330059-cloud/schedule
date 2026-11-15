@@ -246,6 +246,14 @@ textarea{font:inherit;font-size:.92rem;color:var(--fg);background:var(--surface)
 .schoolDay{display:flex;gap:8px;align-items:center;margin:0 0 8px;padding:8px 12px;border-radius:10px;background:rgba(255,107,111,.12);color:#ffb3b5;font-size:.86rem;font-weight:700}
 .schoolDay.ex{background:rgba(251,191,36,.12);color:#fcd34d}
 .weekwrap h2{margin-top:18px}
+.csw{width:28px;height:28px;border-radius:8px;border:2px solid var(--line);background:var(--tc);padding:0;cursor:pointer}
+.catrow{display:flex;gap:6px;align-items:center;min-width:0}.catrow input{flex:1;min-width:0}
+.cdel{border:0;background:none;color:var(--muted);font-size:1rem;padding:4px 6px}
+.cpick{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px;padding:6px 0 4px}
+.cpick button{width:30px;height:30px;border-radius:50%;border:2px solid rgba(255,255,255,.25)}
+.cpick .creset{width:auto;border-radius:999px;padding:0 10px;background:var(--surface);color:var(--fg);font:inherit;font-size:.78rem}
+.wsel{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px}
+.cls.picked{outline:2px solid #ff6b6f;background:rgba(255,107,111,.15)}
 </style>
 </head>
 <body>
@@ -297,7 +305,7 @@ textarea{font:inherit;font-size:.92rem;color:var(--fg);background:var(--surface)
     <div class="card">
       <div class="setting"><strong>App 名稱</strong>
         <input id="sTitle" maxlength="20" style="flex-basis:100%"></div>
-      <div class="setting"><strong>分類名稱</strong><p>改了之後，所有事項上的分類名稱都會跟著變。</p>
+      <div class="setting"><strong>分類名稱和顏色</strong><p>點色塊換顏色、改名稱，所有事項都會跟著變。最下面可以新增自己的分類。</p>
         <div class="rename" id="catRename"></div></div>
       <div class="setting"><strong>上方捷徑名稱</strong>
         <div class="rename" id="appRename"></div></div>
@@ -366,6 +374,7 @@ textarea{font:inherit;font-size:.92rem;color:var(--fg);background:var(--surface)
     <p class="hint" id="kindHint">事件：考試、聚會、比賽這類偶發的事，月曆上顯示成色條。</p>
     <label class="full">內容<input id="fTitle" required placeholder="例如：明天 3 點 微積分小考" autocomplete="off"><span class="nlHint" id="nlHint"></span></label>
     <label id="dateWrap">日期<input id="fDate" type="date"></label>
+    <label id="endDateWrap" hidden>到哪天（多天活動才填）<input id="fEndDate" type="date"></label>
     <label><span id="timeLbl">時間</span><input id="fTime" type="time"></label>
     <label id="endWrap">結束（可空白）<input id="fEnd" type="time"></label>
     <div class="daysel" id="daySel" hidden></div>
