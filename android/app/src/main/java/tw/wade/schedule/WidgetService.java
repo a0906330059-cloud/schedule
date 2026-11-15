@@ -40,7 +40,14 @@ public class WidgetService extends RemoteViewsService {
 
     static String fmtKm(double k) { return k == Math.floor(k) ? String.valueOf((int) k) : String.valueOf(k); }
 
+    /** Colors the user picked in Settings (category → "#rrggbb"). */
+    static JSONObject userColors = null;
+
     static int colorFor(String cat) {
+        if (userColors != null && cat != null) {
+            String c = userColors.optString(cat, "");
+            if (c.startsWith("#")) try { return Color.parseColor(c); } catch (Exception ignored) { }
+        }
         switch (cat == null ? "" : cat) {
             case "課程": return Color.parseColor("#4D82FF");
             case "校隊": return Color.parseColor("#E8EDF5");
@@ -98,6 +105,7 @@ public class WidgetService extends RemoteViewsService {
                 JSONObject auto = data.optJSONObject("auto");
                 if (auto != null && !today.equals(auto.optString("date"))) auto = null;
                 JSONObject settings = data.optJSONObject("settings");
+                userColors = settings == null ? null : settings.optJSONObject("colors");
                 int epopNeed = settings == null ? 10 : settings.optInt("epopMin", 10);
                 JSONArray terms = data.optJSONArray("terms");
                 JSONArray classes = data.optJSONArray("classes");
@@ -111,7 +119,8 @@ public class WidgetService extends RemoteViewsService {
                 JSONArray tasks = data.optJSONArray("tasks");
                 for (int i = 0; tasks != null && i < tasks.length(); i++) {
                     JSONObject t = tasks.getJSONObject(i);
-                    if (!today.equals(t.optString("date"))) continue;
+                    String td = t.optString("date"), te = t.optString("endDate");
+                    if (!today.equals(td) && (te.isEmpty() || today.compareTo(td) < 0 || today.compareTo(te) > 0)) continue;
                     boolean event = t.has("kind") ? "event".equals(t.optString("kind")) : t.optBoolean("milestone");
                     Item ti = new Item(t.optString("time"), t.optString("title"), colorFor(t.optString("cat")), event,
                             "task", t.optString("id"), t.optBoolean("done"));
