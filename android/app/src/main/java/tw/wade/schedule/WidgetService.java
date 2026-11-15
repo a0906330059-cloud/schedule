@@ -25,7 +25,7 @@ public class WidgetService extends RemoteViewsService {
     }
 
     private static final class Item {
-        final String time, title, type, id; final int color; final boolean event, done; String info = "";
+        final String time, title, type, id; final int color; final boolean event, done; String info = ""; int pri = 0;
         Item(String time, String title, int color, boolean event, String type, String id, boolean done) {
             this.time = time; this.title = title; this.color = color; this.event = event; this.type = type; this.id = id; this.done = done;
         }
@@ -124,6 +124,7 @@ public class WidgetService extends RemoteViewsService {
                     boolean event = t.has("kind") ? "event".equals(t.optString("kind")) : t.optBoolean("milestone");
                     Item ti = new Item(t.optString("time"), t.optString("title"), colorFor(t.optString("cat")), event,
                             "task", t.optString("id"), t.optBoolean("done"));
+                    ti.pri = t.optInt("pri", 0);
                     if (auto != null && t.optDouble("goalKm", 0) > 0 && auto.has("runKm"))
                         ti.info = "已跑 " + auto.optDouble("runKm") + "/" + fmtKm(t.optDouble("goalKm")) + "K";
                     items.add(ti);
@@ -139,6 +140,7 @@ public class WidgetService extends RemoteViewsService {
                     JSONObject done = h.optJSONObject("doneDates");
                     Item hi = new Item(h.optString("time"), h.optString("title"), colorFor(h.optString("cat")), false,
                             "habit", h.optString("id"), done != null && done.optBoolean(today));
+                    hi.pri = h.optInt("pri", 0);
                     if (auto != null && "epop".equals(h.optString("link")) && auto.has("epopMin"))
                         hi.info = "已用 " + auto.optInt("epopMin") + "/" + (epopNeed * Math.max(1, h.optInt("epopSlot", 1))) + " 分";
                     items.add(hi);
@@ -152,7 +154,7 @@ public class WidgetService extends RemoteViewsService {
             Item it = items.get(position);
             RemoteViews v = new RemoteViews(ctx.getPackageName(), R.layout.widget_item);
             v.setTextViewText(R.id.i_time, it.time.isEmpty() ? (it.event ? "整天" : "—") : it.time);
-            v.setTextViewText(R.id.i_title, it.title.replaceFirst("^(Python|柳丁樹)：", ""));
+            v.setTextViewText(R.id.i_title, (it.pri == 2 ? "‼ " : it.pri == 1 ? "! " : "") + it.title.replaceFirst("^(Python|柳丁樹)：", ""));
             v.setViewVisibility(R.id.i_bar, it.event ? View.VISIBLE : View.GONE);
             v.setViewVisibility(R.id.i_dot, it.event ? View.GONE : View.VISIBLE);
             v.setInt(R.id.i_bar, "setColorFilter", it.color);
