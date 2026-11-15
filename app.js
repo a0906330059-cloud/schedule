@@ -24,6 +24,8 @@
   function pad(n) { return String(n).padStart(2, "0"); }
   function fmt(d) { return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()); }
   function todayStr() { return fmt(new Date()); }
+  // already over → shown faded/grey
+  function isPast(date, endMin) { var t = todayStr(); if (date < t) return true; if (date > t || endMin == null) return false; var n = new Date(); return endMin <= n.getHours() * 60 + n.getMinutes(); }
   function parse(s) { var p = s.split("-").map(Number); return new Date(p[0], p[1] - 1, p[2]); }
   function addDays(s, n) { var d = parse(s); d.setDate(d.getDate() + n); return fmt(d); }
   function label(s) { var d = parse(s); return (d.getMonth() + 1) + "/" + d.getDate() + "（" + WD[d.getDay()] + "）"; }
@@ -209,7 +211,7 @@
     var chk = el("input", { type: "checkbox", class: "chk", "aria-label": "完成：" + t.title });
     chk.checked = !!t.done;
     chk.addEventListener("change", function () { var v = chk.checked; undoable((v ? "已完成：" : "取消完成：") + t.title, function () { t.done = v; }); });
-    return el("li", { class: "row" + (t.done ? " done" : "") + priCls(t), style: tc(t.cat) },
+    return el("li", { class: "row" + (t.done ? " done" : "") + priCls(t) + ((t.endDate || t.date) < todayStr() ? " past" : ""), style: tc(t.cat) },
       el("div", { class: "t" }, t.time || (ev ? "整天" : "—")),
       editable(el("div", { class: "main" }, el("div", { class: "title" }, el("span", { class: ev ? "mk" : "mkdot" }), el("span", { class: "tx" }, priMark(t) + t.title)), el("div", { class: "note" }, catName(t.cat) + (t.note ? " ・ " + t.note : ""))), "task", t),
       el("div", { class: "acts" }, chk));
@@ -254,7 +256,7 @@
         if (ma) return a.date.localeCompare(b.date) || String(a.id).localeCompare(String(b.id));
         return pri(b) - pri(a) || byTime(a, b);
       }), tks = all.filter(function (t) { return !isEvent(t); });
-      var cell = el("button", { class: "mcell" + (dow === 0 ? " sun" : dow === 6 ? " sat" : "") + (ds.slice(0, 7) !== month ? " other" : "") + (ds === t0 ? " today" : "") + (ds === viewDate ? " sel" : ""), "aria-label": label(ds) },
+      var cell = el("button", { class: "mcell" + (dow === 0 ? " sun" : dow === 6 ? " sat" : "") + (ds.slice(0, 7) !== month ? " other" : "") + (ds === t0 ? " today" : "") + (ds === viewDate ? " sel" : "") + (ds < t0 ? " past" : ""), "aria-label": label(ds) },
         el("span", { class: "mnum" }, d.getDate()));
       var sch = schoolOn(ds);
       if (sch.some(function (x) { return x.off; })) cell.classList.add("off");
@@ -332,7 +334,7 @@
         chk.checked = e.done;
         chk.addEventListener("change", function () { setDone(e, viewDate, chk.checked); });
       }
-      var blk = el("div", { class: "blk " + (e.event ? "event" : "task") + (e.fixed ? " fixed" : "") + (e.done ? " done" : "") + (e.fixed ? "" : priCls(e.obj)), style: tc(e.cat) + ";top:" + top + "px;height:" + hgt + "px;left:calc(" + (e.col * w) + "% + 1px);width:calc(" + w + "% - 3px)" },
+      var blk = el("div", { class: "blk " + (e.event ? "event" : "task") + (e.fixed ? " fixed" : "") + (e.done ? " done" : "") + (e.fixed ? "" : priCls(e.obj)) + (isPast(viewDate, e.end) ? " past" : ""), style: tc(e.cat) + ";top:" + top + "px;height:" + hgt + "px;left:calc(" + (e.col * w) + "% + 1px);width:calc(" + w + "% - 3px)" },
         el("b", {}, (e.fixed ? "" : priMark(e.obj)) + e.title), el("small", {}, hhmm(e.start) + "–" + hhmm(e.end) + (e.sub && e.sub !== "↻" ? " ・ " + e.sub : e.sub === "↻" ? " ↻" : "") + (autoInfo(e.obj, viewDate) ? " ・ " + autoInfo(e.obj, viewDate) : "")), chk);
       editable(blk, e.type, e.obj);
       tl.append(blk);
@@ -359,7 +361,7 @@
     var tx = el("span", { class: "tx" }, priMark(e.obj) + e.title);
     tx.addEventListener("click", function () { if (tx._lp) { tx._lp = false; return; } openEdit(e.type, e.obj); });
     longPress(tx, e.type, e.obj);
-    return el("div", { class: "adi" + (e.event ? "" : " adot") + (e.done ? " done" : "") + (overdue ? " overdue" : "") + priCls(e.obj), style: tc(e.cat) }, tx, el("small", {}, tag), chk);
+    return el("div", { class: "adi" + (e.event ? "" : " adot") + (e.done ? " done" : "") + (overdue ? " overdue" : "") + priCls(e.obj) + (viewDate < todayStr() ? " past" : ""), style: tc(e.cat) }, tx, el("small", {}, tag), chk);
   }
   function addGap(tl, a, b) {
     var top = a / 60 * HOUR + 2, hgt = (b - a) / 60 * HOUR - 4;
