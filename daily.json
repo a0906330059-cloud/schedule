@@ -1,27 +1,27 @@
 {
- "date": "2026-11-14",
- "topic": "國際",
+ "date": "2026-11-15",
+ "topic": "綜合",
  "articles": [
   {
-   "title": "'Miracle on Mississippi' - All passengers rescued after New Orleans cruise ship collision",
-   "link": "https://www.bbc.co.uk/news/articles/cw20xmy0m5yyo?at_medium=RSS&at_campaign=rss",
-   "summary": "The collision leaves 32 people in hospital with non-critical injuries, but no-one unaccounted for.",
-   "source": "BBC World",
-   "topic": "國際"
+   "title": "Bitcoin crashes to 3-month low below $63,000 as analyst flags fourth capitulation wave",
+   "link": "https://www.coindesk.com/markets/2026/11/14/bitcoin-drifts-back-to-usd65-000-deep-value-zone-says-analyst",
+   "summary": "\"They are now selling at the very price they wish they had taken advantage of three months ago,\" wrote James Check.",
+   "source": "CoinDesk",
+   "topic": "區塊鏈"
   },
   {
-   "title": "Microsoft 'deeply sorry' for global outage after almost 24 hours of disruption",
-   "link": "https://www.bbc.co.uk/news/articles/c6rrg51rkz09o?at_medium=RSS&at_campaign=rss",
-   "summary": "Experts say the event is a \"stark reminder\" of how heavily the world relies on a small group of big tech providers.",
-   "source": "BBC World",
-   "topic": "國際"
+   "title": "The Week Jensen Huang Fell: How a Spy Scandal Toppled Nvidia’s CEO",
+   "link": "https://decrypt.co/383280/the-week-jensen-huang-fell-how-spy-scandal-toppled-nvidia-ceo",
+   "summary": "In a matter of days, the executive synonymous with the AI boom resigned after 33 years amid reports of affairs and suspected Chinese intelligence ties—sending Nvidia’s stock reeling and leaving the chipmaker leaderless.",
+   "source": "Decrypt",
+   "topic": "區塊鏈"
   },
   {
-   "title": "Why is Microsoft's outage lasting so long and will emails be lost?",
-   "link": "https://www.bbc.co.uk/news/articles/cwvg238zrnm5o?at_medium=RSS&at_campaign=rss",
-   "summary": "Microsoft says it is continuing to restore services including Outlook and Teams following a global outage.",
-   "source": "BBC World",
-   "topic": "國際"
+   "title": "With Starship catch, SpaceX still shows it can dazzle the world",
+   "link": "https://arstechnica.com/space/2026/11/with-starship-catch-spacex-still-shows-it-can-dazzle-the-world/",
+   "summary": "It felt like stepping into the future.",
+   "source": "Ars Technica",
+   "topic": "科技"
   }
  ]
 }
