@@ -1,27 +1,27 @@
 {
- "date": "2026-11-15",
- "topic": "綜合",
+ "date": "2026-11-16",
+ "topic": "區塊鏈",
  "articles": [
   {
-   "title": "Bitcoin crashes to 3-month low below $63,000 as analyst flags fourth capitulation wave",
-   "link": "https://www.coindesk.com/markets/2026/11/14/bitcoin-drifts-back-to-usd65-000-deep-value-zone-says-analyst",
-   "summary": "\"They are now selling at the very price they wish they had taken advantage of three months ago,\" wrote James Check.",
+   "title": "Did prediction markets call the U.S. midterm election?: State of Crypto",
+   "link": "https://www.coindesk.com/policy/2026/11/15/did-prediction-markets-call-the-u-s-midterm-election-state-of-crypto",
+   "summary": "Prediction markets and polls largely aligned by the end of the 2026 election cycle, and both had notable misses.",
    "source": "CoinDesk",
    "topic": "區塊鏈"
   },
   {
-   "title": "The Week Jensen Huang Fell: How a Spy Scandal Toppled Nvidia’s CEO",
-   "link": "https://decrypt.co/383280/the-week-jensen-huang-fell-how-spy-scandal-toppled-nvidia-ceo",
-   "summary": "In a matter of days, the executive synonymous with the AI boom resigned after 33 years amid reports of affairs and suspected Chinese intelligence ties—sending Nvidia’s stock reeling and leaving the chipmaker leaderless.",
-   "source": "Decrypt",
+   "title": "Crypto insiders aren't counting on silver linings in Congress' 'lame duck' session",
+   "link": "https://www.coindesk.com/news-analysis/2026/11/13/crypto-insiders-aren-t-counting-on-silver-linings-in-congress-lame-duck-session",
+   "summary": "With ascendent Democrats ready to pursue their own crypto and tech agendas next year, the final weeks of this session probably won't produce crypto surprises.",
+   "source": "CoinDesk",
    "topic": "區塊鏈"
   },
   {
-   "title": "With Starship catch, SpaceX still shows it can dazzle the world",
-   "link": "https://arstechnica.com/space/2026/11/with-starship-catch-spacex-still-shows-it-can-dazzle-the-world/",
-   "summary": "It felt like stepping into the future.",
-   "source": "Ars Technica",
-   "topic": "科技"
+   "title": "XRP crashes to its lowest since November 2024 as money leaves crypto",
+   "link": "https://www.coindesk.com/markets/2026/11/15/xrp-crashes-to-its-lowest-since-november-2024-as-money-leaves-crypto",
+   "summary": "XRP tanked to its lowest level since November 2024 as ETF outflows and shrinking stablecoin supply add to pressure on crypto markets.",
+   "source": "CoinDesk",
+   "topic": "區塊鏈"
   }
  ]
 }
