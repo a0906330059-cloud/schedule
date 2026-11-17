@@ -1,27 +1,27 @@
 {
- "date": "2026-11-16",
- "topic": "區塊鏈",
+ "date": "2026-11-17",
+ "topic": "科技",
  "articles": [
   {
-   "title": "Did prediction markets call the U.S. midterm election?: State of Crypto",
-   "link": "https://www.coindesk.com/policy/2026/11/15/did-prediction-markets-call-the-u-s-midterm-election-state-of-crypto",
-   "summary": "Prediction markets and polls largely aligned by the end of the 2026 election cycle, and both had notable misses.",
-   "source": "CoinDesk",
-   "topic": "區塊鏈"
+   "title": "Robo-soldier startup backed by Eric Trump misses payroll, may collapse",
+   "link": "https://arstechnica.com/ai/2026/11/robo-soldier-startup-backed-by-eric-trump-misses-payroll-may-collapse/",
+   "summary": "Robotics startup misses payroll a year after CEO used funds for luxury home.",
+   "source": "Ars Technica",
+   "topic": "科技"
   },
   {
-   "title": "Crypto insiders aren't counting on silver linings in Congress' 'lame duck' session",
-   "link": "https://www.coindesk.com/news-analysis/2026/11/13/crypto-insiders-aren-t-counting-on-silver-linings-in-congress-lame-duck-session",
-   "summary": "With ascendent Democrats ready to pursue their own crypto and tech agendas next year, the final weeks of this session probably won't produce crypto surprises.",
-   "source": "CoinDesk",
-   "topic": "區塊鏈"
+   "title": "Three small failures combined to take down Microsoft 365",
+   "link": "https://arstechnica.com/gadgets/2026/11/microsoft-details-how-three-problems-combined-for-a-global-outage/",
+   "summary": "A hidden bug, shifting traffic, and reduced capacity led to cascading failures.",
+   "source": "Ars Technica",
+   "topic": "科技"
   },
   {
-   "title": "XRP crashes to its lowest since November 2024 as money leaves crypto",
-   "link": "https://www.coindesk.com/markets/2026/11/15/xrp-crashes-to-its-lowest-since-november-2024-as-money-leaves-crypto",
-   "summary": "XRP tanked to its lowest level since November 2024 as ETF outflows and shrinking stablecoin supply add to pressure on crypto markets.",
-   "source": "CoinDesk",
-   "topic": "區塊鏈"
+   "title": "Hyperscale data centers use 2% of US electricity",
+   "link": "https://arstechnica.com/science/2026/11/hyperscale-data-centers-use-2-of-us-electricity/",
+   "summary": "Study attempts to tally hyperscalers’ energy use and emissions.",
+   "source": "Ars Technica",
+   "topic": "科技"
   }
  ]
 }
