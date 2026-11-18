@@ -1,27 +1,27 @@
 {
- "date": "2026-11-17",
- "topic": "科技",
+ "date": "2026-11-18",
+ "topic": "國際",
  "articles": [
   {
-   "title": "Robo-soldier startup backed by Eric Trump misses payroll, may collapse",
-   "link": "https://arstechnica.com/ai/2026/11/robo-soldier-startup-backed-by-eric-trump-misses-payroll-may-collapse/",
-   "summary": "Robotics startup misses payroll a year after CEO used funds for luxury home.",
-   "source": "Ars Technica",
-   "topic": "科技"
+   "title": "Putin's Crimean Bridge partly collapses as Zelensky hails 'unprecedented' attack by Ukraine",
+   "link": "https://www.bbc.co.uk/news/articles/cw772jk4rvmxo?at_medium=RSS&at_campaign=rss",
+   "summary": "Ukraine says the missile and drone attack on the strategic bridge in the Russian-annexed Crimea took weeks to plan.",
+   "source": "BBC World",
+   "topic": "國際"
   },
   {
-   "title": "Three small failures combined to take down Microsoft 365",
-   "link": "https://arstechnica.com/gadgets/2026/11/microsoft-details-how-three-problems-combined-for-a-global-outage/",
-   "summary": "A hidden bug, shifting traffic, and reduced capacity led to cascading failures.",
-   "source": "Ars Technica",
-   "topic": "科技"
+   "title": "How the attack on Crimean Bridge unfolded",
+   "link": "https://www.bbc.co.uk/news/articles/crz9dgz28zwdo?at_medium=RSS&at_campaign=rss",
+   "summary": "One of the key symbols of Russia's occupation of Ukraine has suffered major damage after a seven-stage attack by Kyiv.",
+   "source": "BBC World",
+   "topic": "國際"
   },
   {
-   "title": "Hyperscale data centers use 2% of US electricity",
-   "link": "https://arstechnica.com/science/2026/11/hyperscale-data-centers-use-2-of-us-electricity/",
-   "summary": "Study attempts to tally hyperscalers’ energy use and emissions.",
-   "source": "Ars Technica",
-   "topic": "科技"
+   "title": "Nvidia says it won't reinstate Huang as firm reports bumper results",
+   "link": "https://www.bbc.co.uk/news/articles/cm2kl50vkwkdo?at_medium=RSS&at_campaign=rss",
+   "summary": "The AI chip giant reported strong quarterly earnings on Tuesday after the dramatic exit of Jensen Huang.",
+   "source": "BBC World",
+   "topic": "國際"
   }
  ]
 }
