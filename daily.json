@@ -1,27 +1,27 @@
 {
- "date": "2026-11-20",
- "topic": "科技",
+ "date": "2026-11-21",
+ "topic": "國際",
  "articles": [
   {
-   "title": "Amazon fights the Delivery Protection Act with homepage banner, in-app pop-up",
-   "link": "https://arstechnica.com/tech-policy/2026/11/amazon-takes-its-fight-against-nyc-delivery-bill-to-shoppers-with-in-app-pop-up/",
-   "summary": "Amazon now uses its shopping platform for political purposes.",
-   "source": "Ars Technica",
-   "topic": "科技"
+   "title": "Tech stock sell-off drags markets down as Anthropic shares slide",
+   "link": "https://www.bbc.co.uk/news/articles/c6808ym10vzgo?at_medium=RSS&at_campaign=rss",
+   "summary": "Pressures weighed on US markets, with the S&P 500 and the Dow Jones Industrial Average pushed into correction territory.",
+   "source": "BBC World",
+   "topic": "國際"
   },
   {
-   "title": "MAHA PAC spent more on steak, luxury club than candidates, report shows",
-   "link": "https://arstechnica.com/health/2026/11/maha-pac-spent-more-on-steak-luxury-club-than-candidates-report-shows/",
-   "summary": "Expert called MAHA's spending \"pretty unusual\" for a PAC.",
-   "source": "Ars Technica",
-   "topic": "科技"
+   "title": "UK to explore even closer ties with EU after agreeing deal, says Burnham",
+   "link": "https://www.bbc.co.uk/news/articles/c6jreyqgw4e9o?at_medium=RSS&at_campaign=rss",
+   "summary": "The UK-EU deal agreed on Friday covers British food exports, emissions trading and a youth experience scheme.",
+   "source": "BBC World",
+   "topic": "國際"
   },
   {
-   "title": "Man hired by Russia spied on Silicon Valley tech and defense company, feds say",
-   "link": "https://arstechnica.com/security/2026/11/man-charged-with-spying-on-silicon-valley-tech-and-defense-company-for-russia/",
-   "summary": "25-year-old accused of stalking employees at coffee shop and in an \"aggressive\" car pursuit.",
-   "source": "Ars Technica",
-   "topic": "科技"
+   "title": "Russian missile hits Poland as Ukraine's allies hold military exercise, says Tusk",
+   "link": "https://www.bbc.co.uk/news/articles/cqx2x9dklxnro?at_medium=RSS&at_campaign=rss",
+   "summary": "Nobody was hurt and no damage has been reported, but Warsaw described the incident as a \"provocation\" from Moscow.",
+   "source": "BBC World",
+   "topic": "國際"
   }
  ]
 }
