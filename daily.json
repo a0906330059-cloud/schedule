@@ -1,27 +1,27 @@
 {
- "date": "2026-11-21",
- "topic": "國際",
+ "date": "2026-11-22",
+ "topic": "綜合",
  "articles": [
   {
-   "title": "Tech stock sell-off drags markets down as Anthropic shares slide",
-   "link": "https://www.bbc.co.uk/news/articles/c6808ym10vzgo?at_medium=RSS&at_campaign=rss",
-   "summary": "Pressures weighed on US markets, with the S&P 500 and the Dow Jones Industrial Average pushed into correction territory.",
-   "source": "BBC World",
-   "topic": "國際"
+   "title": "Bitcoin rebounds above $60,000 after $1.8 billion crypto liquidation wave",
+   "link": "https://www.coindesk.com/markets/2026/11/21/bitcoin-bounces-9-from-two-year-low-to-retake-usd60-000-as-traders-eye-monday-s-stock-open",
+   "summary": "The selloff wiped out $1.8 billion in leveraged crypto positions, mostly from bullish bets on rising prices.",
+   "source": "CoinDesk",
+   "topic": "區塊鏈"
   },
   {
-   "title": "UK to explore even closer ties with EU after agreeing deal, says Burnham",
-   "link": "https://www.bbc.co.uk/news/articles/c6jreyqgw4e9o?at_medium=RSS&at_campaign=rss",
-   "summary": "The UK-EU deal agreed on Friday covers British food exports, emissions trading and a youth experience scheme.",
-   "source": "BBC World",
-   "topic": "國際"
+   "title": "GTA 6 Leaker Dangles a PC Port Behind a $15 Million Crypto Pump",
+   "link": "https://decrypt.co/383756/gta-6-leaker-dangles-pc-port-15-million-crypto-pump",
+   "summary": "The anonymous leaker, Cyberleek, released a 209 GB Xbox build but is withholding the executable that could enable a PC port until its CYBERLEEK token hits $15 million.",
+   "source": "Decrypt",
+   "topic": "區塊鏈"
   },
   {
-   "title": "Russian missile hits Poland as Ukraine's allies hold military exercise, says Tusk",
-   "link": "https://www.bbc.co.uk/news/articles/cqx2x9dklxnro?at_medium=RSS&at_campaign=rss",
-   "summary": "Nobody was hurt and no damage has been reported, but Warsaw described the incident as a \"provocation\" from Moscow.",
-   "source": "BBC World",
-   "topic": "國際"
+   "title": "Review: Godzilla Minus Zero joins the list of truly stellar sequels",
+   "link": "https://arstechnica.com/culture/2026/11/review-godzilla-minus-zero-is-everything-we-could-want-in-a-sequel/",
+   "summary": "Director Takashi Yamazaki ups the ante by pitting Godzilla against one of the monster's greatest foes",
+   "source": "Ars Technica",
+   "topic": "科技"
   }
  ]
 }
