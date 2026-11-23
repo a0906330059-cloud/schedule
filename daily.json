@@ -1,27 +1,27 @@
 {
- "date": "2026-11-22",
- "topic": "綜合",
+ "date": "2026-11-23",
+ "topic": "區塊鏈",
  "articles": [
+  {
+   "title": "More on the pending oversight hearings: State of Crypto",
+   "link": "https://www.coindesk.com/",
+   "summary": "New letters show the widening range of Congressional committees that will be probing the presidential administration — and the crypto collateral that may be swept up.",
+   "source": "CoinDesk",
+   "topic": "區塊鏈"
+  },
+  {
+   "title": "Bitcoin's quantum security challenge extends to bridges, custodians and millions of coins",
+   "link": "https://www.coindesk.com/tech/2026/11/22/bitcoin-s-quantum-security-challenge-extends-to-bridges-custodians-and-millions-of-coins",
+   "summary": "Quantum computers can’t break Bitcoin network’s security yet, but Leo Fan warns that upgrading it and moving funds could take longer than expected.",
+   "source": "CoinDesk",
+   "topic": "區塊鏈"
+  },
   {
    "title": "Bitcoin rebounds above $60,000 after $1.8 billion crypto liquidation wave",
    "link": "https://www.coindesk.com/markets/2026/11/21/bitcoin-bounces-9-from-two-year-low-to-retake-usd60-000-as-traders-eye-monday-s-stock-open",
    "summary": "The selloff wiped out $1.8 billion in leveraged crypto positions, mostly from bullish bets on rising prices.",
    "source": "CoinDesk",
    "topic": "區塊鏈"
-  },
-  {
-   "title": "GTA 6 Leaker Dangles a PC Port Behind a $15 Million Crypto Pump",
-   "link": "https://decrypt.co/383756/gta-6-leaker-dangles-pc-port-15-million-crypto-pump",
-   "summary": "The anonymous leaker, Cyberleek, released a 209 GB Xbox build but is withholding the executable that could enable a PC port until its CYBERLEEK token hits $15 million.",
-   "source": "Decrypt",
-   "topic": "區塊鏈"
-  },
-  {
-   "title": "Review: Godzilla Minus Zero joins the list of truly stellar sequels",
-   "link": "https://arstechnica.com/culture/2026/11/review-godzilla-minus-zero-is-everything-we-could-want-in-a-sequel/",
-   "summary": "Director Takashi Yamazaki ups the ante by pitting Godzilla against one of the monster's greatest foes",
-   "source": "Ars Technica",
-   "topic": "科技"
   }
  ]
 }
