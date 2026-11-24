@@ -1,27 +1,27 @@
 {
- "date": "2026-11-23",
- "topic": "區塊鏈",
+ "date": "2026-11-24",
+ "topic": "科技",
  "articles": [
   {
-   "title": "More on the pending oversight hearings: State of Crypto",
-   "link": "https://www.coindesk.com/",
-   "summary": "New letters show the widening range of Congressional committees that will be probing the presidential administration — and the crypto collateral that may be swept up.",
-   "source": "CoinDesk",
-   "topic": "區塊鏈"
+   "title": "Trump halts Iowa detonation, says new governor to blame if it blows accidentally",
+   "link": "https://arstechnica.com/health/2026/11/trump-halts-iowa-detonation-says-new-governor-to-blame-if-it-blows-accidentally/",
+   "summary": "The Army said on Sunday that it would carry out the detonation on Wednesday.",
+   "source": "Ars Technica",
+   "topic": "科技"
   },
   {
-   "title": "Bitcoin's quantum security challenge extends to bridges, custodians and millions of coins",
-   "link": "https://www.coindesk.com/tech/2026/11/22/bitcoin-s-quantum-security-challenge-extends-to-bridges-custodians-and-millions-of-coins",
-   "summary": "Quantum computers can’t break Bitcoin network’s security yet, but Leo Fan warns that upgrading it and moving funds could take longer than expected.",
-   "source": "CoinDesk",
-   "topic": "區塊鏈"
+   "title": "States sue SpaceX to stop Grok from generating child sex images, revenge porn",
+   "link": "https://arstechnica.com/tech-policy/2026/11/states-sue-spacex-to-stop-grok-from-generating-child-sex-images-revenge-porn/",
+   "summary": "X says every Grok output is screened, but state AGs say Grok is still making CSAM.",
+   "source": "Ars Technica",
+   "topic": "科技"
   },
   {
-   "title": "Bitcoin rebounds above $60,000 after $1.8 billion crypto liquidation wave",
-   "link": "https://www.coindesk.com/markets/2026/11/21/bitcoin-bounces-9-from-two-year-low-to-retake-usd60-000-as-traders-eye-monday-s-stock-open",
-   "summary": "The selloff wiped out $1.8 billion in leveraged crypto positions, mostly from bullish bets on rising prices.",
-   "source": "CoinDesk",
-   "topic": "區塊鏈"
+   "title": "Russia will launch a routine ISS supply mission tomorrow—apparently, it's a big secret",
+   "link": "https://arstechnica.com/space/2026/11/russia-will-launch-a-routine-iss-supply-mission-tomorrow-apparently-its-a-big-secret/",
+   "summary": "\"I would ask you to please reach out to Roscosmos directly.\"",
+   "source": "Ars Technica",
+   "topic": "科技"
   }
  ]
 }
