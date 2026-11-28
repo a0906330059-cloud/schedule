@@ -1,27 +1,27 @@
 {
- "date": "2026-11-27",
- "topic": "科技",
+ "date": "2026-11-28",
+ "topic": "國際",
  "articles": [
   {
-   "title": "Ford unveils the GT41 as it hopes to win Le Mans again",
-   "link": "https://arstechnica.com/cars/2026/11/ford-unveils-the-gt41-as-it-hopes-to-win-le-mans-again/",
-   "summary": "Ford enters the World Endurance Championship in 2027 with the new prototype.",
-   "source": "Ars Technica",
-   "topic": "科技"
+   "title": "Spanish PM and rivals rally supporters in final pitch for votes",
+   "link": "https://www.bbc.co.uk/news/articles/c8wy5p4gdnwvo?at_medium=RSS&at_campaign=rss",
+   "summary": "Prime Minister Pedro Sánchez wants to defy the polls, and his main rivals accuse him of not telling the truth and of \"betrayal\".",
+   "source": "BBC World",
+   "topic": "國際"
   },
   {
-   "title": "Draining peatlands is responsible for a few percent of our global warming",
-   "link": "https://arstechnica.com/science/2026/11/draining-peatlands-is-responsible-for-a-few-percent-of-our-global-warming/",
-   "summary": "Detailed estimate going back to 1800 shows how much carbon is being liberated.",
-   "source": "Ars Technica",
-   "topic": "科技"
+   "title": "Zelensky criticises 'strange' Trump-Putin friendship in BBC interview",
+   "link": "https://www.bbc.co.uk/news/articles/c820q9wgrpyyo?at_medium=RSS&at_campaign=rss",
+   "summary": "Ukraine's president voices frustration with US and says it is not pushing Russia hard enough in peace talks to end the war.",
+   "source": "BBC World",
+   "topic": "國際"
   },
   {
-   "title": "From minimalist to maximalist: Ars staffers show off their home offices",
-   "link": "https://arstechnica.com/features/2026/11/from-minimalist-to-maximalist-ars-staffers-show-off-their-home-offices/",
-   "summary": "Our home offices range from tasteful to \"please explain yourself.\"",
-   "source": "Ars Technica",
-   "topic": "科技"
+   "title": "Weary of war but with no sign of backing down, Kyiv faces another punishing winter",
+   "link": "https://www.bbc.co.uk/news/articles/c3pw4yrr8kz9o?at_medium=RSS&at_campaign=rss",
+   "summary": "Ukraine settles in for another devastating winter as the questions persists: how will it all end?",
+   "source": "BBC World",
+   "topic": "國際"
   }
  ]
 }
